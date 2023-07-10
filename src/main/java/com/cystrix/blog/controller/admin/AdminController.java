@@ -19,4 +19,10 @@ public class AdminController {
     public Response index() {
         return Response.ok();
     }
+
+    @RequestMapping(value = "/test")
+    @ResponseBody
+    public Response test() {
+        return Response.ok();
+    }
 }

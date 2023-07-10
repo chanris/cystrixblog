@@ -1,4 +1,4 @@
-package com.cystrix.blog.controller;
+package com.cystrix.blog.controller.home;
 
 import com.cystrix.blog.vo.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @description:
  */
 @RestController
+@RequestMapping(value = "/home")
 public class IndexController {
     @RequestMapping(value = "/index")
     @ResponseBody
