@@ -12,6 +12,4 @@
         VALUE (NULL, #{username}, #{password}, ${email}, #{avatar}, #{motto}, #{createTime}, #{updateTime}, ${isDelete})
     </insert>
 
-
-
 </mapper>
