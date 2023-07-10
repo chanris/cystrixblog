@@ -12,5 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface UserInfoDao {
-    void insert( UserInfo userInfo);
+    void insert(UserInfo userInfo);
+
+    UserInfo queryUserInfoByUsernameAndPassword(UserInfo userInfo);
 }

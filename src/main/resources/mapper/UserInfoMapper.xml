@@ -9,7 +9,11 @@
     
     <insert id="insert" parameterType="com.cystrix.blog.dao.UserInfoDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
-        VALUE (NULL, #{username}, #{password}, ${email}, #{avatar}, #{motto}, #{createTime}, #{updateTime}, ${isDelete})
+        VALUE (NULL, #{username}, #{password}, #{email}, #{avatar}, #{motto}, #{createTime}, #{updateTime}, #{isDelete})
     </insert>
 
+    <select id="queryUserInfoByUsernameAndPassword" parameterType="com.cystrix.blog.dao.UserInfoDao" resultType="com.cystrix.blog.entity.UserInfo">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `username` == #{username} AND `password` == #{password}
+    </select>
 </mapper>

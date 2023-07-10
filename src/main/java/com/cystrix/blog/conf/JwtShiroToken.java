@@ -10,6 +10,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 public class JwtShiroToken implements AuthenticationToken {
     private String token;
 
+
     public JwtShiroToken(String token) {
         this.token = token;
     }

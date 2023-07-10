@@ -49,13 +49,11 @@ public class ShiroConf {
         Map<String, Filter> filterMap = new LinkedHashMap<>();
         filterMap.put("token", new JwtShiroFilter());
         filterFactory.setFilters(filterMap);
-
         Map<String, String> filterRuleMap = new LinkedHashMap<>();
-
         // 相同的url匹配规则, 后面的会覆盖前面的是因为map数据结构的原理
         //map.put("/user/**", "authc");
         filterRuleMap.put("/home/**", "anon");
-        filterRuleMap.put("/admin/index", "anon");
+        filterRuleMap.put("/admin/login", "anon");
         filterRuleMap.put("/admin/**", "token");
         filterFactory.setFilterChainDefinitionMap(filterRuleMap);
         return filterFactory;
