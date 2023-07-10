@@ -1,4 +1,4 @@
-package com.cystrix.blog.controller;
+package com.cystrix.blog.controller.admin;
 
 import com.cystrix.blog.vo.Response;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,11 +7,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author: chenyue7@foxmail.com
- * @date: 6/7/2023
+ * @date: 10/7/2023
  * @description:
  */
 @RestController
-public class IndexController {
+@RequestMapping(value = "/admin")
+public class AdminController {
+
     @RequestMapping(value = "/index")
     @ResponseBody
     public Response index() {
