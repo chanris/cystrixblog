@@ -1,8 +1,6 @@
 package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.UserInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -14,5 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface UserInfoDao {
     void insert(UserInfo userInfo);
 
-    UserInfo queryUserInfoByUsernameAndPassword(UserInfo userInfo);
+    UserInfo selectUserInfoByUsernameAndPassword(UserInfo userInfo);
+
+    UserInfo selectUserInfoById(Integer id);
 }

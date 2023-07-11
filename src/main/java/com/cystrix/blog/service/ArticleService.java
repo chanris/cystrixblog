@@ -10,5 +10,7 @@ import java.util.List;
  * @description:
  */
 public interface ArticleService {
-    List<Article> getArticleByPage(Integer pageNum, Integer pageSize);
+    List<Article> getPagedArticle(Integer pageNum, Integer pageSize);
+
+    List<Article> getPagedArticleByYear(Integer pageNum, Integer pageSize, Integer year);
 }

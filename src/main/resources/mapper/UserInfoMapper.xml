@@ -3,17 +3,24 @@
 <mapper namespace="com.cystrix.blog.dao.UserInfoDao" >
     <sql id="tb">`user_info`</sql>
     <sql id="baseCols">
-    `id`,`username`,`password`,`email`,`avatar`,
+    `id`,`username`,`password`,`email`,`nickname`,`avatar`,
     `motto`,`create_time`,`update_time`,`is_delete`
     </sql>
     
     <insert id="insert" parameterType="com.cystrix.blog.dao.UserInfoDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
-        VALUE (NULL, #{username}, #{password}, #{email}, #{avatar}, #{motto}, #{createTime}, #{updateTime}, #{isDelete})
+        VALUE (NULL, #{username}, #{password}, #{email}, #{nickname}, #{avatar},
+            #{motto}, #{createTime}, #{updateTime}, #{isDelete})
     </insert>
 
-    <select id="queryUserInfoByUsernameAndPassword" parameterType="com.cystrix.blog.dao.UserInfoDao" resultType="com.cystrix.blog.entity.UserInfo">
+    <select id="selectUserInfoByUsernameAndPassword" parameterType="com.cystrix.blog.entity.UserInfo" resultType="com.cystrix.blog.entity.UserInfo">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
         WHERE `username` = #{username} AND `password` = #{password}
     </select>
+
+    <select id="selectUserInfoById" parameterType="integer" resultType="com.cystrix.blog.entity.UserInfo">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `id` = #{value}
+    </select>
+
 </mapper>

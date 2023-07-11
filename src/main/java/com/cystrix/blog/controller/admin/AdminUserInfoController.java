@@ -18,20 +18,15 @@ import org.springframework.web.bind.annotation.RestController;
  * @description:
  */
 @RestController
-@RequestMapping(value = "/admin")
-public class UserInfoController {
+@RequestMapping(value = "/admin/user")
+public class AdminUserInfoController {
 
     private final UserServiceImpl userService;
 
-    public UserInfoController(UserServiceImpl userService) {
+    public AdminUserInfoController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/index")
-    @ResponseBody
-    public Response index() {
-        return Response.ok();
-    }
 
     // TODO 7/11 邮箱验证码功能还没实现
     @RequestMapping(value = "/login")
@@ -44,12 +39,6 @@ public class UserInfoController {
         }
         LoginToken tokenVo = userService.doLoginHandle(userInfo);
         return Response.builder().code(CodeEnum.OK.code).msg("登录成功").data(tokenVo).build();
-    }
-
-    @RequestMapping(value = "/test")
-    @ResponseBody
-    public Response test() {
-        return Response.ok();
     }
 
 }

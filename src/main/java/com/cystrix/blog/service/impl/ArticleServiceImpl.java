@@ -22,8 +22,12 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> getArticleByPage(Integer pageNum, Integer pageSize) {
-        List<Article> articles = articleDao.queryArticleByPage(pageSize, (pageNum - 1) * pageSize);
-        return articles;
+    public List<Article> getPagedArticle(Integer pageNum, Integer pageSize) {
+        return articleDao.selectPage(pageSize, (pageNum - 1) * pageSize);
+    }
+
+    @Override
+    public List<Article> getPagedArticleByYear(Integer pageNum, Integer pageSize, Integer year) {
+        return articleDao.selectPageByYear(pageSize, (pageNum - 1) * pageSize, year);
     }
 }

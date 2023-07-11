@@ -11,10 +11,23 @@
         VALUE (NULL, #{title}, #{cotent}, #{digest}, #{commentCount}, #{viewCount}, #{hotRank})
     </insert>
     
-    <select id="queryArticleByPage" resultType="com.cystrix.blog.entity.Article">
+    <select id="selectPage" resultType="com.cystrix.blog.entity.Article">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
-        ORDER BY `id`
+        ORDER BY `id` DESC
         LIMIT #{pageSize}
         OFFSET #{offset}
+    </select>
+
+    <select id="selectPageByYear" resultType="com.cystrix.blog.entity.Article">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE YEAR(`create_time`) = #{year}
+        ORDER BY `id` DESC
+        LIMIT #{pageSize}
+        OFFSET #{offset}
+    </select>
+
+    <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `id` = #{id}
     </select>
 </mapper>
