@@ -17,7 +17,7 @@ target/
 .idea/libraries/
 .idea/
 logs/
-!logs/**
+logs/**
 *.iws
 *.iml
 *.ipr
