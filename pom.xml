@@ -25,9 +25,17 @@
     <mybatis.version>2.3.1</mybatis.version>
     <shiro.verison>1.11.0</shiro.verison>
     <jwt.version>4.3.0</jwt.version>
+    <fastjson.version>2.0.35</fastjson.version>
   </properties>
 
   <dependencies>
+    <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
+    <dependency>
+      <groupId>com.alibaba.fastjson2</groupId>
+      <artifactId>fastjson2</artifactId>
+      <version>${fastjson.version}</version>
+    </dependency>
+
     <!-- shiro-->
     <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring-boot-starter -->
     <dependency>

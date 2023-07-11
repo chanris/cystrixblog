@@ -16,6 +16,8 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/
+.logs/
+.logs/**
 *.iws
 *.iml
 *.ipr

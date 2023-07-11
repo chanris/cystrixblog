@@ -22,7 +22,7 @@ import java.io.PrintWriter;
 /**
  * @author: chenyue7@foxmail.com
  * @date: 10/7/2023
- * @description:
+ * @description: 处理请求头的Authorization字段
  */
 public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
 
@@ -46,7 +46,6 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         // 获取请求头上的token，字段名为Authorization
         String token = getAuthzHeader(request);
-
         getSubject(request, response).login(new JwtShiroToken(token));
         return true;
     }
@@ -67,8 +66,6 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
             return false;
         }
     }
-
-
 
     /**
      * 提供跨域支持
@@ -97,9 +94,8 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         log.debug("*****************onAccessDenied**********************");
         // 未验证返回
-        HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-        httpServletResponse.setHeader("Content-Type", "application/json");
+        httpServletResponse.setHeader("Content-Type", "application/json;charset=utf-8");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter printWriter = httpServletResponse.getWriter();
         Response responseJson = Response.failed(CodeEnum.USER_UNAUTHORIZED);

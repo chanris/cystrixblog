@@ -6,7 +6,6 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.Response;
-import org.apache.catalina.User;
 import org.apache.shiro.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/admin")
-public class AdminController {
+public class UserInfoController {
 
     private final UserServiceImpl userService;
 
-    public AdminController(UserServiceImpl userService) {
+    public UserInfoController(UserServiceImpl userService) {
         this.userService = userService;
     }
 
@@ -34,6 +33,7 @@ public class AdminController {
         return Response.ok();
     }
 
+    // TODO 7/11 邮箱验证码功能还没实现
     @RequestMapping(value = "/login")
     public Response login(@RequestBody UserInfo userInfo) {
         try {

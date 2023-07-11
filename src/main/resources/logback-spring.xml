@@ -3,7 +3,7 @@
     <!--日志文件主目录：这里${user.home}为当前服务器用户主目录-->
     <property name="LOG_HOME" value="E:\\Git-Repository\\Git-workspace4\\cystrixblog\\logs"/>
     <!--日志文件名称：这里spring.application.name表示工程名称-->
-    <springProperty scope="context" name="APP_NAME" source="cystrix_blog"/>
+    <property name="APP_NAME" value="cystrix_blog"/>
 
     <!--默认配置-->
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
@@ -31,15 +31,15 @@
 
 
     <!--root节点 全局日志级别，用来指定最基础的日志输出级别-->
-    <root level="DEBUG">
+    <root level="INFO">
         <appender-ref ref="FILE"/>
         <appender-ref ref="CONSOLE"/>
     </root>
 
     <!-- 子节点向上级传递 局部日志级别-->
     <logger level="WARN" name="org.springframework"/>
-    <logger level="WARN" name="com.netflix"/>
-    <logger level="DEBUG" name="org.hibernate.SQL"/>
+
+
 
 
 </configuration>
