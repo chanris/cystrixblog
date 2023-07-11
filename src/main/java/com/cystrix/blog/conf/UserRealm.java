@@ -8,12 +8,16 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.stereotype.Component;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -47,7 +51,12 @@ public class UserRealm extends AuthorizingRealm {
     // 本系统只有一个管理员，所以不需要授权管理
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        return null;
+        Integer userId = (Integer) principalCollection.getPrimaryPrincipal();
+        SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
+        Set<String> roles = new HashSet<>();
+        roles.add("admin");
+        simpleAuthorizationInfo.setRoles(roles);
+        return simpleAuthorizationInfo;
     }
 
     // 认证（登录）

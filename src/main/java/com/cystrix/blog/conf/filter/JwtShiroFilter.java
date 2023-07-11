@@ -7,7 +7,10 @@ import com.cystrix.blog.vo.Response;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletRequest;
@@ -23,26 +26,49 @@ import java.io.PrintWriter;
  */
 public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
 
+    private final static Logger log = LoggerFactory.getLogger(JwtShiroFilter.class);
+
+    /**
+     * 判断是否为认证请求
+     */
     @Override
     protected boolean isLoginAttempt(ServletRequest request, ServletResponse response) {
-        return super.isLoginAttempt(request, response);
-    }
-
-    @Override
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
-        return super.isAccessAllowed(request, response, mappedValue);
+        HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
+        String path = httpServletRequest.getServletPath();
+        log.info("request path: {}", path);
+        return StringUtils.hasLength(getAuthzHeader(request));
     }
 
     /**
-     * 登陆
+     * 认证逻辑方法
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
         // 获取请求头上的token，字段名为Authorization
         String token = getAuthzHeader(request);
+
         getSubject(request, response).login(new JwtShiroToken(token));
         return true;
     }
+
+    /**
+     *
+     * 认证调用方法
+     */
+    @Override
+    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+        if (isLoginAttempt(request, response)) {
+            try {
+                return executeLogin(request, response);
+            }catch (Exception e) {
+                return false;
+            }
+        }else {
+            return false;
+        }
+    }
+
+
 
     /**
      * 提供跨域支持
@@ -53,6 +79,7 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
      */
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+        log.debug("*****************preHandle**********************");
         HttpServletRequest httpServletRequest = WebUtils.toHttp(request) ;
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
         httpServletResponse.setHeader("Access-control-Allow-Origin", httpServletRequest.getHeader("Origin"));
@@ -68,14 +95,14 @@ public class JwtShiroFilter extends BasicHttpAuthenticationFilter {
 
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        // 未授权返回
+        log.debug("*****************onAccessDenied**********************");
+        // 未验证返回
         HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
         HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-
         httpServletResponse.setHeader("Content-Type", "application/json");
         httpServletResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         PrintWriter printWriter = httpServletResponse.getWriter();
-        Response responseJson = Response.failed(CodeEnum.FORBIDDEN_ACCESS);
+        Response responseJson = Response.failed(CodeEnum.USER_UNAUTHORIZED);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.writer().writeValue(printWriter, responseJson);
         return false;
