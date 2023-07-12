@@ -15,9 +15,11 @@ import java.util.List;
 public interface ArticleDao {
     void insert(Article article);
 
-    List<Article> selectPage(@Param("pageSize") int pageSize, @Param("offset") int offset);
+    List<Article> selectPageWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
-    List<Article> selectPageByYear(@Param("pageSize") int pageSize, @Param("offset") int offset, @Param("year") int year);
+    List<Article> selectPageByYearWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset, @Param("year") int year);
 
     Article selectArticleById(Integer id);
+    Article selectArticleByIdWithoutContent(Integer id);
+
 }

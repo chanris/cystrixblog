@@ -18,7 +18,7 @@ public class Article {
     private Integer commentCount;
     private Integer viewCount;
     private Integer likeCount;
-    private Integer hotCount;
+    private Integer hotRank;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
     private Integer isDelete;

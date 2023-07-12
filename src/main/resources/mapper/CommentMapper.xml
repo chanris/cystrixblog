@@ -3,4 +3,5 @@
 <mapper namespace="com.cystrix.blog.dao.CommentDao">
     <sql id="tb">`comment`</sql>
     <sql id="baseCols">`id`,`content`,`create_time`,`update_time`,`user_ip`,`is_delete`</sql>
+
 </mapper>

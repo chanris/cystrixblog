@@ -10,7 +10,11 @@ import java.util.List;
  * @description:
  */
 public interface ArticleService {
-    List<Article> getPagedArticle(Integer pageNum, Integer pageSize);
+    List<Article> getPagedArticleWithoutContent(Integer pageNum, Integer pageSize);
 
-    List<Article> getPagedArticleByYear(Integer pageNum, Integer pageSize, Integer year);
+    List<Article> getPagedArticleByYearWithoutContent(Integer pageNum, Integer pageSize, Integer year);
+
+    Article getArticle(Integer id);
+
+    Article getArticleWithoutContent(Integer id);
 }

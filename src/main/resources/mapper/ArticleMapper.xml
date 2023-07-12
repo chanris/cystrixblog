@@ -3,24 +3,30 @@
 <mapper namespace="com.cystrix.blog.dao.ArticleDao">
     <sql id="tb">`article`</sql>
     <sql id="baseCols">
-    `id`,`title`,`content`,`digest`,`comment_count`,`view_count`, `like_count`,`hot_rank`,
+    `id`,`title`,`content`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`,
     `create_time`,`update_time`,`is_delete`
     </sql>
+    <sql id="baseColsWithoutContent">
+    `id`,`title`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`,
+    `create_time`,`update_time`,`is_delete`
+    </sql>
+
     <insert id="insert" parameterType="com.cystrix.blog.entity.Article" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
-        VALUE (NULL, #{title}, #{cotent}, #{digest}, #{commentCount}, #{viewCount}, #{hotRank})
+        VALUE (NULL, #{title}, #{cotent}, #{digest}, #{commentCount}, #{viewCount}, #{hotRank}, #{createTime}, #{updateTime}, #{isDelete})
     </insert>
-    
-    <select id="selectPage" resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+
+    <select id="selectPageWithoutContent" resultType="com.cystrix.blog.entity.Article">
+        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
+        WHERE `is_delete` = 0
         ORDER BY `id` DESC
         LIMIT #{pageSize}
         OFFSET #{offset}
     </select>
 
-    <select id="selectPageByYear" resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
-        WHERE YEAR(`create_time`) = #{year}
+    <select id="selectPageByYearWithoutContent" resultType="com.cystrix.blog.entity.Article">
+        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
+        WHERE YEAR(`create_time`) = #{year} AND `is_delete` = 0
         ORDER BY `id` DESC
         LIMIT #{pageSize}
         OFFSET #{offset}
@@ -28,6 +34,14 @@
 
     <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
-        WHERE `id` = #{id}
+        WHERE `id` = #{id} AND `is_delete` = 0
     </select>
+
+    <select id="selectArticleByIdWithoutContent" resultType="com.cystrix.blog.entity.Article">
+        SELECT `id`,`title`,`digest`,`comment_count`,`view_count`, `like_count`,`hot_rank`,
+        `create_time`,`update_time`, `is_delete` FROM <include refid="tb"/>
+        WHERE `id` = #{id} AND `is_delete` = 0
+    </select>
+
+
 </mapper>

@@ -22,12 +22,22 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<Article> getPagedArticle(Integer pageNum, Integer pageSize) {
-        return articleDao.selectPage(pageSize, (pageNum - 1) * pageSize);
+    public List<Article> getPagedArticleWithoutContent(Integer pageNum, Integer pageSize) {
+        return articleDao.selectPageWithoutContent(pageSize, (pageNum - 1) * pageSize);
     }
 
     @Override
-    public List<Article> getPagedArticleByYear(Integer pageNum, Integer pageSize, Integer year) {
-        return articleDao.selectPageByYear(pageSize, (pageNum - 1) * pageSize, year);
+    public List<Article> getPagedArticleByYearWithoutContent(Integer pageNum, Integer pageSize, Integer year) {
+        return articleDao.selectPageByYearWithoutContent(pageSize, (pageNum - 1) * pageSize, year);
+    }
+
+    @Override
+    public Article getArticle(Integer id) {
+        return articleDao.selectArticleById(id);
+    }
+
+    @Override
+    public Article getArticleWithoutContent(Integer id) {
+        return articleDao.selectArticleByIdWithoutContent(id);
     }
 }

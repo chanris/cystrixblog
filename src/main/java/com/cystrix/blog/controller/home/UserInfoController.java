@@ -3,7 +3,6 @@ package com.cystrix.blog.controller.home;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.Response;
 import com.cystrix.blog.vo.UserInfoVo;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,7 +23,7 @@ public class UserInfoController {
 
     @RequestMapping(value = "/userInfo")
     public Response getUserInfo() {
-        UserInfoVo userInfoVo = userService.getUserInfoVoById(1);
+        UserInfoVo userInfoVo = userService.getUserInfoVo(1);
         return Response.ok(userInfoVo);
     }
 }

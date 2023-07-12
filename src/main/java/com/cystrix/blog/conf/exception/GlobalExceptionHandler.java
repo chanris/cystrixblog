@@ -5,6 +5,7 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.vo.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,12 +33,14 @@ public class GlobalExceptionHandler {
         return Response.failed(CodeEnum.INTER_SERVER_ERROR);
     }
 
-    @ExceptionHandler(value = {ParameterException.class})
-    public Response parameterExceptionHandle(ParameterException ex) {
+    @ExceptionHandler(value = {ParameterException.class, HttpMessageNotReadableException.class})
+    public Response parameterExceptionHandle(Exception ex) {
         log.warn("===========================捕捉到请求参数异常==========================");
         log.warn("异常类型: {}", ex.getClass().toGenericString());
         log.warn("异常信息：{}",ex.getMessage());
         log.warn("===================================================================");
         return Response.failed(CodeEnum.BAD_REQUEST_PARAMETER, ex.getMessage());
     }
+
+
 }

@@ -3,15 +3,14 @@ package com.cystrix.blog.controller.home;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.exception.ParameterException;
+import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.query.PageQuery;
 import com.cystrix.blog.query.PageQueryWithYear;
-import com.cystrix.blog.service.ArticleService;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
 import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -42,7 +41,7 @@ public class ArticleController {
         }catch (Exception e){
             throw new ParameterException(e.getMessage());
         }
-        List<Article> articles = articleService.getPagedArticle(pageQuery.getPageNum(), pageQuery.getPageSize());
+        List<Article> articles = articleService.getPagedArticleWithoutContent(pageQuery.getPageNum(), pageQuery.getPageSize());
         return Response.builder().code(CodeEnum.OK.code).msg("查询成功").data(articles).build();
     }
 
@@ -58,9 +57,20 @@ public class ArticleController {
         }catch (Exception e){
             throw new ParameterException(e.getMessage());
         }
-        List<Article> articles = articleService.getPagedArticleByYear(pageQuery.getPageNum(),
+        List<Article> articles = articleService.getPagedArticleByYearWithoutContent(pageQuery.getPageNum(),
                 pageQuery.getPageSize(), pageQuery.getYear());
         return Response.builder().code(CodeEnum.OK.code).msg("查询成功").data(articles).build();
+    }
+
+    @RequestMapping(value = "/articleStatisticalInfo")
+    public Response articleStatisticalInfo(@RequestBody ArticleQuery query) {
+        try {
+            Assert.notNull(query.getId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        Article article = articleService.getArticleWithoutContent(query.getId());
+        return Response.ok(article);
     }
 
 }
