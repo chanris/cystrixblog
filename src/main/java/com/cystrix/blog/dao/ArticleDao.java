@@ -13,7 +13,6 @@ import java.util.List;
  */
 @Repository
 public interface ArticleDao {
-    void insert(Article article);
 
     /*默认根据创建事件排序分页*/
     List<Article> selectPageWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset);
@@ -26,6 +25,9 @@ public interface ArticleDao {
 
     Article selectArticleByIdWithoutContent(Integer id);
 
+    void insert(Article article);
+
     void update(Article article);
 
+    void deleteById(Integer id);
 }

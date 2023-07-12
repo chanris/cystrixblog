@@ -20,5 +20,9 @@ public interface ArticleService {
 
     Article getArticleWithoutContent(Integer id);
 
+    void addArticle(Article article);
+
     void modifyArticle(Article article);
+
+    void removeArticle(Integer id);
 }
