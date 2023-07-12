@@ -32,6 +32,13 @@
         OFFSET #{offset}
     </select>
 
+    <select id="selectArticleListByHotRank" resultType="com.cystrix.blog.entity.Article" parameterType="integer">
+        SELECT  <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
+        WHERE `is_delete` = 0
+        ORDER BY `hot_rank` DESC
+        LIMIT #{value}
+    </select>
+
     <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
         WHERE `id` = #{id} AND `is_delete` = 0
@@ -42,6 +49,22 @@
         `create_time`,`update_time`, `is_delete` FROM <include refid="tb"/>
         WHERE `id` = #{id} AND `is_delete` = 0
     </select>
+
+    <update id="update" parameterType="com.cystrix.blog.entity.Article">
+        UPDATE <include refid="tb"/>
+        <set>
+            <if test="title != null">`title` = #{title},</if>
+            <if test="content != null">`content` = #{title},</if>
+            <if test="digest != null">`digest` = #{title},</if>
+            <if test="commentCount != null">`comment_count` = #{title},</if>
+            <if test="viewCount != null">`view_count` = #{title},</if>
+            <if test="likeCount != null">`like_count` = #{title},</if>
+            <if test="hotRank != null">`hot_rank` = #{title},</if>
+            <if test="updateTime != null">`update_time` = #{title},</if>
+        </set>
+        WHERE `id` = #{id} AND `is_delete` = 0
+    </update>
+
 
 
 </mapper>

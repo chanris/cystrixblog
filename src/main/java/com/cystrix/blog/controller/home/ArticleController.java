@@ -62,15 +62,28 @@ public class ArticleController {
         return Response.builder().code(CodeEnum.OK.code).msg("查询成功").data(articles).build();
     }
 
-    @RequestMapping(value = "/articleStatisticalInfo")
+    /**
+     * 文章详细页面
+     */
+    @RequestMapping(value = "/articleDetailInfo")
     public Response articleStatisticalInfo(@RequestBody ArticleQuery query) {
         try {
             Assert.notNull(query.getId(), "文章id不能为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        Article article = articleService.getArticleWithoutContent(query.getId());
+        Article article = articleService.getDetailArticle(query.getId());
         return Response.ok(article);
     }
+
+    /**
+     * 热门文章列表（默认10篇）
+     */
+    @RequestMapping(value = "/listHotArticle")
+    public Response listHotArticle() {
+        List<Article> articles = articleService.listArticleOrderByHotRank();
+        return Response.ok(articles);
+    }
+
 
 }

@@ -26,18 +26,18 @@ public class GlobalExceptionHandler {
     // 如果有多个父类exceptionHandler 会选择最近的父类exceptionHandler处理
     @ExceptionHandler(value = {Exception.class})
     public Response defaultExceptionHandle(Exception ex){
-        log.warn("===========================捕捉到全局异常==========================");
+        log.warn("===========================捕捉到全局异常===========================");
         log.warn("异常类型: {}", ex.getClass().toGenericString());
-        log.warn("异常信息：{}",ex.getMessage());
-        log.warn("================================================================");
+        log.warn("异常信息：{}", ex.getMessage());
+        log.warn("==================================================================");
         return Response.failed(CodeEnum.INTER_SERVER_ERROR);
     }
 
     @ExceptionHandler(value = {ParameterException.class, HttpMessageNotReadableException.class})
     public Response parameterExceptionHandle(Exception ex) {
-        log.warn("===========================捕捉到请求参数异常==========================");
+        log.warn("===========================捕捉到请求参数异常=========================");
         log.warn("异常类型: {}", ex.getClass().toGenericString());
-        log.warn("异常信息：{}",ex.getMessage());
+        log.warn("异常信息：{}", ex.getMessage());
         log.warn("===================================================================");
         return Response.failed(CodeEnum.BAD_REQUEST_PARAMETER, ex.getMessage());
     }

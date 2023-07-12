@@ -15,11 +15,17 @@ import java.util.List;
 public interface ArticleDao {
     void insert(Article article);
 
+    /*默认根据创建事件排序分页*/
     List<Article> selectPageWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset);
 
     List<Article> selectPageByYearWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset, @Param("year") int year);
 
+    List<Article> selectArticleListByHotRank(int num);
+
     Article selectArticleById(Integer id);
+
     Article selectArticleByIdWithoutContent(Integer id);
+
+    void update(Article article);
 
 }

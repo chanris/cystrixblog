@@ -14,7 +14,11 @@ public interface ArticleService {
 
     List<Article> getPagedArticleByYearWithoutContent(Integer pageNum, Integer pageSize, Integer year);
 
-    Article getArticle(Integer id);
+    List<Article> listArticleOrderByHotRank();
+
+    Article getDetailArticle(Integer id);
 
     Article getArticleWithoutContent(Integer id);
+
+    void modifyArticle(Article article);
 }
