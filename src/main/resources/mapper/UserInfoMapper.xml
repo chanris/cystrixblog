@@ -10,7 +10,7 @@
     <insert id="insert" parameterType="com.cystrix.blog.dao.UserInfoDao" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
         VALUE (NULL, #{username}, #{password}, #{email}, #{nickname}, #{avatar},
-            #{motto}, #{createTime}, #{updateTime}, #{isDelete})
+            #{motto}, #{createTime}, #{updateTime}, 0)
     </insert>
 
     <select id="selectUserInfoByUsernameAndPassword" parameterType="com.cystrix.blog.entity.UserInfo" resultType="com.cystrix.blog.entity.UserInfo">

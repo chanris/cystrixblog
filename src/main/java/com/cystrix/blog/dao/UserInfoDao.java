@@ -15,4 +15,5 @@ public interface UserInfoDao {
     UserInfo selectUserInfoByUsernameAndPassword(UserInfo userInfo);
 
     UserInfo selectUserInfoById(Integer id);
+
 }

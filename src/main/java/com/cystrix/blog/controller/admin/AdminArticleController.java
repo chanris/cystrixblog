@@ -26,7 +26,7 @@ public class AdminArticleController {
         this.articleService = articleService;
     }
 
-    @PostMapping(value = "/create")
+    @PostMapping(value = "/add")
     public Response createArticle(@RequestBody Article article) {
         try {
             Assert.notNull(article.getTitle(), "文章标题不能为空");

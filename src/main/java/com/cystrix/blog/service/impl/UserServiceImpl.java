@@ -9,6 +9,8 @@ import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.UserInfoVo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 /**
  * @author: chenyue7@foxmail.com
  * @date: 10/7/2023
@@ -46,5 +48,15 @@ public class UserServiceImpl implements UserService {
         userInfoVo.setAvatar(userInfoVo.getAvatar());
         userInfoVo.setMotto(userInfo.getMotto());
         return userInfoVo;
+    }
+
+    @Override
+    public void addUserInfo(UserInfo userInfo) {
+        userInfo.setMotto("我是一只小懒猫 喵喵~~");
+        userInfo.setAvatar("/upload/avatar/251231245.jpg");
+        userInfo.setNickname(userInfo.getUsername());
+        userInfo.setCreateTime(LocalDateTime.now());
+        userInfo.setUpdateTime(LocalDateTime.now());
+        userInfoDao.insert(userInfo);
     }
 }

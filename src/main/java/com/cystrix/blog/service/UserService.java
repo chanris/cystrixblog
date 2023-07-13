@@ -14,4 +14,6 @@ public interface UserService {
     LoginToken doLoginHandle(UserInfo userInfo);
 
     UserInfoVo getUserInfoVo(Integer userId);
+
+    void addUserInfo(UserInfo userInfo);
 }
