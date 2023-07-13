@@ -16,4 +16,5 @@ public interface UserInfoDao {
 
     UserInfo selectUserInfoById(Integer id);
 
+    void update(UserInfo userInfo);
 }

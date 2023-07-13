@@ -69,6 +69,7 @@ public class AdminUserInfoController {
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
+        userService.modifyUserInfo(userInfo);
         return Response.ok();
     }
 

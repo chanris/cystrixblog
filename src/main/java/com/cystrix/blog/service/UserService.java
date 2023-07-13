@@ -16,4 +16,6 @@ public interface UserService {
     UserInfoVo getUserInfoVo(Integer userId);
 
     void addUserInfo(UserInfo userInfo);
+
+    void modifyUserInfo(UserInfo userInfo);
 }

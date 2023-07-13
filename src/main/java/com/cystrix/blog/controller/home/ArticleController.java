@@ -72,10 +72,7 @@ public class ArticleController {
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-
         Article article = articleService.getDetailArticle(query.getId());
-
-
         return Response.ok(article);
     }
 

@@ -57,6 +57,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void modifyUserInfo(UserInfo userInfo) {
+        userInfo.setUpdateTime(LocalDateTime.now());
+        String origin = userInfo.getPassword();
+        if (origin != null) {
+           userInfo.setPassword(md5Utils.encryption(origin));
+        }
+        userInfoDao.update(userInfo);
+    }
+
+    @Override
     public void addUserInfo(UserInfo userInfo) {
         // 加密密码
         String encryptionPasswd = md5Utils.encryption(userInfo.getPassword());
