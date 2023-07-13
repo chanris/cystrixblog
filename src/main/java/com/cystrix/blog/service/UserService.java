@@ -18,4 +18,6 @@ public interface UserService {
     void addUserInfo(UserInfo userInfo);
 
     void modifyUserInfo(UserInfo userInfo);
+
+    void removeUserInfo(Integer id);
 }

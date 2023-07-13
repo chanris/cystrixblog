@@ -67,6 +67,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void removeUserInfo(Integer id) {
+        userInfoDao.deleteById(id);
+    }
+
+    @Override
     public void addUserInfo(UserInfo userInfo) {
         // 加密密码
         String encryptionPasswd = md5Utils.encryption(userInfo.getPassword());

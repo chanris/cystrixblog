@@ -3,6 +3,7 @@ package com.cystrix.blog.controller.admin;
 import com.cystrix.blog.entity.UserInfo;
 import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.exception.ParameterException;
+import com.cystrix.blog.query.UserQuery;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.Response;
@@ -55,7 +56,7 @@ public class AdminUserInfoController {
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        if (checkUserInfoFormat(userInfo)) {
+        if (!checkUserInfoFormat(userInfo)) {
             throw new ParameterException("用户信息格式错误");
         }
         userService.addUserInfo(userInfo);
@@ -73,15 +74,34 @@ public class AdminUserInfoController {
         return Response.ok();
     }
 
+    @PostMapping(value = "/delete")
+    public Response deleteUserInfo(@RequestBody UserQuery userQuery) {
+        try {
+            Assert.notNull(userQuery.getId(), "id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        userService.removeUserInfo(userQuery.getId());
+        return Response.ok();
+    }
+
     private boolean checkUserInfoFormat(UserInfo userInfo) {
-        String regexUsername = "[\\d|\\w]{6,20}";
-        String regexPasswd = "\\w[\\d|\\w]{5,19}";
+        String regexUsername = "\\w{6,20}";
+        String username = userInfo.getUsername();
+        String passwd = userInfo.getPassword();
+        String email = userInfo.getEmail();
+        if (!checkPasswdAndEmailFormat(passwd, email)) {
+            return false;
+        }
+        return Pattern.matches(regexUsername, username);
+    }
+
+    private boolean checkPasswdAndEmailFormat(String passwd, String email) {
+        String regexPasswd = "\\w\\w{5,19}";
         String regexEmail = "(?=^.{3,256}$)^([\\w\\-]+([\\.][\\w\\-]+)*)@[a-zA-Z0-9][a-zA-Z0-9\\-]*[\\.][A-Za-z]{2,6}$\n";
-        if (Pattern.matches(regexUsername, userInfo.getUsername())) {
+        if (!Pattern.matches(regexPasswd, passwd)) {
             return false;
-        }else if (Pattern.matches(regexPasswd, userInfo.getPassword())) {
-            return false;
-        }else return !Pattern.matches(regexEmail, userInfo.getEmail());
+        }else return Pattern.matches(regexEmail, email);
     }
 
 }
