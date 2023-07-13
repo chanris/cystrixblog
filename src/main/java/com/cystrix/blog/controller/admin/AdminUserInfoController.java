@@ -6,7 +6,6 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.Response;
-import com.cystrix.blog.vo.UserInfoVo;
 import org.apache.shiro.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
