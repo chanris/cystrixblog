@@ -3,4 +3,13 @@
 <mapper namespace="com.cystrix.blog.dao.ArticleTagDao">
     <sql id="tb">`article_tag`</sql>
     <sql id="baseCols">`id`,`article_id`,`tag_id`</sql>
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.ArticleTag" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="tb"/> VALUE (NULL, #{articleId}, #{tagId})
+    </insert>
+
+    <select id="selectTagIdListByArticleId" parameterType="integer" resultType="integer">
+        SELECT  `tag_id` FROM <include refid="tb"/>
+        WHERE `article_id`  = #{articleId}
+    </select>
 </mapper>

@@ -1,6 +1,7 @@
 package com.cystrix.blog.controller.admin;
 
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
@@ -58,6 +59,18 @@ public class AdminArticleController {
             throw new ParameterException(e.getMessage());
         }
         this.articleService.removeArticle(query.getId());
+        return Response.ok();
+    }
+
+    @PostMapping(value = "/addTagLink")
+    public Response addTagInfo(@RequestBody ArticleTag articleTag) {
+        try {
+            Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
+            Assert.notNull(articleTag.getTagId(), "标签id不能为空");
+        }catch (Exception e){
+            throw new ParameterException(e.getMessage());
+        }
+        articleService.addTagInfo(articleTag);
         return Response.ok();
     }
 

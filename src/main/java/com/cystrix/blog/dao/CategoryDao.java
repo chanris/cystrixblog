@@ -1,5 +1,6 @@
 package com.cystrix.blog.dao;
 
+import com.cystrix.blog.entity.Category;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,9 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CategoryDao {
+    void insert(Category category);
+
+    void update(Category category);
+
+    void deleteById(Integer id);
 }

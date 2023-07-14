@@ -1,6 +1,7 @@
 package com.cystrix.blog.service;
 
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.ArticleTag;
 
 import java.util.List;
 
@@ -25,4 +26,7 @@ public interface ArticleService {
     void modifyArticle(Article article);
 
     void removeArticle(Integer id);
+
+
+    void addTagInfo(ArticleTag articleTag);
 }

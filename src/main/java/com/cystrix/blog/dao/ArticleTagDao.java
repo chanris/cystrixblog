@@ -1,6 +1,9 @@
 package com.cystrix.blog.dao;
 
+import com.cystrix.blog.entity.ArticleTag;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -9,4 +12,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ArticleTagDao {
+
+    void insert(ArticleTag articleTag);
+
+    List<Integer> selectTagIdListByArticleId(Integer articleId);
 }

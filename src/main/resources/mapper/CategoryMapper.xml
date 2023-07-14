@@ -3,4 +3,22 @@
 <mapper namespace="com.cystrix.blog.dao.CategoryDao">
     <sql id="tb">`category`</sql>
     <sql id="baseCols">`id`,`name`,`create_time`,`update_time`,`is_delete`</sql>
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.Category" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="tb"/> (<include refid="baseCols"/>)
+        VALUE (NULL, #{name}, #{createTime}, #{updateTime}, 0)
+    </insert>
+
+    <update id="update" parameterType="com.cystrix.blog.entity.Category">
+        UPDATE <include refid="tb"/>
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="update_time != null">`update_time` = #{update_time},</if>
+        </set>
+        WHERE `id` = #{id} AND `is_delete` = 0
+    </update>
+
+    <update id="deleteById" parameterType="integer">
+        UPDATE <include refid="tb"/> SET `is_delete` = 1
+    </update>
 </mapper>

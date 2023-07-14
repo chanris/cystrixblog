@@ -3,4 +3,42 @@
 <mapper namespace="com.cystrix.blog.dao.TagDao">
     <sql id="tb">`tag`</sql>
     <sql id="baseCols">`id`,`name`,`create_time`,`update_time`,`is_delete`</sql>
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.Tag" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="tb"/> (<include refid="baseCols"/>)
+        VALUE(NULL, #{name}, #{createTime}, #{updateTime}, 0)
+    </insert>
+
+    <select id="selectPage" parameterType="com.cystrix.blog.query.PageQuery" resultType="com.cystrix.blog.entity.Tag">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `is_delete` = 0
+        LIMIT #{pageSize}
+        OFFSET #{offset}
+    </select>
+
+    <select id="selectTagListByIds" resultType="com.cystrix.blog.entity.Tag">
+        SELECT  <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `is_delete` = 0 AND `id` IN
+        <foreach collection="ids" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </select>
+
+    <select id="selectTagById" resultType="com.cystrix.blog.entity.Tag">
+        SELECT  <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `is_delete` = 0 AND `id` = #{id}
+    </select>
+
+    <update id="update" parameterType="com.cystrix.blog.entity.Tag">
+        UPDATE <include refid="tb"/>
+        <set>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime}</if>
+        </set>
+        WHERE `id` = #{id} AND `is_delete` = 0
+    </update>
+
+    <update id="deleteById" parameterType="integer">
+        UPDATE <include refid="tb"/> SET `is_delete` = 1 WHERE `id` = #{id}
+    </update>
 </mapper>

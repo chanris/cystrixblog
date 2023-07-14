@@ -1,10 +1,15 @@
 package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.ArticleDao;
+import com.cystrix.blog.dao.ArticleTagDao;
+import com.cystrix.blog.dao.TagDao;
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.ArticleTag;
+import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.service.ArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,8 +24,14 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleDao articleDao;
 
-    public ArticleServiceImpl(ArticleDao articleDao) {
+    private final ArticleTagDao articleTagDao;
+
+    private final TagDao tagDao;
+
+    public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, TagDao tagDao) {
         this.articleDao = articleDao;
+        this.articleTagDao = articleTagDao;
+        this.tagDao = tagDao;
     }
 
     @Override
@@ -76,5 +87,20 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public void removeArticle(Integer id) {
         articleDao.deleteById(id);
+    }
+
+    /**
+     * 为文章添加标签信息
+     * @param articleTag
+     */
+    @Override
+    public void addTagInfo(ArticleTag articleTag) {
+        Integer articleId = articleTag.getArticleId();
+        Integer tagId = articleTag.getTagId();
+        Article article = articleDao.selectArticleById(articleId);
+        Tag tag = tagDao.selectTagById(tagId);
+        Assert.notNull(article, "找不到文章 articleId:" + articleId);
+        Assert.notNull(tag, "找不到标签 tagId:" + tagId);
+        articleTagDao.insert(articleTag);
     }
 }
