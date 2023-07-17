@@ -13,12 +13,31 @@
         UPDATE <include refid="tb"/>
         <set>
             <if test="name != null">`name` = #{name},</if>
-            <if test="update_time != null">`update_time` = #{update_time},</if>
+            <if test="updateTime != null">`update_time` = #{updateTime},</if>
         </set>
         WHERE `id` = #{id} AND `is_delete` = 0
     </update>
 
+    <select id="selectCategoryById" resultType="com.cystrix.blog.entity.Category">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `id` = #{categoryId} AND `is_delete` = 0
+    </select>
+
     <update id="deleteById" parameterType="integer">
-        UPDATE <include refid="tb"/> SET `is_delete` = 1
+        UPDATE <include refid="tb"/> SET `is_delete` = 1 WHERE `id` = #{id}
     </update>
+    
+    <select id="selectPage"  resultType="com.cystrix.blog.entity.Category">
+        SELECT  <include refid="baseCols"/> FROM <include refid="tb"/>
+         WHERE `is_delete` = 0
+        LIMIT #{pageSize}  OFFSET #{offset}
+    </select>
+
+    <select id="selectCategoryListByIds"   resultType="com.cystrix.blog.entity.Category">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `id`
+        <foreach collection="ids" item="id" open="IN (" close=")" separator=",">
+            #{id}
+        </foreach>
+        AND `is_delete` = 0
+</select>
 </mapper>

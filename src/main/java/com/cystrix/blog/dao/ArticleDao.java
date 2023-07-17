@@ -25,6 +25,8 @@ public interface ArticleDao {
 
     Article selectArticleByIdWithoutContent(Integer id);
 
+    List<Article> selectArticleByIdsWithoutContent(@Param("ids") List<Integer> ids);
+
     void insert(Article article);
 
     void update(Article article);

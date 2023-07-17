@@ -1,6 +1,7 @@
 package com.cystrix.blog.controller.admin;
 
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
@@ -62,7 +63,7 @@ public class AdminArticleController {
         return Response.ok();
     }
 
-    @PostMapping(value = "/addTagLink")
+    @PostMapping(value = "/addTagInfo")
     public Response addTagInfo(@RequestBody ArticleTag articleTag) {
         try {
             Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
@@ -71,6 +72,18 @@ public class AdminArticleController {
             throw new ParameterException(e.getMessage());
         }
         articleService.addTagInfo(articleTag);
+        return Response.ok();
+    }
+
+    @PostMapping(value = "/addCategoryInfo")
+    public Response addCategoryInfo(@RequestBody ArticleCategory articleCategory) {
+        try {
+            Assert.notNull(articleCategory.getArticleId(), "文章id不能为空");
+            Assert.notNull(articleCategory.getCategoryId(), "分类id不能为空");
+        }catch (Exception e){
+            throw new ParameterException(e.getMessage());
+        }
+        articleService.addCategoryInfo(articleCategory);
         return Response.ok();
     }
 

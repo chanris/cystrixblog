@@ -4,5 +4,15 @@
     <sql id="tb">`article_category`</sql>
     <sql id="baseCols">`id`,`article_id`,`category_id`</sql>
 
+    <insert id="insert" parameterType="com.cystrix.blog.entity.ArticleCategory" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="tb"/> (<include refid="baseCols"/>)
+        VALUE (NULL, #{articleId}, #{categoryId})
+    </insert>
+
+    <delete id="deleteByArticleIdAndCategoryId" parameterType="com.cystrix.blog.entity.ArticleCategory">
+        DELETE FROM <include refid="tb"/>
+        WHERE `category_id` = #{categoryId} AND `article_id` = #{articleId}
+    </delete>
+
 
 </mapper>

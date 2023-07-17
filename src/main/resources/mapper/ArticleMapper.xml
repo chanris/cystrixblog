@@ -50,6 +50,14 @@
         WHERE `id` = #{id} AND `is_delete` = 0
     </select>
 
+    <select id="selectArticleByIdsWithoutContent"  resultType="com.cystrix.blog.entity.Article">
+        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/> WHERE `id`
+        <foreach collection="ids" item="id" open="IN (" separator="," close=")">
+            #{id}
+        </foreach>
+        AND `is_delete` = 0
+    </select>
+
     <update id="update" parameterType="com.cystrix.blog.entity.Article">
         UPDATE <include refid="tb"/>
         <set>

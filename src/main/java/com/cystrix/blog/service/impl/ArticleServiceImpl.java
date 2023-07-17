@@ -1,17 +1,14 @@
 package com.cystrix.blog.service.impl;
 
-import com.cystrix.blog.dao.ArticleDao;
-import com.cystrix.blog.dao.ArticleTagDao;
-import com.cystrix.blog.dao.TagDao;
-import com.cystrix.blog.entity.Article;
-import com.cystrix.blog.entity.ArticleTag;
-import com.cystrix.blog.entity.Tag;
+import com.cystrix.blog.dao.*;
+import com.cystrix.blog.entity.*;
 import com.cystrix.blog.service.ArticleService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,12 +23,19 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleTagDao articleTagDao;
 
+    private final ArticleCategoryDao articleCategoryDao;
+
+    private final CategoryDao categoryDao;
+
     private final TagDao tagDao;
 
-    public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, TagDao tagDao) {
+    public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, ArticleCategoryDao articleCategoryDao,
+                              TagDao tagDao, CategoryDao categoryDao) {
         this.articleDao = articleDao;
         this.articleTagDao = articleTagDao;
+        this.articleCategoryDao = articleCategoryDao;
         this.tagDao = tagDao;
+        this.categoryDao = categoryDao;
     }
 
     @Override
@@ -102,5 +106,25 @@ public class ArticleServiceImpl implements ArticleService {
         Assert.notNull(article, "找不到文章 articleId:" + articleId);
         Assert.notNull(tag, "找不到标签 tagId:" + tagId);
         articleTagDao.insert(articleTag);
+    }
+
+    @Override
+    public void addCategoryInfo(ArticleCategory articleCategory) {
+        Integer articleId = articleCategory.getArticleId();
+        Integer categoryId = articleCategory.getCategoryId();
+        Article article = articleDao.selectArticleById(articleId);
+        Category category = categoryDao.selectCategoryById(categoryId);
+        Assert.notNull(article, "找不到文章 articleId:" + articleId);
+        Assert.notNull(category, "找不到分类 categoryId:" + categoryId);
+        articleCategoryDao.insert(articleCategory);
+    }
+
+    @Override
+    public List<Article> getArticleDigestInfoByTagId(Integer tagId) {
+        List<Integer> list = articleTagDao.selectArticleIdByTagId(tagId);
+        if (list.size() != 0) {
+            return articleDao.selectArticleByIdsWithoutContent(list);
+        }
+        return new ArrayList<>();
     }
 }

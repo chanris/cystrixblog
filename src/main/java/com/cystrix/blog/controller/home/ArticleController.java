@@ -6,6 +6,7 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.query.PageQuery;
 import com.cystrix.blog.query.PageQueryWithYear;
+import com.cystrix.blog.query.TagQuery;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
 import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
@@ -84,6 +85,18 @@ public class ArticleController {
         List<Article> articles = articleService.listArticleOrderByHotRank();
         return Response.ok(articles);
     }
+
+    @RequestMapping(value = "/listByTag")
+    public Response listArticleByTag(@RequestBody TagQuery query) {
+        try {
+            Assert.notNull(query.getId(), "tagId不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        List<Article> articleDigestInfoByTagId = articleService.getArticleDigestInfoByTagId(query.getId());
+        return Response.ok(articleDigestInfoByTagId);
+    }
+
 
 
 }

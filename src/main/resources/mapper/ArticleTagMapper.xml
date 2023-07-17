@@ -12,4 +12,14 @@
         SELECT  `tag_id` FROM <include refid="tb"/>
         WHERE `article_id`  = #{articleId}
     </select>
+
+
+    <select id="selectArticleIdByTagId" parameterType="integer"  resultType="integer">
+        SELECT `article_id` FROM <include refid="tb"/>
+        WHERE `tag_id` = #{tagId}
+    </select>
+
+    <delete id="deleteByArticleIdAndTagId" parameterType="com.cystrix.blog.entity.ArticleTag">
+        DELETE FROM <include refid="tb"/> WHERE `article_id` = #{articleId} AND `tag_id` = #{tagId}
+    </delete>
 </mapper>

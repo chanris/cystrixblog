@@ -16,4 +16,8 @@ public interface ArticleTagDao {
     void insert(ArticleTag articleTag);
 
     List<Integer> selectTagIdListByArticleId(Integer articleId);
+
+    List<Integer> selectArticleIdByTagId(Integer tagId);
+
+    void deleteByArticleIdAndTagId(ArticleTag articleTag);
 }

@@ -1,6 +1,10 @@
 package com.cystrix.blog.service;
 
 import com.cystrix.blog.entity.Category;
+import com.cystrix.blog.entity.Tag;
+import com.cystrix.blog.query.PageQuery;
+
+import java.util.List;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -14,4 +18,9 @@ public interface CategoryService {
     void modifyCategory(Category category);
 
     void deleteById(Integer id);
+
+    List<Category> getPageTag(PageQuery query);
+
+    List<Category> getTagListByArticleId(Integer articleId);
+
 }
