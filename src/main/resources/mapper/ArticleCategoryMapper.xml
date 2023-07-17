@@ -14,5 +14,8 @@
         WHERE `category_id` = #{categoryId} AND `article_id` = #{articleId}
     </delete>
 
+    <select id="selectArticleIdByCategoryId" parameterType="integer" resultType="integer">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `category_id` = `categoryId`
+    </select>
 
 </mapper>

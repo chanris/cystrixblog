@@ -32,4 +32,5 @@ public interface ArticleService {
     void addCategoryInfo(ArticleCategory articleCategory);
 
     List<Article> getArticleDigestInfoByTagId(Integer tagId);
+    List<Article> getArticleDigestInfoByCategoryId(Integer categoryId);
 }

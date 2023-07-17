@@ -127,4 +127,13 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return new ArrayList<>();
     }
+
+    @Override
+    public List<Article> getArticleDigestInfoByCategoryId(Integer categoryId) {
+        List<Integer> list = articleCategoryDao.selectArticleIdByCategoryId(categoryId);
+        if (list.size() != 0) {
+            return articleDao.selectArticleByIdsWithoutContent(list);
+        }
+        return new ArrayList<>();
+    }
 }
