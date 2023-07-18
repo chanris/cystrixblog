@@ -1,5 +1,6 @@
 package com.cystrix.blog.util;
 
+import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.EmailOpsException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
