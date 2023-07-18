@@ -3,4 +3,17 @@
 <mapper namespace="com.cystrix.blog.dao.ArticleCommentDao">
     <sql id="tb">`article_comment`</sql>
     <sql id="baseCols">`id`,`article_id`,`comment_id`</sql>
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.ArticleComment" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
+        VALUE (NULL, #{articleId}, #{commentId})
+    </insert>
+
+    <delete id="deleteById" parameterType="integer">
+        DELETE FROM <include refid="tb"/> WHERE `id` = #{id}
+    </delete>
+
+    <select id="selectOneByArticleId" parameterType="integer" resultType="com.cystrix.blog.entity.ArticleComment">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `article_id` = #{articleId}
+    </select>
 </mapper>

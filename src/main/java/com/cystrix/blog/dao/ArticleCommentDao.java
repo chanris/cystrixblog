@@ -1,5 +1,6 @@
 package com.cystrix.blog.dao;
 
+import com.cystrix.blog.entity.ArticleComment;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +10,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface ArticleCommentDao {
+
+    void insert(ArticleComment record);
+
+    void deleteById(Integer id);
+
+    ArticleComment selectOneByArticleId(Integer articleId);
 }

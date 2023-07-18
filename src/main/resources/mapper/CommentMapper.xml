@@ -2,6 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cystrix.blog.dao.CommentDao">
     <sql id="tb">`comment`</sql>
-    <sql id="baseCols">`id`,`content`,`create_time`,`update_time`,`user_ip`,`is_delete`</sql>
+    <sql id="baseCols">`id`,`pid`,`content`,`create_time`,`update_time`,`user_ip`,`is_delete`</sql>
 
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.Comment">
+        INSERT INTO<include refid="tb"/>(<include refid="baseCols"/>)
+        VALUE (NULL, #{pid}, #{content}, #{createTime}, #{updateTime}, #{userIp}, 0)
+    </insert>
+
+    <update id="deleteById" parameterType="integer">
+        UPDATE <include refid="tb"/> SET `is_delete` = 1 WHERE `id` = #{id}
+    </update>
+
+    <select id="selectCommentById" parameterType="integer" resultType="com.cystrix.blog.entity.Comment">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `id` = #{id} AND `is_delete` = 0
+    </select>
 </mapper>

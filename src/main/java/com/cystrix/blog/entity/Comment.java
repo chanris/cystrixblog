@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Data
 public class Comment {
     private Integer id;
+
+    private Integer pid;
     private String content;
     private LocalDateTime createTime;
     private LocalDateTime updateTime;
