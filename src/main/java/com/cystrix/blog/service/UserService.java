@@ -2,6 +2,7 @@ package com.cystrix.blog.service;
 
 import com.cystrix.blog.entity.UserInfo;
 import com.cystrix.blog.vo.LoginToken;
+import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.UserInfoVo;
 
 /**
@@ -11,7 +12,7 @@ import com.cystrix.blog.vo.UserInfoVo;
  */
 public interface UserService {
 
-    LoginToken doLoginHandle(UserInfo userInfo);
+    LoginToken doLoginHandle(LoginVo loginVo);
 
     UserInfoVo getUserInfoVo(Integer userId);
 
@@ -20,4 +21,6 @@ public interface UserService {
     void modifyUserInfo(UserInfo userInfo);
 
     void removeUserInfo(Integer id);
+
+    boolean isExistedUser(String email);
 }

@@ -6,8 +6,11 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.UserService;
 import com.cystrix.blog.util.JwtUtils;
 import com.cystrix.blog.util.MD5Utils;
+import com.cystrix.blog.util.RedisUtils;
 import com.cystrix.blog.vo.LoginToken;
+import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.UserInfoVo;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -23,22 +26,36 @@ public class UserServiceImpl implements UserService {
     private final UserInfoDao userInfoDao;
     private final JwtUtils jwtUtils;
     private final MD5Utils md5Utils;
+    private final RedisUtils redisUtils;
 
-    public UserServiceImpl(UserInfoDao userInfoDao, JwtUtils jwtUtils, MD5Utils md5Utils) {
+    public UserServiceImpl(UserInfoDao userInfoDao, JwtUtils jwtUtils, MD5Utils md5Utils, RedisUtils redisUtils) {
         this.userInfoDao = userInfoDao;
         this.jwtUtils = jwtUtils;
         this.md5Utils = md5Utils;
+        this.redisUtils = redisUtils;
     }
 
     @Override
-    public LoginToken doLoginHandle(UserInfo userInfo) {
-        String origin = userInfo.getPassword();
-        String encryption = md5Utils.encryption(origin);
-        userInfo.setPassword(encryption);
-        UserInfo result = userInfoDao.selectUserInfoByUsernameAndPassword(userInfo);
-        if (result == null) {
-            throw new ParameterException("用户名密码错误");
+    public LoginToken doLoginHandle(LoginVo loginVo) {
+        String email = loginVo.getEmail();
+        String redisKey = "LOGIN_CODE_" + email;
+        // 验证邮箱验证码
+        if (!(redisUtils.isExistedKey(redisKey) &&
+                redisUtils.getValue(redisKey).equals(loginVo.getVerificationCode()))) {
+            throw new ParameterException("验证码错误");
         }
+
+        String origin = loginVo.getPassword();
+        String encryption = md5Utils.encryption(origin);
+        UserInfo userInfo = new UserInfo();
+        userInfo.setPassword(encryption);
+        userInfo.setEmail(email);
+        UserInfo result = userInfoDao.selectUserInfoByEmailAndPassword(userInfo);
+        if (result == null) {
+            throw new ParameterException("账户密码错误");
+        }
+        // 登录成功，清除缓存
+        redisUtils.deleteKey(redisKey);
         return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
     }
 
@@ -82,5 +99,10 @@ public class UserServiceImpl implements UserService {
         userInfo.setCreateTime(LocalDateTime.now());
         userInfo.setUpdateTime(LocalDateTime.now());
         userInfoDao.insert(userInfo);
+    }
+
+    @Override
+    public boolean isExistedUser(String email) {
+        return userInfoDao.selectUserInfoByEmail(email) != null;
     }
 }

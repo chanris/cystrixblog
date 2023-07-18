@@ -13,9 +13,19 @@
             #{motto}, #{createTime}, #{updateTime}, 0)
     </insert>
 
+    <select id="selectUserInfoByEmail" parameterType="string" resultType="com.cystrix.blog.entity.UserInfo">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `email` = #{email} AND `is_delete` = 0
+    </select>
+
     <select id="selectUserInfoByUsernameAndPassword" parameterType="com.cystrix.blog.entity.UserInfo" resultType="com.cystrix.blog.entity.UserInfo">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
         WHERE `username` = #{username} AND `password` = #{password} AND `is_delete` = 0
+    </select>
+
+    <select id="selectUserInfoByEmailAndPassword" parameterType="com.cystrix.blog.entity.UserInfo" resultType="com.cystrix.blog.entity.UserInfo">
+        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
+        WHERE `email` = #{email} AND `password` = #{password} AND `is_delete` = 0
     </select>
 
     <select id="selectUserInfoById" parameterType="integer" resultType="com.cystrix.blog.entity.UserInfo">

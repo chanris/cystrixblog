@@ -1,6 +1,7 @@
 package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.UserInfo;
+import com.cystrix.blog.vo.LoginVo;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -12,7 +13,10 @@ import org.springframework.stereotype.Repository;
 public interface UserInfoDao {
     void insert(UserInfo userInfo);
 
+    UserInfo selectUserInfoByEmail(String email);
     UserInfo selectUserInfoByUsernameAndPassword(UserInfo userInfo);
+
+    UserInfo selectUserInfoByEmailAndPassword(UserInfo userInfo);
 
     UserInfo selectUserInfoById(Integer id);
 

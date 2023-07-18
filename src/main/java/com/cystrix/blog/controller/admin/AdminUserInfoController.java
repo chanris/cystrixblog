@@ -6,6 +6,7 @@ import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.UserQuery;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.LoginToken;
+import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.Response;
 import org.apache.shiro.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,16 +32,16 @@ public class AdminUserInfoController {
     }
 
 
-    // TODO 7/11 邮箱验证码功能还没实现
+    // TODO 7/11 邮箱验证码功能还没实现 DONE 7/18
     @RequestMapping(value = "/login")
-    public Response login(@RequestBody UserInfo userInfo) {
+    public Response login(@RequestBody LoginVo vo) {
         try {
-            Assert.notNull(userInfo.getUsername(), "用户名不可为空");
-            Assert.notNull(userInfo.getPassword(), "密码不可为空");
+            Assert.notNull(vo.getEmail(), "邮箱不可为空");
+            Assert.notNull(vo.getPassword(), "密码不可为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        LoginToken tokenVo = userService.doLoginHandle(userInfo);
+        LoginToken tokenVo = userService.doLoginHandle(vo);
         return Response.builder().code(CodeEnum.OK.code).msg("登录成功").data(tokenVo).build();
     }
 
