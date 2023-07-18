@@ -25,17 +25,23 @@ public class ArticleServiceImpl implements ArticleService {
 
     private final ArticleCategoryDao articleCategoryDao;
 
+    private final ArticleCommentDao articleCommentDao;
+
     private final CategoryDao categoryDao;
 
     private final TagDao tagDao;
 
+    private final CommentDao commentDao;
+
     public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, ArticleCategoryDao articleCategoryDao,
-                              TagDao tagDao, CategoryDao categoryDao) {
+                              ArticleCommentDao articleCommentDao, TagDao tagDao, CategoryDao categoryDao, CommentDao commentDao) {
         this.articleDao = articleDao;
         this.articleTagDao = articleTagDao;
         this.articleCategoryDao = articleCategoryDao;
+        this.articleCommentDao = articleCommentDao;
         this.tagDao = tagDao;
         this.categoryDao = categoryDao;
+        this.commentDao = commentDao;
     }
 
     @Override
@@ -117,6 +123,17 @@ public class ArticleServiceImpl implements ArticleService {
         Assert.notNull(article, "找不到文章 articleId:" + articleId);
         Assert.notNull(category, "找不到分类 categoryId:" + categoryId);
         articleCategoryDao.insert(articleCategory);
+    }
+
+    @Override
+    public void addCommentInfo(ArticleComment articleComment) {
+        Integer articleId = articleComment.getArticleId();
+        Integer commentId = articleComment.getCommentId();
+        Article article = articleDao.selectArticleById(articleId);
+        Comment comment = commentDao.selectCommentById(commentId);
+        Assert.notNull(article, "找不到文章 articleId:" + articleId);
+        Assert.notNull(comment, "找不到评论 commentId:" + commentId);
+        articleCommentDao.insert(articleComment);
     }
 
     @Override

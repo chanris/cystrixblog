@@ -1,6 +1,7 @@
 package com.cystrix.blog.controller.home;
 
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.ArticleComment;
 import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.*;
@@ -97,13 +98,24 @@ public class ArticleController {
     @RequestMapping(value = "/listByCategory")
     public Response listArticleByTag(@RequestBody CategoryQuery query) {
         try {
-            Assert.notNull(query.getId(), "tagId不能为空");
+            Assert.notNull(query.getId(), "categoryId不能为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        List<Article> articleDigestInfoByTagId = articleService.getArticleDigestInfoByTagId(query.getId());
+        List<Article> articleDigestInfoByTagId = articleService.getArticleDigestInfoByCategoryId(query.getId());
         return Response.ok(articleDigestInfoByTagId);
     }
 
+    @RequestMapping(value = "/addCommentLink")
+    public Response addCommentLink(@RequestBody ArticleComment articleComment) {
+        try {
+            Assert.notNull(articleComment.getArticleId(), "articleId不能为空");
+            Assert.notNull(articleComment.getCommentId(), "commentId不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        articleService.addCommentInfo(articleComment);
+        return Response.ok();
+    }
 
 }

@@ -32,21 +32,7 @@ public class AdminCommentController {
         this.netUtils = netUtils;
     }
 
-    @PostMapping(value = "/add")
-    public Response addComment(@RequestBody Comment comment, HttpServletRequest request) {
-        try {
-            Assert.notNull(comment.getContent(), "评论内容不能为空");
-            if (comment.getUserIp() == null) {
-                String ip = netUtils.getIpAddress(request);
-                comment.setUserIp(ip);
-            }
-            Assert.notNull(comment.getUserIp(), "评论游客ip地址不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        commentService.addComment(comment);
-        return  Response.ok("创建成功");
-    }
+
 
     @PostMapping(value = "/delete")
     public Response deleteComment(@RequestBody CommentQuery query) {
