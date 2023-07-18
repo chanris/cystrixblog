@@ -39,7 +39,7 @@ public class UserInfoController {
     public Response getVerificationCode(@RequestBody LoginVo vo) {
         try {
             Assert.notNull(vo.getEmail(), "邮箱不能为空");
-            Assert.isTrue(userService.isExistedUser(vo.getEmail()), "用户不存在");
+            Assert.isTrue(!userService.isExistedUser(vo.getEmail()), "用户不存在");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
