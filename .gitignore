@@ -21,6 +21,8 @@ logs/**
 *.iws
 *.iml
 *.ipr
+docs
+docs/
 
 ### Eclipse ###
 .apt_generated
