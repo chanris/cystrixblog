@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeUtility;
+import java.io.File;
 import java.util.Random;
 
 /**
@@ -59,5 +60,18 @@ public class EmailUtils {
         return verificationCode.toString();
     }
 
+    public static void main(String[] args) {
+        // 获取资源文件的相对路径（相对于项目根目录）
+        String resourcePath = "src/main/resources/application.yml";
 
+        // 使用File类构建文件对象
+        File resourceFile = new File(resourcePath);
+
+        if (resourceFile.exists()) {
+            // 文件存在，可以进行操作
+            System.out.println("有文件，可以操作");
+        } else {
+            System.out.println("无法找到资源文件: " + resourcePath);
+        }
+    }
 }

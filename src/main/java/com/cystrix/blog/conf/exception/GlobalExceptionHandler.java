@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         log.warn("===========================捕捉到全局异常===========================");
         log.warn("异常类型: {}", ex.getClass().toGenericString());
         log.warn("异常信息：{}", ex.getMessage());
-        log.warn("====================================================================");
+        log.warn("=======================================================================");
         return Response.failed(CodeEnum.INTER_SERVER_ERROR);
     }
 
