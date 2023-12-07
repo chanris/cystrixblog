@@ -31,8 +31,6 @@ public class AdminUserInfoController {
         this.userService = userService;
     }
 
-
-    // TODO 7/11 邮箱验证码功能还没实现 DONE 7/18
     @RequestMapping(value = "/login")
     public Response login(@RequestBody LoginVo vo) {
         try {
