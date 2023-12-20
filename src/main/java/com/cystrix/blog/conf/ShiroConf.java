@@ -10,6 +10,8 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
 import java.util.LinkedHashMap;
@@ -72,6 +74,21 @@ public class ShiroConf {
         evaluator.setSessionStorageEnabled(Boolean.FALSE);
         subjectDAO.setSessionStorageEvaluator(evaluator);
         return securityManager;
+    }
+
+    // spring boot 解决跨域问题
+    @Bean
+    public WebMvcConfigurer crosConfigurer(){
+        System.out.println("cros");
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                //服务器的哪个rul支持跨域
+                registry.addMapping("/**").allowedMethods("*")
+                        .allowedHeaders("*")
+                        .allowedOrigins("*");
+            }
+        };
     }
 
 }

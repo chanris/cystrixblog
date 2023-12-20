@@ -1,6 +1,8 @@
 package com.cystrix.blog.entity;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +11,9 @@ import java.time.LocalDateTime;
  * @date: 10/7/2023
  * @description:
  */
-@Data
+
+@Getter
+@Setter
 public class ArticleCategory {
     private Integer id;
     private Integer articleId;

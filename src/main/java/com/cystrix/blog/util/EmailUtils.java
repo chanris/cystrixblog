@@ -1,5 +1,6 @@
 package com.cystrix.blog.util;
 
+import com.cystrix.blog.enums.RedisEnum;
 import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.EmailOpsException;
 import org.springframework.beans.factory.annotation.Value;
@@ -38,7 +39,7 @@ public class EmailUtils {
         try {
             message.setFrom(new InternetAddress(MimeUtility.encodeText("CystrixBlog系统服务") + "<chenyue7@qq.com>").toString());
             javaMailSender.send(message);
-            String redisKey = "LOGIN_CODE_" + emailReceiver;
+            String redisKey = RedisEnum.VERIFICATION_LOGIN_PREFIX.name() + '_' + emailReceiver;
             redisUtils.setValue(redisKey, verificationCode);
             redisUtils.setExpireTime(redisKey, 60 * 5);
         }catch (Exception e) {

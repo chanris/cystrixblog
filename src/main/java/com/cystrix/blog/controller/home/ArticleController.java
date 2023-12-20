@@ -6,7 +6,10 @@ import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.*;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
+import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -79,9 +82,17 @@ public class ArticleController {
      * 热门文章列表（默认10篇）
      */
     @RequestMapping(value = "/listHotArticle")
-    public Response listHotArticle() {
-        List<Article> articles = articleService.listArticleOrderByHotRank();
-        return Response.ok(articles);
+    public Response listHotArticle(@RequestBody BaseVo vo) {
+        List<Article> articles = null;
+        try {
+            PageHelper.startPage(vo.getPageNum(), vo.getPageSize());
+            articles = articleService.listArticleOrderByHotRank();
+            PageInfo<Article> page = new PageInfo<>(articles);
+            return Response.ok(page);
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+
     }
 
     @RequestMapping(value = "/listByTag")

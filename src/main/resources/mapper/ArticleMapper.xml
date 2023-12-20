@@ -36,7 +36,6 @@
         SELECT  <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
         WHERE `is_delete` = 0
         ORDER BY `hot_rank` DESC
-        LIMIT #{value}
     </select>
 
     <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">

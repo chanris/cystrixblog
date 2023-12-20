@@ -33,12 +33,6 @@ public class AdminUserInfoController {
 
     @RequestMapping(value = "/login")
     public Response login(@RequestBody LoginVo vo) {
-        try {
-            Assert.notNull(vo.getEmail(), "邮箱不可为空");
-            Assert.notNull(vo.getPassword(), "密码不可为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
         LoginToken tokenVo = userService.doLoginHandle(vo);
         return Response.builder().code(CodeEnum.OK.code).msg("登录成功").data(tokenVo).build();
     }

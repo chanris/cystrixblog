@@ -8,6 +8,7 @@ import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.Response;
 import com.cystrix.blog.vo.UserInfoVo;
 import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,6 +45,11 @@ public class UserInfoController {
             throw new ParameterException(e.getMessage());
         }
         emailUtils.sendVerificationCodeToEmail(vo.getEmail());
+        return Response.ok();
+    }
+
+    @GetMapping(value = "/test")
+    public  Response test() {
         return Response.ok();
     }
 }

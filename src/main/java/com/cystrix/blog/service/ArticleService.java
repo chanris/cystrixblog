@@ -39,5 +39,4 @@ public interface ArticleService {
 
     List<Article> getArticleDigestInfoByCategoryId(Integer categoryId);
 
-
 }
