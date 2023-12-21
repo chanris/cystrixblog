@@ -12,8 +12,7 @@
     </sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.Article" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO <include refid="tb"/>(<include refid="baseCols"/>)
-        VALUE (NULL, #{title}, #{content}, #{digest}, #{commentCount}, #{viewCount}, #{likeCount},#{hotRank}, #{createTime}, #{updateTime}, 0)
+        insert into article(id, title, content, digest) value(null, #{title}, #{content}, #{digest})
     </insert>
 
     <select id="selectPageWithoutContent" resultType="com.cystrix.blog.entity.Article">
@@ -66,8 +65,7 @@
             <if test="commentCount != null">`comment_count` = #{commentCount},</if>
             <if test="viewCount != null">`view_count` = #{viewCount},</if>
             <if test="likeCount != null">`like_count` = #{likeCount},</if>
-            <if test="hotRank != null">`hot_rank` = #{hotRank},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime},</if>
+            <if test="hotRank != null">`hot_rank` = #{hotRank}</if>
         </set>
         WHERE `id` = #{id} AND `is_delete` = 0
     </update>
@@ -75,5 +73,9 @@
     <update id="deleteById" parameterType="integer">
         UPDATE <include refid="tb"/> SET `is_delete` = 1 WHERE `id` = #{id}
     </update>
+
+    <select id="articleStatisInfo" resultType="com.cystrix.blog.entity.SiteInfo">
+        select count(*) articleNum, sum(wordNum) wordsNum from article
+    </select>
 
 </mapper>

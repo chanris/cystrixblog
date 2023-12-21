@@ -48,7 +48,7 @@ public class AdminArticleController {
         }catch (Exception e){
             throw new ParameterException(e.getMessage());
         }
-        this.articleService.modifyArticle(article);
+        articleService.modifyArticle(article);
         return Response.ok();
     }
 
@@ -59,7 +59,7 @@ public class AdminArticleController {
         }catch (Exception e){
             throw new ParameterException(e.getMessage());
         }
-        this.articleService.removeArticle(query.getId());
+        articleService.removeArticle(query.getId());
         return Response.ok();
     }
 

@@ -20,6 +20,7 @@ public class Article {
     private String title;
     private String content;
     private String digest;
+    private Integer wordNum;
     private Integer commentCount;
     private Integer viewCount;
     private Integer likeCount;

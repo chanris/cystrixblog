@@ -34,7 +34,7 @@ public class AdminUserInfoController {
     @RequestMapping(value = "/login")
     public Response login(@RequestBody LoginVo vo) {
         LoginToken tokenVo = userService.doLoginHandle(vo);
-        return Response.builder().code(CodeEnum.OK.code).msg("登录成功").data(tokenVo).build();
+        return Response.builder().code(CodeEnum.OK.code).msg("登录成功").result(tokenVo).build();
     }
 
     /**

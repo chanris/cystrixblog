@@ -44,7 +44,7 @@ public class ArticleController {
             throw new ParameterException(e.getMessage());
         }
         List<Article> articles = articleService.getPagedArticleWithoutContent(pageQuery.getPageNum(), pageQuery.getPageSize());
-        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").data(articles).build();
+        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").result(articles).build();
     }
 
     /**
@@ -61,7 +61,7 @@ public class ArticleController {
         }
         List<Article> articles = articleService.getPagedArticleByYearWithoutContent(pageQuery.getPageNum(),
                 pageQuery.getPageSize(), pageQuery.getYear());
-        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").data(articles).build();
+        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").result(articles).build();
     }
 
     /**

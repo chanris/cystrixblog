@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cystrix.blog.dao.SiteInfoDao">
+    <update id="updateSelective" parameterType="com.cystrix.blog.entity.SiteInfo">
+        update site_info
+        <set>
+            <if test="runDays != null">run_days = #{runDays},</if>
+            <if test="articleNum != null">article_num = #{articleNum},</if>
+            <if test="wordsNum != null">words_num = #{wordsNum},</if>
+            <if test="visitorsNum != null">visitors_num = #{visitorsNum},</if>
+            <if test="latestUpdateTime != null">latest_update_time = #{latestUpdateTime}</if>
+        </set>
+        where id = 1
+    </update>
+    
+    <select id="selectOne" resultType="com.cystrix.blog.entity.SiteInfo">
+        select * from site_info where id = 1
+    </select>
+</mapper>

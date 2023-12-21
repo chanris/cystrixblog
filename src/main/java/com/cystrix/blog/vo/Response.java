@@ -1,7 +1,6 @@
 package com.cystrix.blog.vo;
 
 import com.cystrix.blog.enums.CodeEnum;
-import lombok.Data;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -11,13 +10,12 @@ import lombok.Data;
 public class Response {
     private Integer code;
     private String msg;
-    private Object data;
+    private Object result;
 
-
-    public Response(Integer code, String msg, Object data) {
+    public Response(Integer code, String msg, Object result) {
         this.code = code;
         this.msg = msg;
-        this.data = data;
+        this.result = result;
     }
 
     public Integer getCode() {
@@ -36,19 +34,19 @@ public class Response {
         this.msg = msg;
     }
 
-    public Object getData() {
-        return data;
+    public Object getResult() {
+        return result;
     }
 
-    public void setData(Object data) {
-        this.data = data;
+    public void setResult(Object result) {
+        this.result = result;
     }
 
     public static Response ok() {
         return  Response.builder().code(CodeEnum.OK.code).msg(CodeEnum.OK.msg).build();
     }
     public static Response ok(Object data) {
-        return  Response.builder().code(CodeEnum.OK.code).msg(CodeEnum.OK.msg).data(data).build();
+        return  Response.builder().code(CodeEnum.OK.code).msg(CodeEnum.OK.msg).result(data).build();
     }
 
     public static Response failed(CodeEnum codeEnum) {
@@ -60,17 +58,17 @@ public class Response {
     }
 
     public static Response failed(CodeEnum codeEnum, String msg, Object data) {
-        return Response.builder().code(codeEnum.code).msg(msg).data(data).build();
+        return Response.builder().code(codeEnum.code).msg(msg).result(data).build();
     }
 
-    public static Builder builder(){
+    public static Builder builder() {
         return new Builder();
     }
 
-    public static class Builder{
+    public static class Builder {
         private Integer code;
         private String msg;
-        private Object data;
+        private Object result;
 
         public Builder code(Integer code) {
             this.code = code;
@@ -82,13 +80,13 @@ public class Response {
             return this;
         }
 
-        public Builder data(Object data){
-            this.data = data;
+        public Builder result(Object result) {
+            this.result = result;
             return this;
         }
 
-        public Response build(){
-            return new Response(code, msg, data);
+        public Response build() {
+            return new Response(code, msg, result);
         }
     }
 }

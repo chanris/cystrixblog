@@ -5,4 +5,11 @@
     <select id="listArticleWithPage"  resultType="com.cystrix.blog.entity.Article">
         select * from article order by year(create_time), month(create_time) DESC
     </select>
+
+    <select id="listArchiveStatisInfoWithPage" resultType="com.cystrix.blog.view.ArchiveStatisInfoView">
+        select year(create_time) year, month(create_time) month,  count(*) articleNum
+        from article
+        group by year(create_time), month(create_time)
+        order by year, month
+    </select>
 </mapper>

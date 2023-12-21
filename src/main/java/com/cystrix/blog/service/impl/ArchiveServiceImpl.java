@@ -2,12 +2,10 @@ package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.ArchiveDao;
 import com.cystrix.blog.entity.Article;
-import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.BaseService;
+import com.cystrix.blog.view.ArchiveStatisInfoView;
 import com.cystrix.blog.vo.BaseVo;
-import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
-import org.springframework.util.Assert;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -22,9 +20,16 @@ public class ArchiveServiceImpl extends BaseService {
     @Resource
     private ArchiveDao archiveDao;
 
+    // 根据年，月获得文章信息列表
     public List<Article> listArticleWithPage(BaseVo vo) {
         executePage(vo);
         return archiveDao.listArticleWithPage();
+    }
+
+    // 获得每个月的文章数量
+    public List<ArchiveStatisInfoView> listArchiveStatisInfoWithPage(BaseVo vo) {
+        executePage(vo);
+        return archiveDao.listArchiveStatisInfoWithPage();
     }
 
 }

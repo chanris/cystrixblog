@@ -1,6 +1,7 @@
 package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.Article;
+import com.cystrix.blog.entity.SiteInfo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
@@ -32,4 +33,6 @@ public interface ArticleDao {
     void update(Article article);
 
     void deleteById(Integer id);
+
+    SiteInfo articleStatisInfo();
 }

@@ -3,6 +3,7 @@ package com.cystrix.blog.service.impl;
 import com.cystrix.blog.dao.*;
 import com.cystrix.blog.entity.*;
 import com.cystrix.blog.service.ArticleService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -16,6 +17,7 @@ import java.util.List;
  * @date: 11/7/2023
  * @description:
  */
+@Slf4j
 @Service
 public class ArticleServiceImpl implements ArticleService {
 
@@ -78,14 +80,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    @Transactional(rollbackFor = {Exception.class})
     public void addArticle(Article article) {
-        article.setHotRank(0);
-        article.setCreateTime(LocalDateTime.now());
-        article.setUpdateTime(LocalDateTime.now());
-        article.setCommentCount(0);
-        article.setLikeCount(0);
-        article.setViewCount(0);
         articleDao.insert(article);
     }
 
