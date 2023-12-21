@@ -3,6 +3,7 @@ package com.cystrix.blog.service.impl;
 import com.cystrix.blog.dao.*;
 import com.cystrix.blog.entity.*;
 import com.cystrix.blog.service.ArticleService;
+import com.cystrix.blog.util.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +82,8 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public void addArticle(Article article) {
+        int wordNum = StringUtils.countWords(article.getContent());
+        article.setWordNum(wordNum);
         articleDao.insert(article);
     }
 
