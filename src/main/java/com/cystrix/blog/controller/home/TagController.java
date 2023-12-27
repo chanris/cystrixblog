@@ -38,6 +38,11 @@ public class TagController {
         return Response.ok(pageTag);
     }
 
+    @GetMapping(value = "/all")
+    public Response getAllTagList() {
+        return Response.ok(tagService.getAll());
+    }
+
     @RequestMapping(value = "/list")
     public Response getTagList(@RequestBody ArticleQuery articleQuery) {
         try {

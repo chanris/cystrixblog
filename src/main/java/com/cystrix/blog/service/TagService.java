@@ -1,5 +1,6 @@
 package com.cystrix.blog.service;
 
+import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.query.PageQuery;
 
@@ -16,10 +17,14 @@ public interface TagService {
 
     List<Tag> getPageTag(PageQuery query);
 
+    List<Tag>  getAll();
+
     List<Tag> getTagListByArticleId(Integer articleId);
 
     void modifyTag(Tag tag);
 
     void deleteById(Integer id);
+
+    void deleteRef(ArticleTag articleTag);
 
 }

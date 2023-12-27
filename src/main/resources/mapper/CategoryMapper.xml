@@ -39,5 +39,16 @@
             #{id}
         </foreach>
         AND `is_delete` = 0
-</select>
+    </select>
+
+    <select id="categoryTree" resultType="com.cystrix.blog.entity.Category" parameterType="integer">
+        with recursive category_tree as (
+            select id, pid, name, create_time, 1 as level
+            from category where id = #{id} and  is_delete != 1
+            union
+            select c.id, c.pid, c.name, c.create_time, ct.level + 1
+            from category c join category_tree ct on ct.id = c.pid
+            where c.is_delete != 1 and c.pid is not null )
+            select * from category_tree
+    </select>
 </mapper>

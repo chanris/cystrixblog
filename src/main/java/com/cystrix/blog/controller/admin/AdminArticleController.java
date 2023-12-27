@@ -6,18 +6,26 @@ import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
+import com.cystrix.blog.vo.ArticleAddVo;
+import com.cystrix.blog.vo.ArticleVo;
+import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
+import com.github.pagehelper.PageInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
  * @author: chenyue7@foxmail.com
  * @date: 12/7/2023
  * @description:
  */
+@Slf4j
 @RestController
 @RequestMapping(value = "/admin/article")
 public class AdminArticleController {
@@ -29,15 +37,15 @@ public class AdminArticleController {
     }
 
     @PostMapping(value = "/add")
-    public Response createArticle(@RequestBody Article article) {
+    public Response createArticle(@RequestBody ArticleAddVo vo) {
         try {
-            Assert.notNull(article.getTitle(), "文章标题不能为空");
-            Assert.notNull(article.getDigest(), "文章摘要不能为空");
-            Assert.notNull(article.getContent(), "文章内容不能为空");
+            Assert.notNull(vo.getTitle(), "文章标题不能为空");
+            Assert.notNull(vo.getContent(), "文章内容不能为空");
+            Assert.notNull(vo.getDigest(), "文章摘要不能为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        articleService.addArticle(article);
+        articleService.addArticle(vo);
         return Response.ok();
     }
 
@@ -87,4 +95,20 @@ public class AdminArticleController {
         return Response.ok();
     }
 
+    @PostMapping(value = "/list")
+    public Response getArticleInfoWithPage(@RequestBody ArticleVo  vo) {
+        log.info("articleVo: {}", vo);
+        log.info("artcleVo: {}", vo.getPageNum());
+        return Response.ok(new PageInfo<>(articleService.getArticleInfoWithPage(vo)));
+    }
+
+    @PostMapping(value = "/detail")
+    public Response getArticleDetail(@RequestBody Article article) {
+        try {
+            Assert.notNull(article.getId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        return Response.ok(articleService.getDetailArticle(article.getId()));
+    }
 }

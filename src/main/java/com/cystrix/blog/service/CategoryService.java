@@ -1,8 +1,8 @@
 package com.cystrix.blog.service;
 
 import com.cystrix.blog.entity.Category;
-import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.query.PageQuery;
+import com.cystrix.blog.view.CategoryView;
 
 import java.util.List;
 
@@ -22,5 +22,7 @@ public interface CategoryService {
     List<Category> getPageTag(PageQuery query);
 
     List<Category> getTagListByArticleId(Integer articleId);
+
+    CategoryView categoryTree(Integer categoryId);
 
 }

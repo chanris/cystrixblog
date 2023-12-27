@@ -24,4 +24,6 @@ public interface CategoryDao {
     List<Category> selectPage(@Param("pageSize") Integer pageSize, @Param("offset") Integer offset);
 
     List<Category> selectCategoryListByIds(@Param("ids") List<Integer> ids);
+
+    List<Category> categoryTree(Integer categoryId);
 }

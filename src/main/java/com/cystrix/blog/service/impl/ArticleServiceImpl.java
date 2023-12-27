@@ -3,7 +3,11 @@ package com.cystrix.blog.service.impl;
 import com.cystrix.blog.dao.*;
 import com.cystrix.blog.entity.*;
 import com.cystrix.blog.service.ArticleService;
+import com.cystrix.blog.service.BaseService;
 import com.cystrix.blog.util.StringUtils;
+import com.cystrix.blog.vo.ArticleAddVo;
+import com.cystrix.blog.vo.ArticleVo;
+import com.cystrix.blog.vo.BaseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +24,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class ArticleServiceImpl implements ArticleService {
+public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     private final ArticleDao articleDao;
 
@@ -80,15 +84,49 @@ public class ArticleServiceImpl implements ArticleService {
         return articleDao.selectArticleByIdWithoutContent(id);
     }
 
+    @Transactional(rollbackFor = {Exception.class})
     @Override
-    public void addArticle(Article article) {
-        int wordNum = StringUtils.countWords(article.getContent());
-        article.setWordNum(wordNum);
-        articleDao.insert(article);
+    public void addArticle(ArticleAddVo vo) {
+        // 添加文章 设置 摘要 & 字数
+        int wordNum = StringUtils.countWords(vo.getContent());
+        vo.setWordNum(wordNum);
+        Article record = new Article();
+        record.setTitle(vo.getTitle());
+        record.setDigest(vo.getDigest());
+        record.setContent(vo.getContent());
+        record.setWordNum(vo.getWordNum());
+        articleDao.insert(record);
+        // 关联分类
+        ArticleCategory ref = new ArticleCategory();
+        if(vo.getCategoryId() != null) {
+            ref.setArticleId(record.getId());
+            ref.setCategoryId(vo.getCategoryId());
+        }else {
+            // 默认分类
+            ref.setArticleId(record.getId());
+            ref.setCategoryId(1);
+        }
+        articleCategoryDao.insert(ref);
+        if(vo.getTagIdList() != null && vo.getTagIdList().size() != 0) {
+            // 关联标签
+            List<ArticleTag> articleTags = new ArrayList<>();
+            vo.getTagIdList().forEach(item -> {
+                articleTags.add(new ArticleTag(record.getId(), item));
+            });
+            articleTagDao.batchInsert(articleTags);
+        }
     }
 
     @Override
     public void modifyArticle(Article article) {
+        // 更新摘要 & 文章字数
+        if(article.getContent() != null) {
+            String content =  article.getContent();
+            String digest  = StringUtils.generateDigest(content);
+            int wordNum = StringUtils.countWords(content);
+            article.setDigest(digest);
+            article.setWordNum(wordNum);
+        }
         articleDao.update(article);
     }
 
@@ -150,5 +188,11 @@ public class ArticleServiceImpl implements ArticleService {
             return articleDao.selectArticleByIdsWithoutContent(list);
         }
         return new ArrayList<>();
+    }
+
+    @Override
+    public List<Article> getArticleInfoWithPage(ArticleVo vo) {
+        executePage(vo);
+        return articleDao.selectArticleWithPage(vo);
     }
 }

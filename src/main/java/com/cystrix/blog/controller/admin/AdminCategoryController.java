@@ -6,10 +6,7 @@ import com.cystrix.blog.query.CategoryQuery;
 import com.cystrix.blog.service.impl.CategoryServiceImpl;
 import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -57,5 +54,15 @@ public class AdminCategoryController {
         }
         categoryService.deleteById(query.getId());
         return Response.ok();
+    }
+
+    @PostMapping(value = "/tree")
+    public Response categoryTreeList(@RequestBody Category category) {
+        try {
+            Assert.notNull(category.getId(), "分类id不能未空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        return Response.ok(categoryService.categoryTree(category.getId()));
     }
 }

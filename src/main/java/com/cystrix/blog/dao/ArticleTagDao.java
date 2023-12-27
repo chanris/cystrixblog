@@ -15,6 +15,8 @@ public interface ArticleTagDao {
 
     void insert(ArticleTag articleTag);
 
+    void batchInsert(List<ArticleTag> articleTags);
+
     List<Integer> selectTagIdListByArticleId(Integer articleId);
 
     List<Integer> selectArticleIdByTagId(Integer tagId);

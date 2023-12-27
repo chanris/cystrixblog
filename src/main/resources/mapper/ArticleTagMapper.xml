@@ -8,6 +8,12 @@
         INSERT INTO <include refid="tb"/> VALUE (NULL, #{articleId}, #{tagId})
     </insert>
 
+    <insert id="batchInsert" parameterType="list">
+        insert into article_tag values <foreach collection="list" separator="," item="item">
+        (#{item.articleId}, #{item.tagId})
+        </foreach>
+    </insert>
+
     <select id="selectTagIdListByArticleId" parameterType="integer" resultType="integer">
         SELECT  `tag_id` FROM <include refid="tb"/>
         WHERE `article_id`  = #{articleId}
@@ -20,6 +26,6 @@
     </select>
 
     <delete id="deleteByArticleIdAndTagId" parameterType="com.cystrix.blog.entity.ArticleTag">
-        DELETE FROM <include refid="tb"/> WHERE `article_id` = #{articleId} AND `tag_id` = #{tagId}
+        delete from article_tag where `article_id` = #{articleId} and `tag_id` = #{tagId}
     </delete>
 </mapper>

@@ -1,15 +1,13 @@
 package com.cystrix.blog.controller.admin;
 
+import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.TagQuery;
 import com.cystrix.blog.service.impl.TagServiceImpl;
 import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -34,7 +32,7 @@ public class AdminTagController {
             throw new ParameterException(e.getMessage());
         }
         tagService.addTag(tag);
-        return Response.ok();
+        return Response.ok(tag.getId());
     }
 
     @PostMapping(value = "/update")
@@ -56,6 +54,18 @@ public class AdminTagController {
             throw new ParameterException(e.getMessage());
         }
         tagService.deleteById(query.getId());
+        return Response.ok();
+    }
+
+    @PostMapping(value = "/deleteRef")
+    public Response deleteRef(@RequestBody ArticleTag articleTag) {
+        try {
+            Assert.notNull(articleTag.getTagId(), "标签id不能为空");
+            Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        tagService.deleteRef(articleTag);
         return Response.ok();
     }
 }

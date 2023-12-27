@@ -27,5 +27,5 @@ public interface TagDao {
 
     void deleteById(Integer id);
 
-
+   List<Tag> getAll();
 }

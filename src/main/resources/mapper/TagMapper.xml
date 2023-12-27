@@ -5,8 +5,7 @@
     <sql id="baseCols">`id`,`name`,`create_time`,`update_time`,`is_delete`</sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.Tag" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO <include refid="tb"/> (<include refid="baseCols"/>)
-        VALUE(NULL, #{name}, #{createTime}, #{updateTime}, 0)
+       insert into tag(id, name) value (null, #{name})
     </insert>
 
     <select id="selectPage" parameterType="com.cystrix.blog.query.PageQuery" resultType="com.cystrix.blog.entity.Tag">
@@ -41,4 +40,8 @@
     <update id="deleteById" parameterType="integer">
         UPDATE <include refid="tb"/> SET `is_delete` = 1 WHERE `id` = #{id}
     </update>
+
+    <select id="getAll" resultType="com.cystrix.blog.entity.Tag">
+        select id, name from tag where  is_delete != 1
+    </select>
 </mapper>

@@ -22,7 +22,7 @@ public class JwtUtils {
     @Value("${jwt.cache-name}")
     private String cacheName;
     // token过期时间,单位秒
-    private static final long TOKEN_EXPIRED_TIME = 60 * 60 * 24 * 30;
+    private static final long TOKEN_EXPIRED_TIME = 60 * 60;
 
     public String createTokenByUser(UserInfo userInfo){
         String jwtId = UUID.randomUUID().toString().replaceAll("-","");

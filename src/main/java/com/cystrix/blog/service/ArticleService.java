@@ -4,6 +4,9 @@ import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.ArticleComment;
 import com.cystrix.blog.entity.ArticleTag;
+import com.cystrix.blog.vo.ArticleAddVo;
+import com.cystrix.blog.vo.ArticleVo;
+import com.cystrix.blog.vo.BaseVo;
 
 import java.util.List;
 
@@ -23,7 +26,7 @@ public interface ArticleService {
 
     Article getArticleWithoutContent(Integer id);
 
-    void addArticle(Article article);
+    void addArticle(ArticleAddVo article);
 
     void modifyArticle(Article article);
 
@@ -38,5 +41,7 @@ public interface ArticleService {
     List<Article> getArticleDigestInfoByTagId(Integer tagId);
 
     List<Article> getArticleDigestInfoByCategoryId(Integer categoryId);
+
+    List<Article> getArticleInfoWithPage(ArticleVo vo);
 
 }
