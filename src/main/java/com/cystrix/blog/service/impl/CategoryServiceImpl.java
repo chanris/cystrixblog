@@ -1,12 +1,15 @@
 package com.cystrix.blog.service.impl;
 
+import com.cystrix.blog.dao.ArticleCategoryDao;
 import com.cystrix.blog.dao.CategoryDao;
+import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
 import com.cystrix.blog.query.PageQuery;
 import com.cystrix.blog.service.CategoryService;
 import com.cystrix.blog.view.CategoryView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -22,15 +25,19 @@ public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryDao categoryDao;
 
-    public CategoryServiceImpl(CategoryDao categoryDao) {
+    private final ArticleCategoryDao articleCategoryDao;
+
+    public CategoryServiceImpl(CategoryDao categoryDao, ArticleCategoryDao articleCategoryDao) {
         this.categoryDao = categoryDao;
+        this.articleCategoryDao = articleCategoryDao;
     }
 
     @Override
-    public void addCategory(Category category) {
+    public Integer addCategory(Category category) {
         category.setCreateTime(LocalDateTime.now());
         category.setUpdateTime(LocalDateTime.now());
         categoryDao.insert(category);
+        return  category.getId();
     }
 
     @Override
@@ -40,12 +47,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    public void modifyArticleCategory(ArticleCategory articleCategory) {
+        articleCategoryDao.update(articleCategory);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    @Override
     public void deleteById(Integer id) {
+        articleCategoryDao.deleteByCategoryId(id);
         categoryDao.deleteById(id);
     }
 
     @Override
-    public List<Category> getPageTag(PageQuery query) {
+    public List<Category> getPageCategory(PageQuery query) {
         Integer offset = (query.getPageNum() - 1) * query.getPageSize();
         return  categoryDao.selectPage(query.getPageSize(), offset);
     }
@@ -59,7 +73,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryView categoryTree(Integer categoryId) {
         List<Category> categoryList = categoryDao.categoryTree(categoryId);
-//        log.info("categorylist {}", Arrays.toString(categoryList.toArray()));
         Queue<CategoryView> queue = new LinkedList<>();
         CategoryView root = new CategoryView();
         Category category = categoryList.get(0);
@@ -93,5 +106,10 @@ public class CategoryServiceImpl implements CategoryService {
             queue.addAll(childrenList);
         }
         return root;
+    }
+
+    @Override
+    public Category getCategoryByArticleId(Integer articleId) {
+        return categoryDao.selectCategoryByArticleId(articleId);
     }
 }

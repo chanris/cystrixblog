@@ -1,6 +1,7 @@
 package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.ArticleCategory;
+import com.cystrix.blog.entity.Category;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,10 +13,13 @@ import java.util.List;
  */
 @Repository
 public interface ArticleCategoryDao {
-
     void insert(ArticleCategory articleCategory);
 
-   void deleteByArticleIdAndCategoryId(ArticleCategory articleCategory);
+    void deleteByArticleIdAndCategoryId(ArticleCategory articleCategory);
 
-   List<Integer> selectArticleIdByCategoryId(Integer categoryId);
+    void deleteByCategoryId(Integer category);
+
+    List<Integer> selectArticleIdByCategoryId(Integer categoryId);
+
+    void update(ArticleCategory articleCategory);
 }

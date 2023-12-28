@@ -38,8 +38,7 @@
     </select>
 
     <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseCols"/> FROM <include refid="tb"/>
-        WHERE `id` = #{id} AND `is_delete` = 0
+        SELECT * FROM article WHERE `id` = #{id} AND `is_delete` = 0
     </select>
 
     <select id="selectArticleByIdWithoutContent" resultType="com.cystrix.blog.entity.Article">
@@ -80,7 +79,7 @@
     </select>
 
     <select id="selectArticleWithPage" resultType="com.cystrix.blog.entity.Article" parameterType="com.cystrix.blog.vo.ArticleVo">
-        select id, title, digest, wordNum, view_count, like_count, create_time from article where is_delete != 1
+        select id, title, digest, wordNum, view_count, like_count, create_time, update_time from article where is_delete != 1
         <if test="title != null">
             and title like concat('%', #{title}, '%')
         </if>

@@ -14,8 +14,16 @@
         WHERE `category_id` = #{categoryId} AND `article_id` = #{articleId}
     </delete>
 
+    <delete id="deleteByCategoryId" parameterType="integer">
+        delete from article_category where  category_id = #{categoryId}
+    </delete>
+
     <select id="selectArticleIdByCategoryId" parameterType="integer" resultType="integer">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `category_id` = `categoryId`
     </select>
+
+    <update id="update" parameterType="com.cystrix.blog.entity.ArticleCategory">
+        update article_category set category_id = #{categoryId} where article_id = #{articleId}
+    </update>
 
 </mapper>

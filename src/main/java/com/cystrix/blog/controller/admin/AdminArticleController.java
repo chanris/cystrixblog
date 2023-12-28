@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -97,8 +96,6 @@ public class AdminArticleController {
 
     @PostMapping(value = "/list")
     public Response getArticleInfoWithPage(@RequestBody ArticleVo  vo) {
-        log.info("articleVo: {}", vo);
-        log.info("artcleVo: {}", vo.getPageNum());
         return Response.ok(new PageInfo<>(articleService.getArticleInfoWithPage(vo)));
     }
 

@@ -20,6 +20,7 @@ public interface CategoryDao {
     void deleteById(Integer id);
 
     Category selectCategoryById(Integer id);
+    Category selectCategoryByArticleId(Integer id);
 
     List<Category> selectPage(@Param("pageSize") Integer pageSize, @Param("offset") Integer offset);
 

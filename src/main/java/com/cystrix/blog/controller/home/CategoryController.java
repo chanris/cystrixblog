@@ -1,7 +1,7 @@
 package com.cystrix.blog.controller.home;
 
+import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
-import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.query.PageQuery;
@@ -30,15 +30,14 @@ public class CategoryController {
     }
 
     @RequestMapping(value = "/page")
-    public Response getPagedTagList(@RequestBody PageQuery query) {
+    public Response getPagedCategoryList(@RequestBody PageQuery query) {
         try {
             Assert.notNull(query.getPageSize(), "分页大小不能空");
             Assert.notNull(query.getPageNum(), "分页数不能为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-
-        List<Category> categoryList = categoryService.getPageTag(query);
+        List<Category> categoryList = categoryService.getPageCategory(query);
         return Response.ok(categoryList);
     }
 
@@ -52,4 +51,15 @@ public class CategoryController {
         List<Category> categoryList = categoryService.getTagListByArticleId(articleQuery.getId());
         return Response.ok(categoryList);
     }
+
+    @RequestMapping(value = "/getCategoryByArticleId")
+    public Response getCategoryByArticleId(@RequestBody ArticleQuery articleQuery) {
+        try {
+            Assert.notNull(articleQuery.getId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        return Response.ok(categoryService.getCategoryByArticleId(articleQuery.getId()));
+    }
+
 }

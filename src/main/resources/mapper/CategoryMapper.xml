@@ -5,8 +5,7 @@
     <sql id="baseCols">`id`,`name`,`create_time`,`update_time`,`is_delete`</sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.Category" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO <include refid="tb"/> (<include refid="baseCols"/>)
-        VALUE (NULL, #{name}, #{createTime}, #{updateTime}, 0)
+        insert into category(id, name, pid) value (null, #{name}, #{pid})
     </insert>
 
     <update id="update" parameterType="com.cystrix.blog.entity.Category">
@@ -20,6 +19,13 @@
 
     <select id="selectCategoryById" resultType="com.cystrix.blog.entity.Category">
         SELECT <include refid="baseCols"/> FROM <include refid="tb"/> WHERE `id` = #{categoryId} AND `is_delete` = 0
+    </select>
+
+    <select id="selectCategoryByArticleId"   parameterType="integer" resultType="com.cystrix.blog.entity.Category">
+        select c.* from article a
+        join article_category ac on a.id = ac.article_id
+        join category c on ac.category_id = c.id
+        where  a.is_delete != 1 and a.id = #{articleId}
     </select>
 
     <update id="deleteById" parameterType="integer">

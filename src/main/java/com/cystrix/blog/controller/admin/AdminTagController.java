@@ -9,6 +9,8 @@ import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author: chenyue7@foxmail.com
  * @date: 13/7/2023
@@ -63,9 +65,27 @@ public class AdminTagController {
             Assert.notNull(articleTag.getTagId(), "标签id不能为空");
             Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
         }catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ParameterException(e.getMessage());
         }
         tagService.deleteRef(articleTag);
         return Response.ok();
     }
+
+    @PostMapping(value = "/addRef")
+    public Response addRef(@RequestBody ArticleTag articleTag) {
+        try {
+            Assert.notNull(articleTag.getTagId(), "标签id不能为空");
+            Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        return Response.ok();
+    }
+
+    @PostMapping(value = "/batchAddRef")
+    public Response batchAddRef(@RequestBody List<ArticleTag> articleTag) {
+        tagService.batchAddRef(articleTag);
+        return Response.ok();
+    }
+
 }

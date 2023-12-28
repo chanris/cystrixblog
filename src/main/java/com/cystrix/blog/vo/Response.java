@@ -11,11 +11,20 @@ public class Response {
     private Integer code;
     private String msg;
     private Object result;
+    private String refreshToken;
 
     public Response(Integer code, String msg, Object result) {
         this.code = code;
         this.msg = msg;
         this.result = result;
+    }
+
+    public String getRefreshToken() {
+        return refreshToken;
+    }
+
+    public void setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
     }
 
     public Integer getCode() {

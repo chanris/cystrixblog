@@ -22,4 +22,6 @@ public interface ArticleTagDao {
     List<Integer> selectArticleIdByTagId(Integer tagId);
 
     void deleteByArticleIdAndTagId(ArticleTag articleTag);
+
+    void deleteByTagId(Integer tagId);
 }

@@ -32,7 +32,6 @@
         UPDATE <include refid="tb"/>
         <set>
             <if test="name != null">`name` = #{name},</if>
-            <if test="updateTime != null">`update_time` = #{updateTime}</if>
         </set>
         WHERE `id` = #{id} AND `is_delete` = 0
     </update>
@@ -42,6 +41,6 @@
     </update>
 
     <select id="getAll" resultType="com.cystrix.blog.entity.Tag">
-        select id, name from tag where  is_delete != 1
+        select id, name, create_time, update_time from tag where is_delete != 1
     </select>
 </mapper>

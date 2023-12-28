@@ -3,6 +3,7 @@ package com.cystrix.blog.service;
 import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.entity.Tag;
 import com.cystrix.blog.query.PageQuery;
+import com.cystrix.blog.vo.BaseVo;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public interface TagService {
 
     void addTag(Tag tag);
 
-    List<Tag> getPageTag(PageQuery query);
+    void batchAddRef(List<ArticleTag> list);
+
+    List<Tag> getPageTag(BaseVo vo);
 
     List<Tag>  getAll();
 
@@ -27,4 +30,5 @@ public interface TagService {
 
     void deleteRef(ArticleTag articleTag);
 
+    void addRef(ArticleTag articleTag);
 }

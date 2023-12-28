@@ -74,7 +74,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         Integer viewCount = article.getViewCount();
         addViewCount.setId(article.getId());
         addViewCount.setViewCount(viewCount + 1);
-        addViewCount.setUpdateTime(LocalDateTime.now());
+//        addViewCount.setUpdateTime(LocalDateTime.now());
         articleDao.update(addViewCount);
         return article;
     }
@@ -119,12 +119,12 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     @Override
     public void modifyArticle(Article article) {
-        // 更新摘要 & 文章字数
+        // 文章字数
         if(article.getContent() != null) {
             String content =  article.getContent();
-            String digest  = StringUtils.generateDigest(content);
+            // String digest  = StringUtils.generateDigest(content);
             int wordNum = StringUtils.countWords(content);
-            article.setDigest(digest);
+            // article.setDigest(digest);
             article.setWordNum(wordNum);
         }
         articleDao.update(article);

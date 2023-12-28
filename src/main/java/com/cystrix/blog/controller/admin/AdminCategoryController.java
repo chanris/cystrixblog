@@ -1,5 +1,6 @@
 package com.cystrix.blog.controller.admin;
 
+import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.CategoryQuery;
@@ -27,11 +28,11 @@ public class AdminCategoryController {
     public Response create(@RequestBody Category category) {
         try {
             Assert.notNull(category.getName(), "分类名称不能为空");
+            Assert.notNull(category.getPid(), "pid不能为空");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        categoryService.addCategory(category);
-        return Response.ok();
+        return Response.ok(categoryService.addCategory(category));
     }
 
     @PostMapping(value = "/update")
@@ -42,6 +43,18 @@ public class AdminCategoryController {
             throw new ParameterException(e.getMessage());
         }
         categoryService.modifyCategory(category);
+        return Response.ok();
+    }
+
+    @PostMapping(value = "/updateCategoryRef")
+    public Response updateCategoryRef(@RequestBody ArticleCategory articleCategory) {
+        try {
+            Assert.notNull(articleCategory.getCategoryId(), "分类id不能空");
+            Assert.notNull(articleCategory.getArticleId(), "文章id不能空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        categoryService.modifyArticleCategory(articleCategory);
         return Response.ok();
     }
 
