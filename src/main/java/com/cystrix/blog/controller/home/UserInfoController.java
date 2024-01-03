@@ -1,12 +1,11 @@
 package com.cystrix.blog.controller.home;
 
-import com.cystrix.blog.entity.UserInfo;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.util.EmailUtils;
 import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.Response;
-import com.cystrix.blog.vo.UserInfoVo;
+import com.cystrix.blog.view.UserInfoView;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,10 +29,10 @@ public class UserInfoController {
         this.emailUtils = emailUtils;
     }
 
-    @RequestMapping(value = "/userInfo")
+    @RequestMapping(value = "")
     public Response getUserInfo() {
-        UserInfoVo userInfoVo = userService.getUserInfoVo(1);
-        return Response.ok(userInfoVo);
+        UserInfoView userInfoView = userService.getUserInfoVo();
+        return Response.ok(userInfoView);
     }
 
     @RequestMapping(value = "/getVerificationCode")
@@ -45,11 +44,6 @@ public class UserInfoController {
             throw new ParameterException(e.getMessage());
         }
         emailUtils.sendVerificationCodeToEmail(vo.getEmail());
-        return Response.ok();
-    }
-
-    @GetMapping(value = "/test")
-    public  Response test() {
         return Response.ok();
     }
 }

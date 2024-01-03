@@ -1,28 +1,28 @@
-package com.cystrix.blog.entity;
+package com.cystrix.blog.view;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
- * @author: chenyue7@foxmail.com
- * @date: 10/7/2023
- * @description: 文章分类
+ * @author chenyue7@foxmail.com
+ * @date 2/1/2024
+ * @description
  */
-@Data
-public class Category {
+@Getter
+@Setter
+public class ArticleCategoryView {
     private Integer id;
     private Integer pid;
+
     private String name;
-    // non-databsae field
-    private Integer level;
+    private Integer articleNum;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createTime;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     private Integer isDelete;
-
-    // non-db fields
-    private Integer articleNum;
 }

@@ -3,6 +3,7 @@ package com.cystrix.blog.controller.admin;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.ArticleTag;
+import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
@@ -13,11 +14,8 @@ import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -107,5 +105,12 @@ public class AdminArticleController {
             throw new ParameterException(e.getMessage());
         }
         return Response.ok(articleService.getDetailArticle(article.getId()));
+    }
+
+    // todo 23/12/29 上传的图片无法在服务器内删除
+    @PostMapping(value = "/upload/img")
+    public Response uploadImg(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+        articleService.updateArticleCoverImg(file, id);
+        return Response.ok();
     }
 }

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cystrix.blog.dao.CoverDao">
+
+    <insert id="add" parameterType="com.cystrix.blog.entity.Cover" keyProperty="id" useGeneratedKeys="true">
+        insert into cover(id, url, name, type, size) value (null, #{url}, #{name}, #{type}, #{size})
+    </insert>
+</mapper>

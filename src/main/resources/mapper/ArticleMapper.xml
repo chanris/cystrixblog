@@ -3,24 +3,24 @@
 <mapper namespace="com.cystrix.blog.dao.ArticleDao">
     <sql id="tb">`article`</sql>
     <sql id="baseCols">
-    `id`,`title`,`content`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`,
+    `id`,`title`,`content`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`, `cover_img`
     `create_time`,`update_time`,`is_delete`
     </sql>
     <sql id="baseColsWithoutContent">
-    `id`,`title`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`,
+    `id`,`title`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`, `cover_img`
     `create_time`,`update_time`,`is_delete`
     </sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.Article" useGeneratedKeys="true" keyProperty="id">
-        insert into article(id, title, content, digest) value(null, #{title}, #{content}, #{digest})
+        insert into article(id, title, content, digest, wordNum) value(null, #{title}, #{content}, #{digest}, #{wordNum})
     </insert>
 
     <select id="selectPageWithoutContent" resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
-        WHERE `is_delete` = 0
-        ORDER BY `id` DESC
-        LIMIT #{pageSize}
-        OFFSET #{offset}
+        select a.id, a.title, a.digest, a.view_count, a.like_count, a.wordNum, a.create_time, a.update_time, a.cover_id, c2.name coverImg, c.id categoryId, c.name categoryName  from article a
+        left join article_category ac on ac.article_id = a.id
+        left join category c on ac.category_id = c.id
+        left join cover c2 on a.cover_id = c2.id
+        where a.`is_delete` = 0  order by a.id desc
     </select>
 
     <select id="selectPageByYearWithoutContent" resultType="com.cystrix.blog.entity.Article">
@@ -38,7 +38,11 @@
     </select>
 
     <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
-        SELECT * FROM article WHERE `id` = #{id} AND `is_delete` = 0
+        SELECT a.*, c.name categoryName, c.id categoryId, c2.id coverId, c2.name coverImg  FROM article a
+        left join article_category ac on ac.article_id = a.id
+        left join category c on ac.category_id = c.id
+        left join cover c2 on a.cover_id = c2.id
+        WHERE a.`id` = #{id} AND a.`is_delete` = 0
     </select>
 
     <select id="selectArticleByIdWithoutContent" resultType="com.cystrix.blog.entity.Article">
@@ -65,7 +69,8 @@
             <if test="wordNum != null">`wordNum` = #{wordNum},</if>
             <if test="viewCount != null">`view_count` = #{viewCount},</if>
             <if test="likeCount != null">`like_count` = #{likeCount},</if>
-            <if test="hotRank != null">`hot_rank` = #{hotRank}</if>
+            <if test="hotRank != null">`hot_rank` = #{hotRank},</if>
+            <if test="coverId != null">`cover_id` = #{coverId}</if>
         </set>
         WHERE `id` = #{id} AND `is_delete` = 0
     </update>
@@ -87,5 +92,9 @@
             and create_time between #{startTime} and #{endTime}
         </if>
     </select>
+
+    <update id="addLikeCount" parameterType="integer">
+        update article set like_count = like_count + 1 where  id = #{articleId} and is_delete != 1
+    </update>
 
 </mapper>

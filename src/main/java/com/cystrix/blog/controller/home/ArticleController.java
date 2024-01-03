@@ -11,9 +11,7 @@ import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -36,15 +34,9 @@ public class ArticleController {
      * 文章摘要列表，首页展示
      */
     @RequestMapping(value = "/listArticleDigestInfo")
-    public Response listArticleDigestInfo(@RequestBody PageQuery pageQuery) {
-        try {
-            Assert.notNull(pageQuery.getPageNum(), "查询页数不能为空");
-            Assert.notNull(pageQuery.getPageSize(), "分页大小不能为空");
-        }catch (Exception e){
-            throw new ParameterException(e.getMessage());
-        }
-        List<Article> articles = articleService.getPagedArticleWithoutContent(pageQuery.getPageNum(), pageQuery.getPageSize());
-        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").result(articles).build();
+    public Response listArticleDigestInfo(@RequestBody BaseVo vo) {
+        List<Article> articles = articleService.getPagedArticleWithoutContent(vo);
+        return Response.ok(new PageInfo<>(articles));
     }
 
     /**
@@ -76,6 +68,20 @@ public class ArticleController {
         }
         Article article = articleService.getDetailArticle(query.getId());
         return Response.ok(article);
+    }
+
+    /**
+     * 文章点赞
+     */
+    @PostMapping(value = "/likeArticle")
+    public Response likeArticle(@RequestBody ArticleQuery query) {
+        try {
+            Assert.notNull(query.getId(), "文章id不能为空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        articleService.addLikeCount(query.getId());
+        return Response.ok();
     }
 
     /**

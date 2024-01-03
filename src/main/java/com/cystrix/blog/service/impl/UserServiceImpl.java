@@ -2,7 +2,6 @@ package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.UserInfoDao;
 import com.cystrix.blog.entity.UserInfo;
-import com.cystrix.blog.enums.RedisEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.UserService;
 import com.cystrix.blog.util.JwtUtils;
@@ -10,8 +9,7 @@ import com.cystrix.blog.util.MD5Utils;
 import com.cystrix.blog.util.RedisUtils;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.LoginVo;
-import com.cystrix.blog.vo.UserInfoVo;
-import org.apache.catalina.User;
+import com.cystrix.blog.view.UserInfoView;
 import org.apache.shiro.util.Assert;
 import org.springframework.stereotype.Service;
 
@@ -70,29 +68,16 @@ public class UserServiceImpl implements UserService {
 //            }else {
 //                throw new ParameterException("账号密码和邮箱验证码不能同时为空");
 //            }
-            UserInfo result = new UserInfo();
-            result.setEmail("chenyue619629@gmail.com");
-            result.setId(3);
-            result.setUsername("chanirs688");
-            result.setNickname("chenyueyue");
-            return new LoginToken(3, "chenyue", jwtUtils.createTokenByUser(result));
+            UserInfo result = userInfoDao.selectUserInfoByEmail(email);
+            return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
     }
 
     @Override
-    public UserInfoVo getUserInfoVo(Integer userId) {
-        UserInfo userInfo = userInfoDao.selectUserInfoById(userId);
-        if (userId == null) {
-            return null;
-        }
-        UserInfoVo userInfoVo = new UserInfoVo();
-        userInfoVo.setEmail(userInfo.getEmail());
-        userInfoVo.setNickname(userInfo.getNickname());
-        userInfoVo.setAvatar(userInfoVo.getAvatar());
-        userInfoVo.setMotto(userInfo.getMotto());
-        return userInfoVo;
+    public UserInfoView getUserInfoVo() {
+        return userInfoDao.selectUserInfoView();
     }
 
     @Override

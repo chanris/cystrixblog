@@ -1,7 +1,7 @@
 package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.UserInfo;
-import com.cystrix.blog.vo.LoginVo;
+import com.cystrix.blog.view.UserInfoView;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -19,6 +19,8 @@ public interface UserInfoDao {
     UserInfo selectUserInfoByEmailAndPassword(UserInfo userInfo);
 
     UserInfo selectUserInfoById(Integer id);
+
+    UserInfoView selectUserInfoView();
 
     void update(UserInfo userInfo);
 

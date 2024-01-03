@@ -3,6 +3,7 @@ package com.cystrix.blog.service;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
 import com.cystrix.blog.query.PageQuery;
+import com.cystrix.blog.view.ArticleCategoryView;
 import com.cystrix.blog.view.CategoryView;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface CategoryService {
     CategoryView categoryTree(Integer categoryId);
 
     Category getCategoryByArticleId(Integer articleId);
+
+    ArticleCategoryView getArticleCategoryView();
 }

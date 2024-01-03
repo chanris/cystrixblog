@@ -3,7 +3,7 @@ package com.cystrix.blog.service;
 import com.cystrix.blog.entity.UserInfo;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.LoginVo;
-import com.cystrix.blog.vo.UserInfoVo;
+import com.cystrix.blog.view.UserInfoView;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -14,7 +14,7 @@ public interface UserService {
 
     LoginToken doLoginHandle(LoginVo loginVo);
 
-    UserInfoVo getUserInfoVo(Integer userId);
+    UserInfoView getUserInfoVo();
 
     void addUserInfo(UserInfo userInfo);
 

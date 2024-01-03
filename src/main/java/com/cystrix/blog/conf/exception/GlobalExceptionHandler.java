@@ -1,6 +1,7 @@
 package com.cystrix.blog.conf.exception;
 
 import com.cystrix.blog.enums.CodeEnum;
+import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.vo.Response;
 import org.slf4j.Logger;
@@ -40,6 +41,15 @@ public class GlobalExceptionHandler {
         log.warn("异常信息：{}", ex.getMessage());
         log.warn("======================================================================");
         return Response.failed(CodeEnum.BAD_REQUEST_PARAMETER, ex.getMessage());
+    }
+
+    @ExceptionHandler(value = {BusinessException.class})
+    public Response businessExceptionHandle(Exception ex){
+        log.warn("===========================捕捉到业务异常===========================");
+        log.warn("异常类型: {}", ex.getClass().toGenericString());
+        log.warn("异常信息：{}", ex.getMessage());
+        log.warn("=======================================================================");
+        return Response.failed(CodeEnum.INTER_SERVER_ERROR, ex.getMessage());
     }
 
 

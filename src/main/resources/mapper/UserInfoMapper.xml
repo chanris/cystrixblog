@@ -33,6 +33,14 @@
         WHERE `id` = #{value} AND `is_delete` = 0
     </select>
 
+    <select id="selectUserInfoView" resultType="com.cystrix.blog.view.UserInfoView">
+        select  u.nickname, u.email, u.avatar,
+            (select count(a.id) from article a where a.is_delete != 1) articleNum,
+            (select count(t.id) from tag t where t.is_delete != 1) tagNum,
+            (select  count(c.id) from category c where  c.is_delete != 1) categoryNum
+        from user_info u where u.is_delete != 1 and u.id = 1
+    </select>
+
     <update id="update" parameterType="com.cystrix.blog.entity.UserInfo">
         UPDATE <include refid="tb"/>
         <set>

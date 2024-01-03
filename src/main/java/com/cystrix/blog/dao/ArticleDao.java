@@ -17,7 +17,7 @@ import java.util.List;
 public interface ArticleDao {
 
     /*默认根据创建事件排序分页*/
-    List<Article> selectPageWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset);
+    List<Article> selectPageWithoutContent();
 
     List<Article> selectPageByYearWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset, @Param("year") int year);
 
@@ -38,4 +38,6 @@ public interface ArticleDao {
     SiteInfo articleStatisInfo();
 
     List<Article> selectArticleWithPage(ArticleVo vo);
+
+    void addLikeCount(Integer articleId);
 }

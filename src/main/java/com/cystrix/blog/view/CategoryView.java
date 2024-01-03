@@ -20,6 +20,7 @@ import java.util.List;
 public class CategoryView {
     private Integer id;
     private Integer pid;
+    private Integer articleNum;
     private List<CategoryView> children;
     private Integer level;
     private String name;

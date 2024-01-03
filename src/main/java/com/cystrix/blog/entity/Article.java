@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 public class Article {
     private Integer id;
     private String title;
+    private Integer coverId;
     private String content;
     private String digest;
     private Integer wordNum;
@@ -30,4 +31,9 @@ public class Article {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
     private Integer isDelete;
+
+    // non-db field
+    private String categoryName;
+    private Integer categoryId;
+    private String coverImg;
 }

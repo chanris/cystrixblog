@@ -29,4 +29,12 @@ public class SiteController {
         siteInfoService.updateSiteInfo(siteInfo);
         return Response.ok();
     }
+
+    @GetMapping(value = "/randomMottos")
+    public Response randomMottos(Integer num) {
+        if(num == null) {
+            num = 3;
+        }
+        return Response.ok(siteInfoService.randMottoList(num));
+    }
 }

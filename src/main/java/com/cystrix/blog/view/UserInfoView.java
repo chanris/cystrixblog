@@ -1,4 +1,4 @@
-package com.cystrix.blog.vo;
+package com.cystrix.blog.view;
 
 import lombok.Data;
 
@@ -8,9 +8,12 @@ import lombok.Data;
  * @description:
  */
 @Data
-public class UserInfoVo {
+public class UserInfoView {
     private String nickname;
     private String avatar;
     private String email;
     private String motto;
+    private Integer articleNum;
+    private Integer tagNum;
+    private Integer categoryNum;
 }

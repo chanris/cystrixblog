@@ -6,6 +6,7 @@ import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
 import com.cystrix.blog.query.PageQuery;
 import com.cystrix.blog.service.CategoryService;
+import com.cystrix.blog.view.ArticleCategoryView;
 import com.cystrix.blog.view.CategoryView;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,6 +71,9 @@ public class CategoryServiceImpl implements CategoryService {
         return null;
     }
 
+
+
+
     @Override
     public CategoryView categoryTree(Integer categoryId) {
         List<Category> categoryList = categoryDao.categoryTree(categoryId);
@@ -78,6 +82,7 @@ public class CategoryServiceImpl implements CategoryService {
         Category category = categoryList.get(0);
         root.setLevel(category.getLevel());
         root.setId(category.getId());
+        root.setArticleNum(category.getArticleNum());
         root.setName(category.getName());
         root.setLabel(category.getName());
         root.setValue(category.getId() + "");
@@ -96,6 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
                     child.setName(c.getName());
                     child.setPid(c.getPid());
                     child.setId(c.getId());
+                    child.setArticleNum(c.getArticleNum());
                     child.setLevel(c.getLevel());
                     child.setLabel(c.getName());
                     child.setValue(c.getId() + "");
@@ -111,5 +117,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getCategoryByArticleId(Integer articleId) {
         return categoryDao.selectCategoryByArticleId(articleId);
+    }
+
+    @Override
+    public ArticleCategoryView getArticleCategoryView() {
+        return articleCategoryDao.selectArticleNumByCategoryId();
     }
 }

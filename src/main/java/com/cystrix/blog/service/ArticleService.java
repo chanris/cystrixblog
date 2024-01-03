@@ -7,6 +7,7 @@ import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.vo.ArticleAddVo;
 import com.cystrix.blog.vo.ArticleVo;
 import com.cystrix.blog.vo.BaseVo;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @description:
  */
 public interface ArticleService {
-    List<Article> getPagedArticleWithoutContent(Integer pageNum, Integer pageSize);
+    List<Article> getPagedArticleWithoutContent(BaseVo vo);
 
     List<Article> getPagedArticleByYearWithoutContent(Integer pageNum, Integer pageSize, Integer year);
 
@@ -44,4 +45,7 @@ public interface ArticleService {
 
     List<Article> getArticleInfoWithPage(ArticleVo vo);
 
+    void updateArticleCoverImg(MultipartFile file, Integer articleId);
+
+    void addLikeCount(Integer articleId);
 }

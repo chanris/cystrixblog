@@ -26,4 +26,11 @@
         update article_category set category_id = #{categoryId} where article_id = #{articleId}
     </update>
 
+    <select id="selectArticleNumByCategoryId" resultType="com.cystrix.blog.view.ArticleCategoryView">
+        select c.*, sub.*
+        from ( select count( distinct ac.article_id ) articleNum, ac.category_id categoryId from article_category ac group by ac.category_id ) sub
+        left join category c on sub.categoryId = c.id
+        order by sub.articleNum desc limit 5
+    </select>
+
 </mapper>

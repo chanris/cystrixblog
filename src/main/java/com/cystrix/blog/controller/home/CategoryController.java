@@ -8,9 +8,7 @@ import com.cystrix.blog.query.PageQuery;
 import com.cystrix.blog.service.impl.CategoryServiceImpl;
 import com.cystrix.blog.vo.Response;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +39,12 @@ public class CategoryController {
         return Response.ok(categoryList);
     }
 
+    @GetMapping(value = "/getArticleCategoryView")
+    public Response getArticleCategoryView() {
+        return Response.ok(categoryService.getArticleCategoryView());
+    }
+
+
     @RequestMapping(value = "/list")
     public Response getTagList(@RequestBody ArticleQuery articleQuery) {
         try {
@@ -60,6 +64,16 @@ public class CategoryController {
             throw new ParameterException(e.getMessage());
         }
         return Response.ok(categoryService.getCategoryByArticleId(articleQuery.getId()));
+    }
+
+    @PostMapping(value = "/tree")
+    public Response categoryTreeList(@RequestBody Category category) {
+        try {
+            Assert.notNull(category.getId(), "分类id不能未空");
+        }catch (Exception e) {
+            throw new ParameterException(e.getMessage());
+        }
+        return Response.ok(categoryService.categoryTree(category.getId()));
     }
 
 }

@@ -2,6 +2,8 @@ package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.*;
 import com.cystrix.blog.entity.*;
+import com.cystrix.blog.exception.BusinessException;
+import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.ArticleService;
 import com.cystrix.blog.service.BaseService;
 import com.cystrix.blog.util.StringUtils;
@@ -12,10 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -40,8 +48,10 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
 
     private final CommentDao commentDao;
 
+    private final CoverDao coverDao;
+
     public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, ArticleCategoryDao articleCategoryDao,
-                              ArticleCommentDao articleCommentDao, TagDao tagDao, CategoryDao categoryDao, CommentDao commentDao) {
+                              ArticleCommentDao articleCommentDao, TagDao tagDao, CategoryDao categoryDao, CommentDao commentDao, CoverDao coverDao) {
         this.articleDao = articleDao;
         this.articleTagDao = articleTagDao;
         this.articleCategoryDao = articleCategoryDao;
@@ -49,11 +59,13 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         this.tagDao = tagDao;
         this.categoryDao = categoryDao;
         this.commentDao = commentDao;
+        this.coverDao = coverDao;
     }
 
     @Override
-    public List<Article> getPagedArticleWithoutContent(Integer pageNum, Integer pageSize) {
-        return articleDao.selectPageWithoutContent(pageSize, (pageNum - 1) * pageSize);
+    public List<Article> getPagedArticleWithoutContent(BaseVo vo) {
+        executePage(vo);
+        return articleDao.selectPageWithoutContent();
     }
 
     @Override
@@ -74,7 +86,6 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         Integer viewCount = article.getViewCount();
         addViewCount.setId(article.getId());
         addViewCount.setViewCount(viewCount + 1);
-//        addViewCount.setUpdateTime(LocalDateTime.now());
         articleDao.update(addViewCount);
         return article;
     }
@@ -194,5 +205,74 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
     public List<Article> getArticleInfoWithPage(ArticleVo vo) {
         executePage(vo);
         return articleDao.selectArticleWithPage(vo);
+    }
+
+    @Transactional(rollbackFor = {Exception.class})
+    @Override
+    public void updateArticleCoverImg(MultipartFile file, Integer articleId) {
+        if (file.isEmpty()) {
+            throw new ParameterException("上传的文件不能为空");
+        }
+        if (file.getContentType() == null) {
+            throw new ParameterException("文件类型不能为空");
+        }
+        switch (file.getContentType()) {
+            case "image/jpeg", "image/png" -> {
+                try {
+                    log.info("文件大小：{}", file.getSize());
+                    String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
+                    String filePath = "/blog/upload/article/covers/" + fileName;
+                    File directory = new File("/blog/upload/article/covers");
+                    if (!directory.exists()) {
+                        boolean result = directory.mkdirs();
+                        if (!result) {
+                            throw new BusinessException("创建上传文件夹失败");
+                        }
+                    }
+                    File saveFile = new File(filePath);
+                    try (FileOutputStream fos = new FileOutputStream(saveFile)) {
+                        fos.write(file.getBytes());
+                    }
+                    Cover cover = new Cover();
+                    cover.setType(file.getContentType());
+                    cover.setSize(file.getSize());
+                    cover.setName(fileName);
+                    cover.setUrl(saveFile.getAbsolutePath());
+                    coverDao.add(cover);
+                    Article article = new Article();
+                    article.setId(articleId);
+                    article.setCoverId(cover.getId());
+                    articleDao.update(article);
+                } catch (Exception e) {
+                    throw new BusinessException(e.getMessage());
+                }
+            }
+            default -> throw new ParameterException("文件类型不支持");
+        }
+    }
+
+    @Override
+    public void addLikeCount(Integer articleId) {
+        articleDao.addLikeCount(articleId);
+    }
+
+    private String generateFilename() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmssSSS");
+        String timestamp = dateFormat.format(new Date());
+        int length = 8;
+        StringBuilder randomString = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < length; i++) {
+            // 随机选择是大写还是小写字母
+            boolean isUpperCase = random.nextBoolean();
+            char randomChar = generateRandomLetter(random, isUpperCase);
+            randomString.append(randomChar);
+        }
+        return timestamp + "_" + randomString.toString();
+    }
+
+    private char generateRandomLetter(Random random, boolean isUpperCase) {
+        int offset = isUpperCase ? 'A' : 'a';
+        return (char) (offset + random.nextInt(26));
     }
 }

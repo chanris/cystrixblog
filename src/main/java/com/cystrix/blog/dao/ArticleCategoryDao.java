@@ -2,6 +2,7 @@ package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
+import com.cystrix.blog.view.ArticleCategoryView;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface ArticleCategoryDao {
     List<Integer> selectArticleIdByCategoryId(Integer categoryId);
 
     void update(ArticleCategory articleCategory);
+
+    ArticleCategoryView selectArticleNumByCategoryId();
 }
