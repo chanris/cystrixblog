@@ -6,6 +6,7 @@ package com.cystrix.blog.enums;
  * @description
  */
 public enum RedisEnum {
-    VERIFICATION_LOGIN_PREFIX,
-    VISITOR_IP_PREFIX_
+    VERIFICATION_LOGIN_PREFIX_,
+    VISITOR_IP_PREFIX_,
+    LOGIN_TOKEN_
 }

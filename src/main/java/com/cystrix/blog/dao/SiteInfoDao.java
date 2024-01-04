@@ -13,10 +13,8 @@ import org.springframework.stereotype.Repository;
 public interface SiteInfoDao {
     @Update("update site_info set run_days = 0 where id = 1")
     void resetRunDays();
-
     SiteInfo selectOne();
-
     void updateSelective(SiteInfo siteInfo);
-
-
+    @Update("update site_info set visit_num = visit_num + 1 where id = 1")
+    void addVisitNum();
 }

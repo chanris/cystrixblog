@@ -1,21 +1,22 @@
 package com.cystrix.blog.controller.admin;
 
+import com.cystrix.blog.conf.task.SiteTaskService;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.ArticleTag;
-import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
 import com.cystrix.blog.vo.ArticleAddVo;
 import com.cystrix.blog.vo.ArticleVo;
-import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -28,9 +29,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class AdminArticleController {
 
     private final ArticleServiceImpl articleService;
+    private final SiteTaskService siteTaskService;
 
-    public AdminArticleController(ArticleServiceImpl articleService) {
+    public AdminArticleController(ArticleServiceImpl articleService, SiteTaskService siteTaskService) {
         this.articleService = articleService;
+        this.siteTaskService = siteTaskService;
     }
 
     @PostMapping(value = "/add")
@@ -89,6 +92,7 @@ public class AdminArticleController {
             throw new ParameterException(e.getMessage());
         }
         articleService.addCategoryInfo(articleCategory);
+        siteTaskService.updateSiteInfo(LocalDateTime.now());
         return Response.ok();
     }
 

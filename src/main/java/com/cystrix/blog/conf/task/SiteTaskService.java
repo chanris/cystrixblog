@@ -1,13 +1,16 @@
 package com.cystrix.blog.conf.task;
 
 import com.cystrix.blog.dao.ArticleDao;
+import com.cystrix.blog.dao.SiteHistoryDao;
 import com.cystrix.blog.dao.SiteInfoDao;
+import com.cystrix.blog.entity.SiteHistory;
 import com.cystrix.blog.entity.SiteInfo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * @author chenyue7@foxmail.com
@@ -15,11 +18,13 @@ import javax.annotation.Resource;
  * @description
  */
 @Service
+@Slf4j
 public class SiteTaskService {
 
     @Resource
     private SiteInfoDao siteInfoDao;
-
+    @Resource
+    private SiteHistoryDao siteHistoryDao;
     @Resource
     private ArticleDao articleDao;
 
@@ -29,13 +34,23 @@ public class SiteTaskService {
      * fixedRate
      */
     @Scheduled(cron = "0 0 0 * * ?")
-    public void task() {
+    public void autoUpdateSiteInfo() {
         // 更新网站统计信息
         SiteInfo siteInfo = siteInfoDao.selectOne();
         siteInfo.setRunDays(siteInfo.getRunDays() + 1);
         SiteInfo articleStatisInfo = articleDao.articleStatisInfo();
         siteInfo.setArticleNum(articleStatisInfo.getArticleNum());
         siteInfo.setWordsNum(articleStatisInfo.getWordsNum());
+        siteInfoDao.updateSelective(siteInfo);
+    }
+
+    public void updateSiteInfo(LocalDateTime updateTime) {
+        // 更新网站统计信息
+        SiteInfo siteInfo = siteInfoDao.selectOne();
+        SiteInfo articleStatisInfo = articleDao.articleStatisInfo();
+        siteInfo.setArticleNum(articleStatisInfo.getArticleNum());
+        siteInfo.setWordsNum(articleStatisInfo.getWordsNum());
+        siteInfo.setLatestUpdateTime(updateTime);
         siteInfoDao.updateSelective(siteInfo);
     }
 }

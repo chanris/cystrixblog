@@ -70,7 +70,7 @@ public class AdminCategoryController {
     }
 
     @PostMapping(value = "/tree")
-    public Response categoryTreeList(@RequestBody Category category) {
+    public Response getCategoryTreeList(@RequestBody Category category) {
         try {
             Assert.notNull(category.getId(), "分类id不能未空");
         }catch (Exception e) {

@@ -28,6 +28,15 @@ public class RedisUtils {
     }
 
     /**
+     * 获得存活时间 单位秒
+     * @param key
+     * @return
+     */
+    public Long getExpireTime(String key) {
+        return redisTemplate.getExpire(key);
+    }
+
+    /**
      * 判断key是否存在
      */
     public boolean isExistedKey(String key) {
@@ -50,6 +59,7 @@ public class RedisUtils {
 
     /**
      * 获得key的值
+     * key不存在返回null
      */
     public String getValue(String key) {
         return redisTemplate.opsForValue().get(key);

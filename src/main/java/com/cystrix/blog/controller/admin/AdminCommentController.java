@@ -32,8 +32,6 @@ public class AdminCommentController {
         this.netUtils = netUtils;
     }
 
-
-
     @PostMapping(value = "/delete")
     public Response deleteComment(@RequestBody CommentQuery query) {
         try {
@@ -44,6 +42,4 @@ public class AdminCommentController {
         commentService.removeComment(query.getId());
         return Response.ok();
     }
-
-
 }
