@@ -3,9 +3,11 @@ package com.cystrix.blog.controller.home;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.service.impl.ArchiveServiceImpl;
 import com.cystrix.blog.view.ArchiveStatisInfoView;
+import com.cystrix.blog.vo.ArchiveVo;
 import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageInfo;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -24,7 +26,7 @@ public class ArchiveController {
     private ArchiveServiceImpl archiveService;
 
     @PostMapping(value = "/listArticleWithPage")
-    public Response listArticleWithPage(@RequestBody BaseVo vo) {
+    public Response listArticleWithPage(@RequestBody ArchiveVo vo) {
         List<Article> articles = archiveService.listArticleWithPage(vo);
         return Response.ok(new PageInfo<>(articles));
     }
