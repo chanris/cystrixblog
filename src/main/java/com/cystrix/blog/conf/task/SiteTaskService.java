@@ -23,8 +23,7 @@ public class SiteTaskService {
 
     @Resource
     private SiteInfoDao siteInfoDao;
-    @Resource
-    private SiteHistoryDao siteHistoryDao;
+
     @Resource
     private ArticleDao articleDao;
 
@@ -36,6 +35,7 @@ public class SiteTaskService {
     @Scheduled(cron = "0 0 0 * * ?")
     public void autoUpdateSiteInfo() {
         // 更新网站统计信息
+        log.info("定时-更新网站统计数据");
         SiteInfo siteInfo = siteInfoDao.selectOne();
         siteInfo.setRunDays(siteInfo.getRunDays() + 1);
         SiteInfo articleStatisInfo = articleDao.articleStatisInfo();
@@ -45,12 +45,15 @@ public class SiteTaskService {
     }
 
     public void updateSiteInfo(LocalDateTime updateTime) {
+        log.info("切面-更新网站统计数据");
         // 更新网站统计信息
         SiteInfo siteInfo = siteInfoDao.selectOne();
         SiteInfo articleStatisInfo = articleDao.articleStatisInfo();
         siteInfo.setArticleNum(articleStatisInfo.getArticleNum());
         siteInfo.setWordsNum(articleStatisInfo.getWordsNum());
         siteInfo.setLatestUpdateTime(updateTime);
+        siteInfo.setVisitorsNum(articleStatisInfo.getVisitorsNum());
+//        siteInfo.setVisitNum(articleStatisInfo.getVisitNum());
         siteInfoDao.updateSelective(siteInfo);
     }
 }

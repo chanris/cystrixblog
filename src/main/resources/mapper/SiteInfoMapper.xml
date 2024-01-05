@@ -8,6 +8,7 @@
             <if test="articleNum != null">article_num = #{articleNum},</if>
             <if test="wordsNum != null">words_num = #{wordsNum},</if>
             <if test="visitorsNum != null">visitors_num = #{visitorsNum},</if>
+            <if test="visitNum != null">visit_num = #{visitNum},</if>
             <if test="latestUpdateTime != null">latest_update_time = #{latestUpdateTime}</if>
         </set>
         where id = 1

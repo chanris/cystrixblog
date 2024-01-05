@@ -92,7 +92,6 @@ public class AdminArticleController {
             throw new ParameterException(e.getMessage());
         }
         articleService.addCategoryInfo(articleCategory);
-        siteTaskService.updateSiteInfo(LocalDateTime.now());
         return Response.ok();
     }
 

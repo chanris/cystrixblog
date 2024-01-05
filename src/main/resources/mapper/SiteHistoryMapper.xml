@@ -19,7 +19,7 @@
     </update>
 
     <select id="getVisitStatis" resultType="com.cystrix.blog.entity.SiteInfo">
-        select count(distinct real_ip) as visitorsNum, count(real_ip) as visitNum from site_history
+        select count(real_ip) as visitNum from site_history
     </select>
 
 </mapper>

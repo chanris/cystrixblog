@@ -80,7 +80,10 @@
     </update>
 
     <select id="articleStatisInfo" resultType="com.cystrix.blog.entity.SiteInfo">
-        select count(*) articleNum, sum(wordNum) wordsNum, (select count(distinct real_ip) as visitorsNum from site_history ) visitorsNum from article where is_delete != 1
+        select count(*) articleNum, sum(wordNum) wordsNum,
+            (select count(distinct real_ip) as visitorsNum from site_history ) visitorsNum,
+            (select count(real_ip) as visitNum from site_history) visitNum
+        from article where is_delete != 1
     </select>
 
     <select id="selectArticleWithPage" resultType="com.cystrix.blog.entity.Article" parameterType="com.cystrix.blog.vo.ArticleVo">
