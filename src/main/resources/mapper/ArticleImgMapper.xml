@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cystrix.blog.dao.ArticleImgDao">
+
+    <insert id="add" parameterType="com.cystrix.blog.entity.ArticleImg">
+        insert into article_img(id, article_id, img_id) value (null, #{articleId}, #{imgId})
+    </insert>
+
+</mapper>

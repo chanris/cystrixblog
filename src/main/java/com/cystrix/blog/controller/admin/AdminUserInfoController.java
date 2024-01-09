@@ -67,17 +67,6 @@ public class AdminUserInfoController {
         return Response.ok();
     }
 
-    @PostMapping(value = "/delete")
-    public Response deleteUserInfo(@RequestBody UserQuery userQuery) {
-        try {
-            Assert.notNull(userQuery.getId(), "id不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        userService.removeUserInfo(userQuery.getId());
-        return Response.ok();
-    }
-
     private boolean checkUserInfoFormat(UserInfo userInfo) {
         String regexUsername = "\\w{6,20}";
         String username = userInfo.getUsername();

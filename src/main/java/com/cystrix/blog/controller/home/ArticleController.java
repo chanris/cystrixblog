@@ -1,14 +1,12 @@
 package com.cystrix.blog.controller.home;
 
 import com.cystrix.blog.entity.Article;
-import com.cystrix.blog.entity.ArticleComment;
-import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.*;
 import com.cystrix.blog.service.impl.ArticleServiceImpl;
+import com.cystrix.blog.view.ArticleView;
 import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
@@ -35,25 +33,8 @@ public class ArticleController {
      */
     @RequestMapping(value = "/listArticleDigestInfo")
     public Response listArticleDigestInfo(@RequestBody BaseVo vo) {
-        List<Article> articles = articleService.getPagedArticleWithoutContent(vo);
+        List<ArticleView> articles = articleService.getPagedArticleWithoutContent(vo);
         return Response.ok(new PageInfo<>(articles));
-    }
-
-    /**
-     * 根据年份获得文章摘要列表
-     */
-    @RequestMapping(value = "/listArchive")
-    public Response listArchive(@RequestBody PageQueryWithYear pageQuery) {
-        try {
-            Assert.notNull(pageQuery.getPageNum(), "查询页数不能为空");
-            Assert.notNull(pageQuery.getPageSize(), "分页大小不能为空");
-            Assert.notNull(pageQuery.getPageSize(), "文章年份不能为空");
-        }catch (Exception e){
-            throw new ParameterException(e.getMessage());
-        }
-        List<Article> articles = articleService.getPagedArticleByYearWithoutContent(pageQuery.getPageNum(),
-                pageQuery.getPageSize(), pageQuery.getYear());
-        return Response.builder().code(CodeEnum.OK.code).msg("查询成功").result(articles).build();
     }
 
     /**
@@ -66,7 +47,7 @@ public class ArticleController {
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
-        Article article = articleService.getDetailArticle(query.getId());
+        ArticleView article = articleService.getDetailArticle(query.getId());
         return Response.ok(article);
     }
 
@@ -81,57 +62,6 @@ public class ArticleController {
             throw new ParameterException(e.getMessage());
         }
         articleService.addLikeCount(query.getId());
-        return Response.ok();
-    }
-
-    /**
-     * 热门文章列表（默认10篇）
-     */
-    @RequestMapping(value = "/listHotArticle")
-    public Response listHotArticle(@RequestBody BaseVo vo) {
-        List<Article> articles = null;
-        try {
-            PageHelper.startPage(vo.getPageNum(), vo.getPageSize());
-            articles = articleService.listArticleOrderByHotRank();
-            PageInfo<Article> page = new PageInfo<>(articles);
-            return Response.ok(page);
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-
-    }
-
-    @RequestMapping(value = "/listByTag")
-    public Response listArticleByTag(@RequestBody TagQuery query) {
-        try {
-            Assert.notNull(query.getId(), "tagId不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        List<Article> articleDigestInfoByTagId = articleService.getArticleDigestInfoByTagId(query.getId());
-        return Response.ok(articleDigestInfoByTagId);
-    }
-
-    @RequestMapping(value = "/listByCategory")
-    public Response listArticleByTag(@RequestBody CategoryQuery query) {
-        try {
-            Assert.notNull(query.getId(), "categoryId不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        List<Article> articleDigestInfoByTagId = articleService.getArticleDigestInfoByCategoryId(query.getId());
-        return Response.ok(articleDigestInfoByTagId);
-    }
-
-    @RequestMapping(value = "/addCommentLink")
-    public Response addCommentLink(@RequestBody ArticleComment articleComment) {
-        try {
-            Assert.notNull(articleComment.getArticleId(), "articleId不能为空");
-            Assert.notNull(articleComment.getCommentId(), "commentId不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        articleService.addCommentInfo(articleComment);
         return Response.ok();
     }
 

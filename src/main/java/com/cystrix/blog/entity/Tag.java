@@ -1,24 +1,19 @@
 package com.cystrix.blog.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Data;
-
-import java.time.LocalDateTime;
+import com.cystrix.blog.entity.base.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author: chenyue7@foxmail.com
  * @date: 10/7/2023
  * @description:
  */
-@Data
-public class Tag {
+@Getter
+@Setter
+public class Tag extends BaseEntity {
     private Integer id;
     private String name;
-    // rgb val
+    // rgb颜色值
     private String color;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
-    private Integer isDelete;
 }

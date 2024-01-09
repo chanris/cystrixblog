@@ -1,6 +1,5 @@
 package com.cystrix.blog.controller.admin;
 
-import com.cystrix.blog.conf.task.SiteTaskService;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.ArticleTag;
@@ -16,8 +15,6 @@ import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDateTime;
-
 /**
  * @author: chenyue7@foxmail.com
  * @date: 12/7/2023
@@ -29,13 +26,16 @@ import java.time.LocalDateTime;
 public class AdminArticleController {
 
     private final ArticleServiceImpl articleService;
-    private final SiteTaskService siteTaskService;
 
-    public AdminArticleController(ArticleServiceImpl articleService, SiteTaskService siteTaskService) {
+    public AdminArticleController(ArticleServiceImpl articleService) {
         this.articleService = articleService;
-        this.siteTaskService = siteTaskService;
     }
 
+    /**
+     * 添加文章
+     * @param vo ArticleAddVo
+     * @return
+     */
     @PostMapping(value = "/add")
     public Response createArticle(@RequestBody ArticleAddVo vo) {
         try {
@@ -49,6 +49,11 @@ public class AdminArticleController {
         return Response.ok();
     }
 
+    /**
+     * 更新文章信息
+     * @param article
+     * @return
+     */
     @PostMapping(value = "/update")
     public Response updateArticle(@RequestBody Article article) {
         try {
@@ -110,10 +115,28 @@ public class AdminArticleController {
         return Response.ok(articleService.getDetailArticle(article.getId()));
     }
 
-    // todo 23/12/29 上传的图片无法在服务器内删除
+    /**
+     * 上传文章内容图片
+     * @param file
+     * @param id
+     * @return
+     */
     @PostMapping(value = "/upload/img")
     public Response uploadImg(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
-        articleService.updateArticleCoverImg(file, id);
+        // todo 24/1/9
+        return Response.ok();
+    }
+
+    // todo 23/12/29 上传的图片无法在服务器内删除
+    /**
+     * 上传文章封面图片
+     * @param file
+     * @param id
+     * @return
+     */
+    @PostMapping(value = "/upload/cover")
+    public Response uploadCover(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+        articleService.setArticleCoverImage(file, id);
         return Response.ok();
     }
 }

@@ -71,17 +71,6 @@ public class AdminTagController {
         return Response.ok();
     }
 
-    @PostMapping(value = "/addRef")
-    public Response addRef(@RequestBody ArticleTag articleTag) {
-        try {
-            Assert.notNull(articleTag.getTagId(), "标签id不能为空");
-            Assert.notNull(articleTag.getArticleId(), "文章id不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        return Response.ok();
-    }
-
     @PostMapping(value = "/batchAddRef")
     public Response batchAddRef(@RequestBody List<ArticleTag> articleTag) {
         tagService.batchAddRef(articleTag);

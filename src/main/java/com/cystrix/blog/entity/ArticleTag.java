@@ -1,14 +1,17 @@
 package com.cystrix.blog.entity;
 
-import lombok.Data;
+import com.cystrix.blog.entity.base.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * @author: chenyue7@foxmail.com
  * @date: 10/7/2023
  * @description:
  */
-@Data
-public class ArticleTag {
+@Getter
+@Setter
+public class ArticleTag extends BaseEntity {
     private Integer id;
     private Integer articleId;
     private Integer tagId;

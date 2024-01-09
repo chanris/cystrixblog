@@ -1,5 +1,6 @@
 package com.cystrix.blog.entity;
 
+import com.cystrix.blog.entity.base.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
  */
 @Getter
 @Setter
-public class SiteInfo {
+public class SiteInfo extends BaseEntity {
     private Integer id;
     private Integer articleNum;
     private Integer runDays;
@@ -22,8 +23,4 @@ public class SiteInfo {
     private Integer visitNum;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime latestUpdateTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime createTime;
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime updateTime;
 }

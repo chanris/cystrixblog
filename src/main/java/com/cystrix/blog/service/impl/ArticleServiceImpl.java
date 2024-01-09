@@ -4,9 +4,9 @@ import com.cystrix.blog.dao.*;
 import com.cystrix.blog.entity.*;
 import com.cystrix.blog.exception.BusinessException;
 import com.cystrix.blog.exception.ParameterException;
-import com.cystrix.blog.service.ArticleService;
 import com.cystrix.blog.service.BaseService;
 import com.cystrix.blog.util.StringUtils;
+import com.cystrix.blog.view.ArticleView;
 import com.cystrix.blog.vo.ArticleAddVo;
 import com.cystrix.blog.vo.ArticleVo;
 import com.cystrix.blog.vo.BaseVo;
@@ -19,7 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,56 +31,53 @@ import java.util.Random;
  */
 @Slf4j
 @Service
-public class ArticleServiceImpl extends BaseService implements ArticleService {
+public class ArticleServiceImpl extends BaseService {
 
     private final ArticleDao articleDao;
-
     private final ArticleTagDao articleTagDao;
-
     private final ArticleCategoryDao articleCategoryDao;
 
-    private final ArticleCommentDao articleCommentDao;
-
     private final CategoryDao categoryDao;
-
     private final TagDao tagDao;
 
-    private final CommentDao commentDao;
+    private final ArticleCoverDao articleCoverDao;
+    private final ArticleImgDao articleImgDao;
 
-    private final CoverDao coverDao;
 
     public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, ArticleCategoryDao articleCategoryDao,
-                              ArticleCommentDao articleCommentDao, TagDao tagDao, CategoryDao categoryDao, CommentDao commentDao, CoverDao coverDao) {
+                             TagDao tagDao, CategoryDao categoryDao,
+                              ArticleCoverDao articleCoverDao, ArticleImgDao articleImgDao) {
         this.articleDao = articleDao;
         this.articleTagDao = articleTagDao;
         this.articleCategoryDao = articleCategoryDao;
-        this.articleCommentDao = articleCommentDao;
         this.tagDao = tagDao;
         this.categoryDao = categoryDao;
-        this.commentDao = commentDao;
-        this.coverDao = coverDao;
+        this.articleCoverDao = articleCoverDao;
+        this.articleImgDao = articleImgDao;
     }
 
-    @Override
-    public List<Article> getPagedArticleWithoutContent(BaseVo vo) {
+    public List<ArticleView> getPagedArticleWithoutContent(BaseVo vo) {
         executePage(vo);
         return articleDao.selectPageWithoutContent();
     }
 
-    @Override
-    public List<Article> getPagedArticleByYearWithoutContent(Integer pageNum, Integer pageSize, Integer year) {
-        return articleDao.selectPageByYearWithoutContent(pageSize, (pageNum - 1) * pageSize, year);
+    /**
+     * 后台获得文章详情
+     * @param articleId 文章id
+     * @return ArticleView
+     */
+    public ArticleView editDetailArticle(Integer articleId) {
+        return articleDao.selectArticleViewById(articleId);
     }
 
-    @Override
-    public List<Article> listArticleOrderByHotRank() {
-        return articleDao.selectArticleListByHotRank(10);
-    }
-
-    @Override
+    /**
+     * 前台获得文章详情，更新阅读量
+     * @param id
+     * @return
+     */
     @Transactional(rollbackFor = {Exception.class})
-    public Article getDetailArticle(Integer id) {
-        Article article = articleDao.selectArticleById(id);
+    public ArticleView getDetailArticle(Integer id) {
+        ArticleView article = articleDao.selectArticleViewById(id);
         Article addViewCount = new Article();
         Integer viewCount = article.getViewCount();
         addViewCount.setId(article.getId());
@@ -90,13 +86,7 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         return article;
     }
 
-    @Override
-    public Article getArticleWithoutContent(Integer id) {
-        return articleDao.selectArticleByIdWithoutContent(id);
-    }
-
     @Transactional(rollbackFor = {Exception.class})
-    @Override
     public void addArticle(ArticleAddVo vo) {
         // 添加文章 设置 摘要 & 字数
         int wordNum = StringUtils.countWords(vo.getContent());
@@ -128,7 +118,6 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
     }
 
-    @Override
     public void modifyArticle(Article article) {
         // 文章字数
         if(article.getContent() != null) {
@@ -141,7 +130,6 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         articleDao.update(article);
     }
 
-    @Override
     public void removeArticle(Integer id) {
         articleDao.deleteById(id);
     }
@@ -150,66 +138,34 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
      * 为文章添加标签信息
      * @param articleTag
      */
-    @Override
     public void addTagInfo(ArticleTag articleTag) {
         Integer articleId = articleTag.getArticleId();
         Integer tagId = articleTag.getTagId();
-        Article article = articleDao.selectArticleById(articleId);
+//        ArticleView article = articleDao.selectArticleById(articleId);
+        Article article = articleDao.selectById(articleId);
         Tag tag = tagDao.selectTagById(tagId);
         Assert.notNull(article, "找不到文章 articleId:" + articleId);
         Assert.notNull(tag, "找不到标签 tagId:" + tagId);
         articleTagDao.insert(articleTag);
     }
 
-    @Override
     public void addCategoryInfo(ArticleCategory articleCategory) {
         Integer articleId = articleCategory.getArticleId();
         Integer categoryId = articleCategory.getCategoryId();
-        Article article = articleDao.selectArticleById(articleId);
+        Article article = articleDao.selectById(articleId);
         Category category = categoryDao.selectCategoryById(categoryId);
         Assert.notNull(article, "找不到文章 articleId:" + articleId);
         Assert.notNull(category, "找不到分类 categoryId:" + categoryId);
         articleCategoryDao.insert(articleCategory);
     }
 
-    @Override
-    public void addCommentInfo(ArticleComment articleComment) {
-        Integer articleId = articleComment.getArticleId();
-        Integer commentId = articleComment.getCommentId();
-        Article article = articleDao.selectArticleById(articleId);
-        Comment comment = commentDao.selectCommentById(commentId);
-        Assert.notNull(article, "找不到文章 articleId:" + articleId);
-        Assert.notNull(comment, "找不到评论 commentId:" + commentId);
-        articleCommentDao.insert(articleComment);
-    }
-
-    @Override
-    public List<Article> getArticleDigestInfoByTagId(Integer tagId) {
-        List<Integer> list = articleTagDao.selectArticleIdByTagId(tagId);
-        if (list.size() != 0) {
-            return articleDao.selectArticleByIdsWithoutContent(list);
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
-    public List<Article> getArticleDigestInfoByCategoryId(Integer categoryId) {
-        List<Integer> list = articleCategoryDao.selectArticleIdByCategoryId(categoryId);
-        if (list.size() != 0) {
-            return articleDao.selectArticleByIdsWithoutContent(list);
-        }
-        return new ArrayList<>();
-    }
-
-    @Override
     public List<Article> getArticleInfoWithPage(ArticleVo vo) {
         executePage(vo);
         return articleDao.selectArticleWithPage(vo);
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    @Override
-    public void updateArticleCoverImg(MultipartFile file, Integer articleId) {
+    public void setArticleCoverImage(MultipartFile file, Integer articleId) {
         if (file.isEmpty()) {
             throw new ParameterException("上传的文件不能为空");
         }
@@ -233,16 +189,13 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
                     try (FileOutputStream fos = new FileOutputStream(saveFile)) {
                         fos.write(file.getBytes());
                     }
-                    Cover cover = new Cover();
-                    cover.setType(file.getContentType());
-                    cover.setSize(file.getSize());
-                    cover.setName(fileName);
-                    cover.setUrl(saveFile.getAbsolutePath());
-                    coverDao.add(cover);
-                    Article article = new Article();
-                    article.setId(articleId);
-                    article.setCoverId(cover.getId());
-                    articleDao.update(article);
+                    ArticleCover articleCover = new ArticleCover();
+                    articleCover.setArticleId(articleId);
+                    articleCover.setType(file.getContentType());
+                    articleCover.setSize(file.getSize());
+                    articleCover.setName(fileName);
+                    articleCover.setUrl(saveFile.getAbsolutePath());
+                    articleCoverDao.add(articleCover);
                 } catch (Exception e) {
                     throw new BusinessException(e.getMessage());
                 }
@@ -251,7 +204,11 @@ public class ArticleServiceImpl extends BaseService implements ArticleService {
         }
     }
 
-    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void updateArticleContentImg(MultipartFile file, Integer articleId) {
+        // TODO 24/1/9
+    }
+
     public void addLikeCount(Integer articleId) {
         articleDao.addLikeCount(articleId);
     }

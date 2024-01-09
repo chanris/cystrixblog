@@ -2,16 +2,13 @@ package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.UserInfoDao;
 import com.cystrix.blog.entity.UserInfo;
-import com.cystrix.blog.enums.RedisEnum;
 import com.cystrix.blog.exception.ParameterException;
-import com.cystrix.blog.service.UserService;
 import com.cystrix.blog.util.JwtUtils;
 import com.cystrix.blog.util.MD5Utils;
 import com.cystrix.blog.util.RedisUtils;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.view.UserInfoView;
-import org.apache.shiro.util.Assert;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,7 +19,7 @@ import java.time.LocalDateTime;
  * @description:
  */
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl {
 
     private final UserInfoDao userInfoDao;
     private final JwtUtils jwtUtils;
@@ -36,10 +33,10 @@ public class UserServiceImpl implements UserService {
         this.redisUtils = redisUtils;
     }
 
-    @Override
+
     public LoginToken doLoginHandle(LoginVo loginVo) {
         try {
-            Assert.notNull(loginVo.getEmail(), "邮箱不能为空");
+            /*Assert.notNull(loginVo.getEmail(), "邮箱不能为空");
             String email = loginVo.getEmail();
             if(!this.isExistedUser(email)) {
                 throw new ParameterException("用户不存在");
@@ -68,22 +65,19 @@ public class UserServiceImpl implements UserService {
                 return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
             }else {
                 throw new ParameterException("账号密码和邮箱验证码不能同时为空");
-            }
-//            UserInfo result = userInfoDao.selectUserInfoByEmail(email);
-//            return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
+            }*/
+            UserInfo result = userInfoDao.selectUserInfoByEmail(loginVo.getEmail());
+            return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
     }
 
-    @Override
     public UserInfoView getUserInfoVo() {
         return userInfoDao.selectUserInfoView();
     }
 
-    @Override
     public void modifyUserInfo(UserInfo userInfo) {
-        userInfo.setUpdateTime(LocalDateTime.now());
         String origin = userInfo.getPassword();
         if (origin != null) {
            userInfo.setPassword(md5Utils.encryption(origin));
@@ -91,26 +85,16 @@ public class UserServiceImpl implements UserService {
         userInfoDao.update(userInfo);
     }
 
-    @Override
-    public void removeUserInfo(Integer id) {
-        userInfoDao.deleteById(id);
-    }
-
-    @Override
     public void addUserInfo(UserInfo userInfo) {
         // 加密密码
         String encryptionPasswd = md5Utils.encryption(userInfo.getPassword());
         userInfo.setPassword(encryptionPasswd);
-        userInfo.setMotto("我是一只小懒猫 喵喵~~");
-        userInfo.setAvatar("/upload/avatar/251231245.jpg");
         userInfo.setNickname(userInfo.getUsername());
         userInfo.setCreateTime(LocalDateTime.now());
         userInfo.setUpdateTime(LocalDateTime.now());
         userInfoDao.insert(userInfo);
     }
 
-
-    @Override
     public boolean isExistedUser(String email) {
         return userInfoDao.selectUserInfoByEmail(email) != null;
     }

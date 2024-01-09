@@ -1,66 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cystrix.blog.dao.ArticleDao">
-    <sql id="tb">`article`</sql>
-    <sql id="baseCols">
-    `id`,`title`,`content`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`, `cover_img`
-    `create_time`,`update_time`,`is_delete`
-    </sql>
-    <sql id="baseColsWithoutContent">
-    `id`,`title`,`digest`,`comment_count`,`view_count`,`like_count`,`hot_rank`, `cover_img`
-    `create_time`,`update_time`,`is_delete`
-    </sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.Article" useGeneratedKeys="true" keyProperty="id">
         insert into article(id, title, content, digest, wordNum) value(null, #{title}, #{content}, #{digest}, #{wordNum})
     </insert>
 
-    <select id="selectPageWithoutContent" resultType="com.cystrix.blog.entity.Article">
-        select a.id, a.title, a.digest, a.view_count, a.like_count, a.wordNum, a.create_time, a.update_time, a.cover_id, c2.name coverImg, c.id categoryId, c.name categoryName  from article a
+    <select id="selectPageWithoutContent" resultType="com.cystrix.blog.view.ArticleView">
+        select a.*, c.id categoryId, c.name categoryName, ac2.name coverImg   from article a
         left join article_category ac on ac.article_id = a.id
         left join category c on ac.category_id = c.id
-        left join cover c2 on a.cover_id = c2.id
-        where a.`is_delete` = 0  order by a.id desc
+        left join article_cover ac2 on a.id = ac2.article_id
+        where a.`is_delete` != 1 order by a.id desc
     </select>
 
-    <select id="selectPageByYearWithoutContent" resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
-        WHERE YEAR(`create_time`) = #{year} AND `is_delete` = 0
-        ORDER BY `id` DESC
-        LIMIT #{pageSize}
-        OFFSET #{offset}
+    <select id="selectById" parameterType="integer" resultType="com.cystrix.blog.entity.Article">
+        select * from article where  id = #{id} and is_delete != 1
     </select>
 
-    <select id="selectArticleListByHotRank" resultType="com.cystrix.blog.entity.Article" parameterType="integer">
-        SELECT  <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/>
-        WHERE `is_delete` = 0
-        ORDER BY `hot_rank` DESC
-    </select>
-
-    <select id="selectArticleById" resultType="com.cystrix.blog.entity.Article">
-        SELECT a.*, c.name categoryName, c.id categoryId, c2.id coverId, c2.name coverImg  FROM article a
-        left join article_category ac on ac.article_id = a.id
-        left join category c on ac.category_id = c.id
-        left join cover c2 on a.cover_id = c2.id
-        WHERE a.`id` = #{id} AND a.`is_delete` = 0
-    </select>
-
-    <select id="selectArticleByIdWithoutContent" resultType="com.cystrix.blog.entity.Article">
-        SELECT `id`,`title`,`digest`,`comment_count`,`view_count`, `like_count`,`hot_rank`,
-        `create_time`,`update_time`, `is_delete` FROM <include refid="tb"/>
-        WHERE `id` = #{id} AND `is_delete` = 0
-    </select>
-
-    <select id="selectArticleByIdsWithoutContent"  resultType="com.cystrix.blog.entity.Article">
-        SELECT <include refid="baseColsWithoutContent"/> FROM <include refid="tb"/> WHERE `id`
-        <foreach collection="ids" item="id" open="IN (" separator="," close=")">
-            #{id}
-        </foreach>
-        AND `is_delete` = 0
+    <select id="selectArticleViewById" parameterType="integer" resultType="com.cystrix.blog.view.ArticleView">
+        select a.*, c.id categoryId, c.name categoryName, ac2.name coverImg from article a
+        left join article_category ac on a.id = ac.article_id
+        left join category c on c.id = ac.category_id
+        left join article_cover ac2 on a.id = ac2.article_id
+        where a.id = #{val} and a.is_delete != 1
     </select>
 
     <update id="update" parameterType="com.cystrix.blog.entity.Article">
-        UPDATE <include refid="tb"/>
+        update article
         <set>
             <if test="title != null">`title` = #{title},</if>
             <if test="content != null">`content` = #{content},</if>
@@ -69,10 +36,9 @@
             <if test="wordNum != null">`wordNum` = #{wordNum},</if>
             <if test="viewCount != null">`view_count` = #{viewCount},</if>
             <if test="likeCount != null">`like_count` = #{likeCount},</if>
-            <if test="hotRank != null">`hot_rank` = #{hotRank},</if>
-            <if test="coverId != null">`cover_id` = #{coverId}</if>
+            <if test="hotRank != null">`hot_rank` = #{hotRank}</if>
         </set>
-        WHERE `id` = #{id} AND `is_delete` = 0
+        where `id` = #{id} and `is_delete` != 1
     </update>
 
     <update id="deleteById" parameterType="integer">
@@ -87,7 +53,7 @@
     </select>
 
     <select id="selectArticleWithPage" resultType="com.cystrix.blog.entity.Article" parameterType="com.cystrix.blog.vo.ArticleVo">
-        select id, title, digest, wordNum, view_count, like_count, create_time, update_time from article where is_delete != 1
+        select * from article where is_delete != 1
         <if test="title != null">
             and title like concat('%', #{title}, '%')
         </if>
@@ -97,7 +63,7 @@
     </select>
 
     <update id="addLikeCount" parameterType="integer">
-        update article set like_count = like_count + 1 where  id = #{articleId} and is_delete != 1
+        update article set like_count = like_count + 1 where id = #{articleId} and is_delete != 1
     </update>
 
 </mapper>

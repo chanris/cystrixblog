@@ -1,7 +1,6 @@
 package com.cystrix.blog.util;
 
 import com.cystrix.blog.dao.SiteHistoryDao;
-import com.cystrix.blog.entity.IpInfo;
 import com.cystrix.blog.entity.SiteHistory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -30,7 +29,6 @@ public class NetUtils {
 
     @Value("${ipinfo.token}")
     private String token;
-
 
     /**
      * 获得请求ip地址
@@ -67,7 +65,7 @@ public class NetUtils {
             String result = response.getBody();
             ObjectMapper om = new ObjectMapper();
             try {
-                IpInfo ipInfo = om.readValue(result, IpInfo.class);
+                SiteHistory ipInfo = om.readValue(result, SiteHistory.class);
                 ipInfo.setId(history.getId());
                 siteHistoryDao.update(ipInfo);
             } catch (JsonProcessingException e) {

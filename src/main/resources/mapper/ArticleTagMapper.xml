@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cystrix.blog.dao.ArticleTagDao">
-    <sql id="tb">`article_tag`</sql>
-    <sql id="baseCols">`id`,`article_id`,`tag_id`</sql>
 
     <insert id="insert" parameterType="com.cystrix.blog.entity.ArticleTag" useGeneratedKeys="true" keyProperty="id">
-        insert into article_tag value (null, #{articleId}, #{tagId})
+        insert into article_tag(id, article_id, tag_id) value (null, #{articleId}, #{tagId})
     </insert>
 
     <insert id="batchInsert" parameterType="list">
@@ -15,14 +13,8 @@
     </insert>
 
     <select id="selectTagIdListByArticleId" parameterType="integer" resultType="integer">
-        SELECT  `tag_id` FROM <include refid="tb"/>
-        WHERE `article_id`  = #{articleId}
-    </select>
-
-
-    <select id="selectArticleIdByTagId" parameterType="integer"  resultType="integer">
-        SELECT `article_id` FROM <include refid="tb"/>
-        WHERE `tag_id` = #{tagId}
+        select `tag_id` from article_tag
+        where `article_id` = #{articleId}
     </select>
 
     <delete id="deleteByArticleIdAndTagId" parameterType="com.cystrix.blog.entity.ArticleTag">

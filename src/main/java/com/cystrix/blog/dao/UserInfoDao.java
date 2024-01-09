@@ -12,17 +12,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserInfoDao {
     void insert(UserInfo userInfo);
-
     UserInfo selectUserInfoByEmail(String email);
     UserInfo selectUserInfoByUsernameAndPassword(UserInfo userInfo);
-
     UserInfo selectUserInfoByEmailAndPassword(UserInfo userInfo);
-
     UserInfo selectUserInfoById(Integer id);
-
     UserInfoView selectUserInfoView();
-
     void update(UserInfo userInfo);
-
-    void deleteById(Integer id);
 }

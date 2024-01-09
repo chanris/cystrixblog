@@ -27,35 +27,6 @@ public class CategoryController {
         this.categoryService = categoryService;
     }
 
-    @RequestMapping(value = "/page")
-    public Response getPagedCategoryList(@RequestBody PageQuery query) {
-        try {
-            Assert.notNull(query.getPageSize(), "分页大小不能空");
-            Assert.notNull(query.getPageNum(), "分页数不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        List<Category> categoryList = categoryService.getPageCategory(query);
-        return Response.ok(categoryList);
-    }
-
-    @GetMapping(value = "/getArticleCategoryView")
-    public Response getArticleCategoryView() {
-        return Response.ok(categoryService.getArticleCategoryView());
-    }
-
-
-    @RequestMapping(value = "/list")
-    public Response getTagList(@RequestBody ArticleQuery articleQuery) {
-        try {
-            Assert.notNull(articleQuery.getId(), "文章id不能为空");
-        }catch (Exception e) {
-            throw new ParameterException(e.getMessage());
-        }
-        List<Category> categoryList = categoryService.getTagListByArticleId(articleQuery.getId());
-        return Response.ok(categoryList);
-    }
-
     @RequestMapping(value = "/getCategoryByArticleId")
     public Response getCategoryByArticleId(@RequestBody ArticleQuery articleQuery) {
         try {
@@ -65,6 +36,8 @@ public class CategoryController {
         }
         return Response.ok(categoryService.getCategoryByArticleId(articleQuery.getId()));
     }
+
+
 
     @PostMapping(value = "/tree")
     public Response categoryTreeList(@RequestBody Category category) {

@@ -1,6 +1,6 @@
 package com.cystrix.blog.dao;
 
-import com.cystrix.blog.entity.IpInfo;
+
 import com.cystrix.blog.entity.SiteHistory;
 import com.cystrix.blog.entity.SiteInfo;
 import org.springframework.stereotype.Repository;
@@ -15,7 +15,7 @@ public interface SiteHistoryDao {
 
     void insert(SiteHistory siteHistory);
 
-    void update(IpInfo ipInfo);
+    void update(SiteHistory ipInfo);
 
     SiteInfo getVisitStatis();
 }

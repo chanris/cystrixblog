@@ -2,6 +2,7 @@ package com.cystrix.blog.dao;
 
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.SiteInfo;
+import com.cystrix.blog.view.ArticleView;
 import com.cystrix.blog.vo.ArticleVo;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -17,17 +18,11 @@ import java.util.List;
 public interface ArticleDao {
 
     /*默认根据创建事件排序分页*/
-    List<Article> selectPageWithoutContent();
+    List<ArticleView> selectPageWithoutContent();
 
-    List<Article> selectPageByYearWithoutContent(@Param("pageSize") int pageSize, @Param("offset") int offset, @Param("year") int year);
+    ArticleView selectArticleViewById(Integer id);
 
-    List<Article> selectArticleListByHotRank(int num);
-
-    Article selectArticleById(Integer id);
-
-    Article selectArticleByIdWithoutContent(Integer id);
-
-    List<Article> selectArticleByIdsWithoutContent(@Param("ids") List<Integer> ids);
+    Article selectById(Integer id);
 
     void insert(Article article);
 

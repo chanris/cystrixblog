@@ -5,7 +5,7 @@
         insert into site_history(real_ip, uri, method, params) value (#{realIP},#{uri}, #{method}, #{params})
     </insert>
 
-    <update id="update" parameterType="com.cystrix.blog.entity.IpInfo">
+    <update id="update" parameterType="com.cystrix.blog.entity.SiteHistory">
         update site_history
         <set>
             <if test="city != null">city = #{city},</if>
@@ -13,7 +13,7 @@
             <if test="region != null">region = #{region},</if>
             <if test="loc != null">loc = #{loc},</if>
             <if test="org != null">org = #{org},</if>
-            <if test="timezone != null">timezone = #{timezone},</if>
+            <if test="timezone != null">timezone = #{timezone}</if>
         </set>
         where id = #{id}
     </update>

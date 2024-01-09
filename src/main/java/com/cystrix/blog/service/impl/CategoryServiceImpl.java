@@ -5,7 +5,6 @@ import com.cystrix.blog.dao.CategoryDao;
 import com.cystrix.blog.entity.ArticleCategory;
 import com.cystrix.blog.entity.Category;
 import com.cystrix.blog.query.PageQuery;
-import com.cystrix.blog.service.CategoryService;
 import com.cystrix.blog.view.ArticleCategoryView;
 import com.cystrix.blog.view.CategoryView;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,7 @@ import java.util.*;
  */
 @Slf4j
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class CategoryServiceImpl {
 
     private final CategoryDao categoryDao;
 
@@ -33,7 +32,6 @@ public class CategoryServiceImpl implements CategoryService {
         this.articleCategoryDao = articleCategoryDao;
     }
 
-    @Override
     public Integer addCategory(Category category) {
         category.setCreateTime(LocalDateTime.now());
         category.setUpdateTime(LocalDateTime.now());
@@ -41,40 +39,20 @@ public class CategoryServiceImpl implements CategoryService {
         return  category.getId();
     }
 
-    @Override
     public void modifyCategory(Category category) {
-        category.setUpdateTime(LocalDateTime.now());
         categoryDao.update(category);
     }
 
-    @Override
     public void modifyArticleCategory(ArticleCategory articleCategory) {
         articleCategoryDao.update(articleCategory);
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    @Override
     public void deleteById(Integer id) {
         articleCategoryDao.deleteByCategoryId(id);
         categoryDao.deleteById(id);
     }
 
-    @Override
-    public List<Category> getPageCategory(PageQuery query) {
-        Integer offset = (query.getPageNum() - 1) * query.getPageSize();
-        return  categoryDao.selectPage(query.getPageSize(), offset);
-    }
-
-    @Override
-    public List<Category> getTagListByArticleId(Integer articleId) {
-
-        return null;
-    }
-
-
-
-
-    @Override
     public CategoryView categoryTree(Integer categoryId) {
         List<Category> categoryList = categoryDao.categoryTree(categoryId);
         Queue<CategoryView> queue = new LinkedList<>();
@@ -114,13 +92,7 @@ public class CategoryServiceImpl implements CategoryService {
         return root;
     }
 
-    @Override
     public Category getCategoryByArticleId(Integer articleId) {
         return categoryDao.selectCategoryByArticleId(articleId);
-    }
-
-    @Override
-    public ArticleCategoryView getArticleCategoryView() {
-        return articleCategoryDao.selectArticleNumByCategoryId();
     }
 }
