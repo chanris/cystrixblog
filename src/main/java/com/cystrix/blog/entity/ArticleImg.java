@@ -13,8 +13,6 @@ import lombok.Setter;
 @Setter
 public class ArticleImg extends BaseEntity {
     private Integer id;
-    // 文章id
-    private Integer articleId;
     // 文件绝对路径
     private String uri;
     // 文件名称

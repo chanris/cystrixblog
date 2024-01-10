@@ -223,10 +223,10 @@ public class ArticleServiceImpl extends BaseService {
     }
 
     @Transactional(rollbackFor = {Exception.class})
-    public ArticleImg updateArticleContentImg(MultipartFile file, Integer articleId) {
-        if(checkFileValidation(file, articleId)) {
+    public ArticleImg updateArticleContentImg(MultipartFile file) {
+        // 上传文章图片不需要articleId
+        if(checkFileValidation(file, 1)) {
             ArticleImg articleImg = new ArticleImg();
-            articleImg.setArticleId(articleId);
             try {
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
                 String filePath = "/blog/upload/article/img/" + fileName;

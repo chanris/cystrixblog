@@ -3,8 +3,8 @@
 <mapper namespace="com.cystrix.blog.dao.ArticleImgDao">
 
     <insert id="add" parameterType="com.cystrix.blog.entity.ArticleImg" useGeneratedKeys="true" keyProperty="id">
-        insert into article_img(id, article_id, name, type, size, uri)
-        value (null, #{articleId}, #{name}, #{type}, #{size}, #{uri})
+        insert into article_img(id, name, type, size, uri)
+        value (null, #{name}, #{type}, #{size}, #{uri})
     </insert>
 
 </mapper>

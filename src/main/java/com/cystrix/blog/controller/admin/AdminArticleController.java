@@ -141,8 +141,8 @@ public class AdminArticleController {
      * @return
      */
     @PostMapping(value = "/upload/img")
-    public Response uploadArticleImg(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
-        ArticleImg articleImg = articleService.updateArticleContentImg(file, id);
+    public Response uploadArticleImg(@RequestParam("file") MultipartFile file) {
+        ArticleImg articleImg = articleService.updateArticleContentImg(file);
         return Response.ok(articleImg);
     }
 }
