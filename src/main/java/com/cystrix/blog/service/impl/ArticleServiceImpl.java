@@ -168,7 +168,6 @@ public class ArticleServiceImpl extends BaseService {
     public void setArticleCoverImage(MultipartFile file, Integer articleId) {
         if(checkFileValidation(file, articleId)) {
             try {
-                log.info("文件大小：{}", file.getSize());
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
                 String filePath = "/blog/upload/article/covers/" + fileName;
                 File directory = new File("/blog/upload/article/covers");
@@ -200,11 +199,12 @@ public class ArticleServiceImpl extends BaseService {
             ArticleCover oldRecord = articleCoverDao.selectByArticleId(articleId);
             Assert.notNull(oldRecord, "没有找到该文章封面");
             try {
-                log.info("文件大小：{}", file.getSize());
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
                 String filePath = "/blog/upload/article/covers/" + fileName;
                 File needDelFile = new File(oldRecord.getUrl());
-                needDelFile.delete();
+                if(!needDelFile.delete()) {
+                    log.warn("文章图片无法删除 文件名：{}", needDelFile.getName());
+                }
                 File saveFile = new File(filePath);
                 try (FileOutputStream fos = new FileOutputStream(saveFile)) {
                     fos.write(file.getBytes());
@@ -222,10 +222,29 @@ public class ArticleServiceImpl extends BaseService {
         }
     }
 
-
     @Transactional(rollbackFor = {Exception.class})
-    public void updateArticleContentImg(MultipartFile file, Integer articleId) {
-        // TODO 24/1/9
+    public ArticleImg updateArticleContentImg(MultipartFile file, Integer articleId) {
+        if(checkFileValidation(file, articleId)) {
+            ArticleImg articleImg = new ArticleImg();
+            articleImg.setArticleId(articleId);
+            try {
+                String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
+                String filePath = "/blog/upload/article/img/" + fileName;
+                File saveFile = new File(filePath);
+                try (FileOutputStream fos = new FileOutputStream(saveFile)) {
+                    fos.write(file.getBytes());
+                }
+                articleImg.setType(file.getContentType());
+                articleImg.setName(fileName);
+                articleImg.setSize(file.getSize());
+                articleImg.setUri(saveFile.getAbsolutePath());
+                articleImgDao.add(articleImg);
+                return articleImg;
+            }catch (Exception e) {
+                throw new BusinessException(e.getMessage());
+            }
+        }
+        return null;
     }
 
     public void addLikeCount(Integer articleId) {
@@ -253,6 +272,9 @@ public class ArticleServiceImpl extends BaseService {
     }
 
     private boolean checkFileValidation(MultipartFile file, Integer articleId) {
+        if(articleId == null) {
+            throw new ParameterException("文章id不能为空");
+        }
         if (file.isEmpty()) {
             throw new ParameterException("上传的文件不能为空");
         }

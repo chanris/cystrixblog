@@ -65,9 +65,15 @@ public class NetUtils {
             String result = response.getBody();
             ObjectMapper om = new ObjectMapper();
             try {
-                SiteHistory ipInfo = om.readValue(result, SiteHistory.class);
-                ipInfo.setId(history.getId());
-                siteHistoryDao.update(ipInfo);
+                IPInfo ipInfo = om.readValue(result, IPInfo.class);
+                history.setCity(ipInfo.getCity());
+                history.setCountry(ipInfo.getCountry());
+                history.setRealIP(ipInfo.getIp());
+                history.setLoc(ipInfo.getLoc());
+                history.setOrg(ipInfo.getOrg());
+                history.setTimezone(ipInfo.getTimezone());
+                history.setRegion(ipInfo.getRegion());
+                siteHistoryDao.update(history);
             } catch (JsonProcessingException e) {
                 log.warn("ip info address exception, json format error {}", result);
             }
@@ -75,4 +81,71 @@ public class NetUtils {
             log.warn("ip info address failed, response code: {}", response.getStatusCodeValue());
         }
     }
+
+    private static class IPInfo {
+        String ip;
+        String city;
+        String region;
+        String country;
+        String loc;
+        String org;
+        String timezone;
+
+        public String getIp() {
+            return ip;
+        }
+
+        public void setIp(String ip) {
+            this.ip = ip;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getRegion() {
+            return region;
+        }
+
+        public void setRegion(String region) {
+            this.region = region;
+        }
+
+        public String getCountry() {
+            return country;
+        }
+
+        public void setCountry(String country) {
+            this.country = country;
+        }
+
+        public String getLoc() {
+            return loc;
+        }
+
+        public void setLoc(String loc) {
+            this.loc = loc;
+        }
+
+        public String getOrg() {
+            return org;
+        }
+
+        public void setOrg(String org) {
+            this.org = org;
+        }
+
+        public String getTimezone() {
+            return timezone;
+        }
+
+        public void setTimezone(String timezone) {
+            this.timezone = timezone;
+        }
+    }
+
 }

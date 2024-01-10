@@ -2,6 +2,7 @@ package com.cystrix.blog.controller.admin;
 
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.entity.ArticleCategory;
+import com.cystrix.blog.entity.ArticleImg;
 import com.cystrix.blog.entity.ArticleTag;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.query.ArticleQuery;
@@ -116,19 +117,6 @@ public class AdminArticleController {
     }
 
     /**
-     * 上传文章内容图片
-     * @param file
-     * @param id
-     * @return
-     */
-    @PostMapping(value = "/upload/img")
-    public Response uploadImg(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
-        // todo 24/1/9
-        return Response.ok();
-    }
-
-    // todo 23/12/29 上传的图片无法在服务器内删除
-    /**
      * 上传文章封面图片
      * @param file
      * @param id
@@ -144,5 +132,17 @@ public class AdminArticleController {
     public Response updateCover(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
         articleService.updateArticleCoverImage(file, id);
         return Response.ok();
+    }
+
+    /**
+     * 上传文章图片
+     * @param file
+     * @param id
+     * @return
+     */
+    @PostMapping(value = "/upload/img")
+    public Response uploadArticleImg(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+        ArticleImg articleImg = articleService.updateArticleContentImg(file, id);
+        return Response.ok(articleImg);
     }
 }

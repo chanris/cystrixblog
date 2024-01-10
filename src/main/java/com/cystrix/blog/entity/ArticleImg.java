@@ -22,5 +22,5 @@ public class ArticleImg extends BaseEntity {
     // 文件类型
     private String type;
     // 文件大小
-    private Integer size;
+    private Long size;
 }
