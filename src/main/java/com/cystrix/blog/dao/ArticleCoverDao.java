@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ArticleCoverDao {
 
+    ArticleCover selectByArticleId(Integer id);
     void add(ArticleCover articleCover);
+    void update(ArticleCover articleCover);
 }

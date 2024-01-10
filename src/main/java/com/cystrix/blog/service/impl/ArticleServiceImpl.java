@@ -159,50 +159,69 @@ public class ArticleServiceImpl extends BaseService {
         articleCategoryDao.insert(articleCategory);
     }
 
-    public List<Article> getArticleInfoWithPage(ArticleVo vo) {
+    public List<ArticleView> getArticleInfoWithPage(ArticleVo vo) {
         executePage(vo);
         return articleDao.selectArticleWithPage(vo);
     }
 
     @Transactional(rollbackFor = {Exception.class})
     public void setArticleCoverImage(MultipartFile file, Integer articleId) {
-        if (file.isEmpty()) {
-            throw new ParameterException("上传的文件不能为空");
-        }
-        if (file.getContentType() == null) {
-            throw new ParameterException("文件类型不能为空");
-        }
-        switch (file.getContentType()) {
-            case "image/jpeg", "image/png" -> {
-                try {
-                    log.info("文件大小：{}", file.getSize());
-                    String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
-                    String filePath = "/blog/upload/article/covers/" + fileName;
-                    File directory = new File("/blog/upload/article/covers");
-                    if (!directory.exists()) {
-                        boolean result = directory.mkdirs();
-                        if (!result) {
-                            throw new BusinessException("创建上传文件夹失败");
-                        }
+        if(checkFileValidation(file, articleId)) {
+            try {
+                log.info("文件大小：{}", file.getSize());
+                String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
+                String filePath = "/blog/upload/article/covers/" + fileName;
+                File directory = new File("/blog/upload/article/covers");
+                if (!directory.exists()) {
+                    boolean result = directory.mkdirs();
+                    if (!result) {
+                        throw new BusinessException("创建上传文件夹失败");
                     }
-                    File saveFile = new File(filePath);
-                    try (FileOutputStream fos = new FileOutputStream(saveFile)) {
-                        fos.write(file.getBytes());
-                    }
-                    ArticleCover articleCover = new ArticleCover();
-                    articleCover.setArticleId(articleId);
-                    articleCover.setType(file.getContentType());
-                    articleCover.setSize(file.getSize());
-                    articleCover.setName(fileName);
-                    articleCover.setUrl(saveFile.getAbsolutePath());
-                    articleCoverDao.add(articleCover);
-                } catch (Exception e) {
-                    throw new BusinessException(e.getMessage());
                 }
+                File saveFile = new File(filePath);
+                try (FileOutputStream fos = new FileOutputStream(saveFile)) {
+                    fos.write(file.getBytes());
+                }
+                ArticleCover articleCover = new ArticleCover();
+                articleCover.setArticleId(articleId);
+                articleCover.setType(file.getContentType());
+                articleCover.setSize(file.getSize());
+                articleCover.setName(fileName);
+                articleCover.setUrl(saveFile.getAbsolutePath());
+                articleCoverDao.add(articleCover);
+            } catch (Exception e) {
+                throw new BusinessException(e.getMessage());
             }
-            default -> throw new ParameterException("文件类型不支持");
         }
     }
+    @Transactional(rollbackFor = {Exception.class})
+    public void updateArticleCoverImage(MultipartFile file, Integer articleId) {
+        if(checkFileValidation(file, articleId)) {
+            ArticleCover oldRecord = articleCoverDao.selectByArticleId(articleId);
+            Assert.notNull(oldRecord, "没有找到该文章封面");
+            try {
+                log.info("文件大小：{}", file.getSize());
+                String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
+                String filePath = "/blog/upload/article/covers/" + fileName;
+                File needDelFile = new File(oldRecord.getUrl());
+                needDelFile.delete();
+                File saveFile = new File(filePath);
+                try (FileOutputStream fos = new FileOutputStream(saveFile)) {
+                    fos.write(file.getBytes());
+                }
+                ArticleCover articleCover = new ArticleCover();
+                articleCover.setArticleId(articleId);
+                articleCover.setType(file.getContentType());
+                articleCover.setSize(file.getSize());
+                articleCover.setName(fileName);
+                articleCover.setUrl(saveFile.getAbsolutePath());
+                articleCoverDao.update(articleCover);
+            } catch (Exception e) {
+                throw new BusinessException(e.getMessage());
+            }
+        }
+    }
+
 
     @Transactional(rollbackFor = {Exception.class})
     public void updateArticleContentImg(MultipartFile file, Integer articleId) {
@@ -231,5 +250,23 @@ public class ArticleServiceImpl extends BaseService {
     private char generateRandomLetter(Random random, boolean isUpperCase) {
         int offset = isUpperCase ? 'A' : 'a';
         return (char) (offset + random.nextInt(26));
+    }
+
+    private boolean checkFileValidation(MultipartFile file, Integer articleId) {
+        if (file.isEmpty()) {
+            throw new ParameterException("上传的文件不能为空");
+        }
+        if (file.getContentType() == null) {
+            throw new ParameterException("文件类型不能为空");
+        }
+        if (file.getSize() <= 0) {
+            throw new ParameterException("文件大小不能为零");
+        }
+        switch (file.getContentType()) {
+            case "image/jpeg", "image/png" -> {
+                return true;
+            }
+            default -> throw new ParameterException("文件类型不支持");
+        }
     }
 }

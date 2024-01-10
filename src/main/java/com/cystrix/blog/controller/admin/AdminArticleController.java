@@ -139,4 +139,10 @@ public class AdminArticleController {
         articleService.setArticleCoverImage(file, id);
         return Response.ok();
     }
+
+    @PostMapping(value = "/update/cover")
+    public Response updateCover(@RequestParam("file") MultipartFile file, @RequestParam("id") Integer id) {
+        articleService.updateArticleCoverImage(file, id);
+        return Response.ok();
+    }
 }

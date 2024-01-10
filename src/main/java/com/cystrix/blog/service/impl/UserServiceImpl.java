@@ -2,6 +2,7 @@ package com.cystrix.blog.service.impl;
 
 import com.cystrix.blog.dao.UserInfoDao;
 import com.cystrix.blog.entity.UserInfo;
+import com.cystrix.blog.enums.RedisEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.util.JwtUtils;
 import com.cystrix.blog.util.MD5Utils;
@@ -10,6 +11,7 @@ import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.view.UserInfoView;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.time.LocalDateTime;
 
@@ -36,7 +38,7 @@ public class UserServiceImpl {
 
     public LoginToken doLoginHandle(LoginVo loginVo) {
         try {
-            /*Assert.notNull(loginVo.getEmail(), "邮箱不能为空");
+            Assert.notNull(loginVo.getEmail(), "邮箱不能为空");
             String email = loginVo.getEmail();
             if(!this.isExistedUser(email)) {
                 throw new ParameterException("用户不存在");
@@ -65,9 +67,9 @@ public class UserServiceImpl {
                 return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
             }else {
                 throw new ParameterException("账号密码和邮箱验证码不能同时为空");
-            }*/
-            UserInfo result = userInfoDao.selectUserInfoByEmail(loginVo.getEmail());
-            return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
+            }
+//            UserInfo result = userInfoDao.selectUserInfoByEmail(loginVo.getEmail());
+//            return new LoginToken(result.getId(), result.getUsername(), jwtUtils.createTokenByUser(result));
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }

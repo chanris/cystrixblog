@@ -3,6 +3,7 @@ package com.cystrix.blog.controller.home;
 import com.cystrix.blog.entity.Article;
 import com.cystrix.blog.service.impl.ArchiveServiceImpl;
 import com.cystrix.blog.view.ArchiveStatisInfoView;
+import com.cystrix.blog.view.ArticleView;
 import com.cystrix.blog.vo.ArchiveVo;
 import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
@@ -27,7 +28,7 @@ public class ArchiveController {
 
     @PostMapping(value = "/listArticleWithPage")
     public Response listArticleWithPage(@RequestBody ArchiveVo vo) {
-        List<Article> articles = archiveService.listArticleWithPage(vo);
+        List<ArticleView> articles = archiveService.listArticleWithPage(vo);
         return Response.ok(new PageInfo<>(articles));
     }
 

@@ -2,11 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cystrix.blog.dao.ArchiveDao">
 
-    <select id="listArticleWithPage"  parameterType="com.cystrix.blog.vo.ArchiveVo" resultType="com.cystrix.blog.entity.Article">
-        select a.cover_id, a.create_time, a.id, a.title, c.name as coverImg from article a
-        left join articleCover c on a.cover_id = c.id
-        where 1 = 1 <if test="year != null and year.length > 0 and month != null and month.length > 0"> and year(a.create_time) = #{year} and month(a.create_time) = #{month} </if>
-        order by year(a.create_time) desc, month(a.create_time) desc, day(a.create_time) desc
+    <select id="listArticleWithPage"  parameterType="com.cystrix.blog.vo.ArchiveVo"
+            resultType="com.cystrix.blog.view.ArticleView">
+        select a.create_time, a.id, a.title, c.name as coverImg from article a
+        left join article_cover c on c.article_id = a.id
+        where 1 = 1
+        <if test="year != null and year.length > 0 and month != null and month.length > 0">
+            and year(a.create_time) = #{year} and month(a.create_time) = #{month}
+        </if>
+        order by a.create_time desc
     </select>
 
     <select id="listArchiveStatisInfoWithPage" resultType="com.cystrix.blog.view.ArchiveStatisInfoView">

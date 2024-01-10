@@ -32,7 +32,7 @@ public interface ArticleDao {
 
     SiteInfo articleStatisInfo();
 
-    List<Article> selectArticleWithPage(ArticleVo vo);
+    List<ArticleView> selectArticleWithPage(ArticleVo vo);
 
     void addLikeCount(Integer articleId);
 }

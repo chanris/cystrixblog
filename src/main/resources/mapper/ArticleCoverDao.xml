@@ -2,8 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.cystrix.blog.dao.ArticleCoverDao">
 
+    <select id="selectByArticleId" parameterType="integer" resultType="com.cystrix.blog.entity.ArticleCover">
+        select * from article_cover where article_id = #{val} and is_delete = 0
+    </select>
+
     <insert id="add" parameterType="com.cystrix.blog.entity.ArticleCover" keyProperty="id" useGeneratedKeys="true">
         insert into article_cover(id, article_id, url, `name`, type, size)
         value (null, #{articleId}, #{url}, #{name}, #{type}, #{size})
     </insert>
+
+    <update id="update" parameterType="com.cystrix.blog.entity.ArticleCover">
+        update article_cover
+        <set>
+            <if test="url != null">url = #{url},</if>
+            <if test="name != null">`name` = #{name},</if>
+            <if test="type != null">`type` = #{type},</if>
+            <if test="size != null">`size` = #{size},</if>
+        </set>
+        where article_id = #{articleId}
+    </update>
 </mapper>
