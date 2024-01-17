@@ -229,6 +229,11 @@ public class ArticleServiceImpl extends BaseService {
             ArticleImg articleImg = new ArticleImg();
             try {
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
+                // 处理上传文件为svg格式
+                int idx = fileName.indexOf('+');
+                if(idx != -1) {
+                    fileName = fileName.substring(0, idx);
+                }
                 String filePath = "/blog/upload/article/img/" + fileName;
                 File saveFile = new File(filePath);
                 try (FileOutputStream fos = new FileOutputStream(saveFile)) {
@@ -285,7 +290,7 @@ public class ArticleServiceImpl extends BaseService {
             throw new ParameterException("文件大小不能为零");
         }
         switch (file.getContentType()) {
-            case "image/jpeg", "image/png" -> {
+            case "image/jpeg", "image/png", "image/svg+xml" -> {
                 return true;
             }
             default -> throw new ParameterException("文件类型不支持");
