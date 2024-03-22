@@ -7,7 +7,6 @@ import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -83,7 +82,7 @@ public class ShiroConf {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                //服务器的哪个rul支持跨域
+                //服务器的哪个url支持跨域
                 registry.addMapping("/**").allowedMethods("*")
                         .allowedHeaders("*")
                         .allowedOrigins("*");

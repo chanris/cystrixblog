@@ -1,6 +1,6 @@
 spring:
   application:
-    name: cystrix_blog
+    name: cystrix-blog
   datasource:
     # JDBC
     username: root
@@ -73,31 +73,9 @@ spring:
         login-password: 123
         allow: 127.0.0.1           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
         deny:
-  redis:
-    host: 127.0.0.1
-    password: 633544
-    port: 6379
-    database: 0
-  mail:
-    host: smtp.qq.com
-#    username: ${email.username}
-#    password: ${email.password}         # 授权码
-    username: chenyue7@qq.com
-    password: xxxxxxx                    # 邮箱服务授权码
-    default-encoding: UTF-8
-    properties:
-      mail:
-        smtp:
-          ssl:
-            enable: true
-          auth: true
-          starttls:
-            enable: true
-            required: true
 server:
   servlet:
     context-path: /
-  port: 8080
 
 # mybatis配置
 mybatis:
@@ -106,9 +84,6 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
     map-underscore-to-camel-case: true                      # 经典驼峰字段映射
-jwt:
-  secret-key: xxxxx           # jwt秘钥
-  cache-name: redis
-logging:
-  config: classpath:logback-spring.xml
+#logging:
+#  config: classpath:logback-spring.xml
 

@@ -11,7 +11,7 @@
 
   <groupId>com.cystrix</groupId>
   <artifactId>cystrixblog</artifactId>
-  <version>1.0.0</version>
+  <version>1.1.0</version>
   <packaging>jar</packaging>
 
   <name>cystrixblog</name>
@@ -19,6 +19,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
     <mysql.version>8.0.33</mysql.version>
     <druid.version>1.2.18</druid.version>
     <spring.version>2.3.4.RELEASE</spring.version>
@@ -35,6 +36,23 @@
       <artifactId>spring-boot-starter-mail</artifactId>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/com.alibaba.cloud/spring-cloud-starter-alibaba-nacos-config -->
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-config</artifactId>
+      <version>2021.0.5.0</version>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-bootstrap -->
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-bootstrap</artifactId>
+      <version>3.1.8</version>
+    </dependency>
+    <dependency>
+      <groupId>com.alibaba.cloud</groupId>
+      <artifactId>spring-cloud-starter-alibaba-nacos-discovery</artifactId>
+      <version>2021.0.5.0</version>
+    </dependency>
     <!-- https://mvnrepository.com/artifact/com.alibaba.fastjson2/fastjson2 -->
     <dependency>
       <groupId>com.alibaba.fastjson2</groupId>
