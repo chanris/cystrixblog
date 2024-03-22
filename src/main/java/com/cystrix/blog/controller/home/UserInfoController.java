@@ -1,5 +1,6 @@
 package com.cystrix.blog.controller.home;
 
+import com.cystrix.blog.enums.CodeEnum;
 import com.cystrix.blog.enums.RedisEnum;
 import com.cystrix.blog.exception.ParameterException;
 import com.cystrix.blog.service.impl.UserServiceImpl;
@@ -45,13 +46,15 @@ public class UserInfoController {
 
     @RequestMapping(value = "/getVerificationCode")
     public Response getVerificationCode(@RequestBody LoginVo vo) {
-        redisUtils.isActionAllowed(RedisEnum.VC_LIMIT_RATE.toString(), "send_code", 60, 40);
         try {
             Assert.notNull(vo.getEmail(), "邮箱不能为空");
             Assert.isTrue(userService.isExistedUser(vo.getEmail()), "用户不存在");
         }catch (Exception e) {
             throw new ParameterException(e.getMessage());
         }
+        // 一分钟内最多30个请求
+        boolean allowed = redisUtils.isActionAllowed(RedisEnum.VC_LIMIT_RATE.toString(), "send_code", 60, 30);
+        if (!allowed) return Response.failed(CodeEnum.INTER_SERVER_UNAVAILABLE);
         emailUtils.sendVerificationCodeToEmail(vo.getEmail());
         return Response.ok();
     }
