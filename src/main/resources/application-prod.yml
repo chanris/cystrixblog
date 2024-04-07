@@ -3,8 +3,8 @@ spring:
     name: cystrix-blog
   datasource:
     # JDBC
-    username: root
-    password: acid10837
+    ## username: root
+    ## password: xxx
     url: jdbc:mysql://127.0.0.1:3306/cystrix_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -84,6 +84,4 @@ mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
     map-underscore-to-camel-case: true                      # 经典驼峰字段映射
-#logging:
-#  config: classpath:logback-spring.xml
 

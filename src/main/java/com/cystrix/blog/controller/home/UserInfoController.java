@@ -58,9 +58,4 @@ public class UserInfoController {
         emailUtils.sendVerificationCodeToEmail(vo.getEmail());
         return Response.ok();
     }
-
-    @GetMapping("/getIpInfoToken")
-    public String getIpinfoToken() {
-        return ipinfoToken;
-    }
 }
