@@ -1,9 +1,14 @@
 spring:
+  config:
+    activate:
+      on-profile: dev
+  application:
+    name: cystrix-blog
   datasource:
     # JDBC
-    username: root
-    password: xxxxxx
-    url: jdbc:mysql://localhost:3306/cystrix_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
+    username: ${DB_USER}
+    password: ${DB_PWD}
+    url: jdbc:mysql://127.0.0.1:3306/cystrix_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
@@ -49,7 +54,7 @@ spring:
           slow-sql-millis: 2000
         # 日志监控，使用slf4j 进行日志输出
         slf4j:
-          enabled: true
+          enabled: false
           statement-log-error-enabled: true
           statement-create-after-log-enabled: false
           statement-close-after-log-enabled: false
@@ -66,25 +71,20 @@ spring:
       stat-view-servlet:
         enabled: true                   # 启用StatViewServlet
         url-pattern: /druid/*           # 访问内置监控页面的路径，内置监控页面的首页是/druid/index.html
-        reset-enable: false             # 不允许清空统计数据,重新计算
-        login-username: root            # 配置监控页面访问密码
-        login-password: 123
-        allow: 127.0.0.1           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
-        deny:
+        reset-enable: false              # 不允许清空统计数据,重新计算
+        login-username: ${DRUID_USER}            # 配置监控页面访问密码
+        login-password: ${DRUID_PWD}
+        #allow: *           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        # deny:
   redis:
-    host: 127.0.0.1
-    password: xxxxxx
-    port: 6379
+    host: ${REDIS_HOST}
+    password: ${REDIS_PWD}
+    port: ${REDIS_PORT}
   mail:
     host: smtp.qq.com
-    port: 465
-    #    username: ${email.username}
-    #    password: ${email.password}         # 授权码
-    username: chenyue7@qq.com
-    password: xxxxxx                       # 邮箱服务授权码
+    username: ${MAIL_USER}
+    password: ${MAIL_PWD}
     default-encoding: UTF-8
-    # 协议
-    protocol: smtps
     properties:
       mail:
         smtp:
@@ -94,15 +94,14 @@ spring:
           starttls:
             enable: true
             required: true
-
+jwt:
+  secret-key: ${PRIVATE_KEY}
+  cache-name: redis
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置
   type-aliases-package: com.cystrix.blog.entity    # 实体类所在的位置
   configuration:
-    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 用于控制台打印sql语句
     map-underscore-to-camel-case: true                      # 经典驼峰字段映射
-jwt:
-  secret-key: xxxxxx           # jwt秘钥
-  cache-name: redis
 

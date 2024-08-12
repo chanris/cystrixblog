@@ -2,18 +2,20 @@
 spring:
   application:
     name: cystrix_blog
-  profiles:
-    active: dev
   servlet:
     multipart:
       max-file-size: 10MB
+  profiles:
+    active: prod
   jackson:
     default-property-inclusion: non_null   # 序列化时默认排除值为null的字段
+ipinfo:
+  token: ${IP_TOKEN}
 
-logging:
-  level:
-    com.cystrix: WARN
 server:
   servlet:
     context-path: /
   port: 8080
+logging:
+  level:
+    org.apache.ibatis: WARN

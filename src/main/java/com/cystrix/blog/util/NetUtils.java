@@ -90,6 +90,15 @@ public class NetUtils {
         String loc;
         String org;
         String timezone;
+        String postal;
+
+        public String getPostal() {
+            return postal;
+        }
+
+        public void setPostal() {
+            this.postal = postal;
+        }
 
         public String getIp() {
             return ip;
