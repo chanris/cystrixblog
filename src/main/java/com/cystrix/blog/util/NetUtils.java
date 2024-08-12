@@ -74,8 +74,8 @@ public class NetUtils {
                 history.setTimezone(ipInfo.getTimezone());
                 history.setRegion(ipInfo.getRegion());
                 siteHistoryDao.update(history);
-            } catch (JsonProcessingException e) {
-                log.warn("ip info address exception, json format error {}", result);
+            } catch (Exception e) {
+                log.warn("ip info address exception {}, json format error {}", e.getClass().getName() + e.getMessage(), result);
             }
         }else {
             log.warn("ip info address failed, response code: {}", response.getStatusCodeValue());
