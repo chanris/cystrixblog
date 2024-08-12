@@ -39,7 +39,4 @@
     <!-- 子节点向上级传递 局部日志级别-->
     <logger level="WARN" name="org.springframework"/>
 
-
-
-
 </configuration>

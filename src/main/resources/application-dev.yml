@@ -1,10 +1,8 @@
 spring:
-  application:
-    name: cystrix_blog
   datasource:
     # JDBC
     username: root
-    password: root
+    password: xxxxxx
     url: jdbc:mysql://localhost:3306/cystrix_blog?useUnicode=true&characterEncoding=utf8&serverTimezone=GMT%2B8
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
@@ -75,7 +73,7 @@ spring:
         deny:
   redis:
     host: 127.0.0.1
-    password: redis123
+    password: xxxxxx
     port: 6379
   mail:
     host: smtp.qq.com
@@ -83,7 +81,7 @@ spring:
     #    username: ${email.username}
     #    password: ${email.password}         # 授权码
     username: chenyue7@qq.com
-    password: xxxxxxx                        # 邮箱服务授权码
+    password: xxxxxx                       # 邮箱服务授权码
     default-encoding: UTF-8
     # 协议
     protocol: smtps
@@ -97,21 +95,14 @@ spring:
             enable: true
             required: true
 
-server:
-  servlet:
-    context-path: /
-  port: 8080
-
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置
   type-aliases-package: com.cystrix.blog.entity    # 实体类所在的位置
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
+    # log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
     map-underscore-to-camel-case: true                      # 经典驼峰字段映射
 jwt:
-  secret-key: xxxxx           # jwt秘钥
+  secret-key: xxxxxx           # jwt秘钥
   cache-name: redis
-logging:
-  config: classpath:logback-spring.xml
 

@@ -73,15 +73,12 @@ spring:
         login-password: 123
         allow: 127.0.0.1           # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
         deny:
-server:
-  servlet:
-    context-path: /
 
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置
   type-aliases-package: com.cystrix.blog.entity    # 实体类所在的位置
   configuration:
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   #用于控制台打印sql语句
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl   # 用于控制台打印sql语句
     map-underscore-to-camel-case: true                      # 经典驼峰字段映射
 
