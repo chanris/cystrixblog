@@ -74,8 +74,8 @@ spring:
         reset-enable: false              # 不允许清空统计数据,重新计算
         login-username: ${DRUID_USER}            # 配置监控页面访问密码
         login-password: ${DRUID_PWD}
-        # allow:            # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
-        # deny:
+        allow: ""            # 允许访问的地址，如果allow没有配置或者为空，则允许所有访问
+        deny:
   redis:
     host: ${REDIS_HOST}
     password: ${REDIS_PWD}
@@ -97,6 +97,9 @@ spring:
 jwt:
   secret-key: ${PRIVATE_KEY}
   cache-name: redis
+path:
+  img: ${IMG_PATH}
+  cover: ${COVER_PATH}
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置

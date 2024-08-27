@@ -11,6 +11,7 @@ import com.cystrix.blog.vo.ArticleAddVo;
 import com.cystrix.blog.vo.ArticleVo;
 import com.cystrix.blog.vo.BaseVo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -43,6 +44,10 @@ public class ArticleServiceImpl extends BaseService {
     private final ArticleCoverDao articleCoverDao;
     private final ArticleImgDao articleImgDao;
 
+    @Value("${path.img}")
+    private String imgPath;
+    @Value("${path.cover}")
+    private String coverPath;
 
     public ArticleServiceImpl(ArticleDao articleDao, ArticleTagDao articleTagDao, ArticleCategoryDao articleCategoryDao,
                              TagDao tagDao, CategoryDao categoryDao,
@@ -169,8 +174,8 @@ public class ArticleServiceImpl extends BaseService {
         if(checkFileValidation(file, articleId)) {
             try {
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
-                String filePath = "/blog/upload/article/covers/" + fileName;
-                File directory = new File("/blog/upload/article/covers");
+                String filePath = coverPath + fileName;
+                File directory = new File(coverPath);
                 if (!directory.exists()) {
                     boolean result = directory.mkdirs();
                     if (!result) {
@@ -200,7 +205,7 @@ public class ArticleServiceImpl extends BaseService {
             Assert.notNull(oldRecord, "没有找到该文章封面");
             try {
                 String fileName = generateFilename() + "." + file.getContentType().split("/")[1];
-                String filePath = "/blog/upload/article/covers/" + fileName;
+                String filePath = coverPath + fileName;
                 File needDelFile = new File(oldRecord.getUrl());
                 if(!needDelFile.delete()) {
                     log.warn("文章图片无法删除 文件名：{}", needDelFile.getName());
@@ -234,7 +239,7 @@ public class ArticleServiceImpl extends BaseService {
                 if(idx != -1) {
                     fileName = fileName.substring(0, idx);
                 }
-                String filePath = "/blog/upload/article/img/" + fileName;
+                String filePath = imgPath + fileName;
                 File saveFile = new File(filePath);
                 try (FileOutputStream fos = new FileOutputStream(saveFile)) {
                     fos.write(file.getBytes());

@@ -97,6 +97,9 @@ spring:
 jwt:
   secret-key: ${PRIVATE_KEY}
   cache-name: redis
+path:
+  img: ${IMG_PATH}
+  cover: ${COVER_PATH}
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置
