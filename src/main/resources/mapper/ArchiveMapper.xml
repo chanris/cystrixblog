@@ -6,10 +6,11 @@
             resultType="com.cystrix.blog.view.ArticleView">
         select a.create_time, a.id, a.title, c.name as coverImg from article a
         left join article_cover c on c.article_id = a.id
-        where 1 = 1
-        <if test="year != null and year.length > 0 and month != null and month.length > 0">
-            and year(a.create_time) = #{year} and month(a.create_time) = #{month}
-        </if>
+        <where>
+            <if test="year != null and year.length > 0 and month != null and month.length > 0">
+                and year(a.create_time) = #{year} and month(a.create_time) = #{month}
+            </if>
+        </where>
         order by a.create_time desc
     </select>
 

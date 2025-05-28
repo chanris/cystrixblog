@@ -113,7 +113,7 @@ public class ArticleServiceImpl extends BaseService {
             ref.setCategoryId(1);
         }
         articleCategoryDao.insert(ref);
-        if(vo.getTagIdList() != null && vo.getTagIdList().size() != 0) {
+        if(vo.getTagIdList() != null && !vo.getTagIdList().isEmpty()) {
             // 关联标签
             List<ArticleTag> articleTags = new ArrayList<>();
             vo.getTagIdList().forEach(item -> {
