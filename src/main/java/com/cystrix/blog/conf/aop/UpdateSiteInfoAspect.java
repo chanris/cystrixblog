@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
  * @date 4/1/2024
  * @description
  */
+@ConditionalOnProperty(name = "access.record.enable")
 @Component
 @Aspect
 public class UpdateSiteInfoAspect {

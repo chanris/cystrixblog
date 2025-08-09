@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cystrix.blog.dao.CommentDao">
+
+    <insert id="insert" parameterType="com.cystrix.blog.entity.Comment" useGeneratedKeys="true" keyProperty="id">
+        insert into comment(id, pid, content, user_ip, local) value (null, #{pid}, #{content}, #{userIp}, #{local})
+    </insert>
+
+    <select id="commentListByArticleId" parameterType="integer" resultType="com.cystrix.blog.entity.Comment">
+        select c.* from comment c left join article_comment ac on c.id = ac.comment_id
+        where ac.article_id = #{articleId} and c.is_delete = 0
+    </select>
+</mapper>

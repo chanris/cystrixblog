@@ -100,6 +100,9 @@ jwt:
 path:
   img: ${IMG_PATH}
   cover: ${COVER_PATH}
+access:
+  record:
+    enable: false
 # mybatis配置
 mybatis:
   mapper-locations: classpath:mapper/*.xml    # mapper映射文件位置

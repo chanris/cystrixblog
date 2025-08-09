@@ -94,7 +94,7 @@ public class ArticleServiceImpl extends BaseService {
     @Transactional(rollbackFor = {Exception.class})
     public void addArticle(ArticleAddVo vo) {
         // 添加文章 设置 摘要 & 字数
-        int wordNum = StringUtils.countWords(vo.getContent());
+        int wordNum = StringUtils.countMarkdownWords(vo.getContent());
         vo.setWordNum(wordNum);
         Article record = new Article();
         record.setTitle(vo.getTitle());
@@ -128,7 +128,7 @@ public class ArticleServiceImpl extends BaseService {
         if(article.getContent() != null) {
             String content =  article.getContent();
             // String digest  = StringUtils.generateDigest(content);
-            int wordNum = StringUtils.countWords(content);
+            int wordNum = StringUtils.countMarkdownWords(content);
             // article.setDigest(digest);
             article.setWordNum(wordNum);
         }

@@ -6,7 +6,7 @@ spring:
     multipart:
       max-file-size: 10MB
   profiles:
-    active: prod
+    active: dev
   jackson:
     default-property-inclusion: non_null   # 序列化时默认排除值为null的字段
 ipinfo:

@@ -1,0 +1,43 @@
+spring:
+  config:
+    activate:
+      on-profile: test  # Changed to 'test' profile for test environment
+  application:
+    name: cystrix-blog
+  autoconfigure:
+#    exclude:
+#      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+#      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+#      - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
+#      - org.apache.shiro.spring.boot.autoconfigure.ShiroAnnotationProcessorAutoConfiguration
+#      - org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration
+#      - com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceAutoConfigure
+  mail:
+    host: smtp.qq.com
+    username: ${MAIL_USER:}
+    password: ${MAIL_PWD:}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
+          auth: true
+          starttls:
+            enable: true
+            required: true
+jwt:
+  secret-key: ${PRIVATE_KEY:7bebb3e1-5ad3-4374-9b5d-d9f311ee1f36}
+  cache-name: redis
+path:
+  img: ${IMG_PATH:}
+  cover: ${COVER_PATH:}
+access:
+  record:
+    enable: false
+# mybatis configuration
+mybatis:
+  mapper-locations: classpath:mapper/*.xml    # Mapper files remain the same
+  type-aliases-package: com.cystrix.blog.entity    # Entity package unchanged
+  configuration:
+    map-underscore-to-camel-case: true

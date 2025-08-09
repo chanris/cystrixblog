@@ -1,5 +1,9 @@
 package com.cystrix.blog.util;
 
+import org.commonmark.node.Node;
+import org.commonmark.parser.Parser;
+import org.commonmark.renderer.text.TextContentRenderer;
+
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,6 +14,15 @@ import java.util.regex.Pattern;
  * @description 关于字符串操作的处理写在着
  */
 public class StringUtils {
+
+    public static int countMarkdownWords(String markdown) {
+        Parser parser = Parser.builder().build();
+        Node document = parser.parse(markdown);
+        TextContentRenderer renderer = TextContentRenderer.builder().build();
+        String plainText = renderer.render(document);
+        return plainText.replaceAll("\\s+", "").length(); // 中文字符按字计数，英文可按空格分词
+    }
+
 
     public static int countWords(String origin) {
         if (origin == null || origin.trim().equals("")) {

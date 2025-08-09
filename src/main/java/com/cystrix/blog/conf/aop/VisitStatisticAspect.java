@@ -19,6 +19,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author chenyue7@foxmail.com
@@ -38,6 +39,8 @@ public class VisitStatisticAspect {
     private SiteHistoryDao siteHistoryDao;
     @Resource
     private SiteInfoDao siteInfoDao;
+    @Resource
+    private ThreadPoolExecutor ipThreadPoolExecutor;
 
     private static final long VISIT_EXPIRE_TIME = 60 * 15;
 
@@ -55,18 +58,17 @@ public class VisitStatisticAspect {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         // 确保RequestAttributes是ServletRequestAttributes类型
         if (requestAttributes instanceof ServletRequestAttributes) {
-            HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
-            String realIp = netUtils.getIpAddress(request);
-            String uri = request.getRequestURI();
-            // log.info("Request URI: {}, IP: {}", uri, realIp);
-            SiteHistory history = new SiteHistory();
-            history.setMethod(request.getMethod());
-            history.setRealIP(realIp);
-            history.setUri(uri);
-            siteHistoryDao.insert(history);
-            netUtils.setIPInfo(history);
+            final HttpServletRequest request = ((ServletRequestAttributes) requestAttributes).getRequest();
+
+            ipThreadPoolExecutor.execute(()->{
+                SiteHistory siteHistory = netUtils.getSiteHistory(request);
+                if (siteHistory != null) {
+                    siteHistoryDao.insert(siteHistory);
+                }
+            });
 
             // 设置浏览量
+            String realIp = netUtils.getIpAddress(request);
             String key = RedisEnum.VISITOR_IP_PREFIX_.name() + realIp;
             String value = redisUtils.getValue(key);
             if(value == null) {

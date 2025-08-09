@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author: chenyue7@foxmail.com
@@ -26,6 +27,9 @@ public class NetUtils {
 
     @Resource
     private SiteHistoryDao siteHistoryDao;
+
+    @Resource
+    private ThreadPoolExecutor ipThreadPoolExecutor;
 
     @Value("${ipinfo.token}")
     private String token;
@@ -55,32 +59,43 @@ public class NetUtils {
         return ipAddress;
     }
 
+    public SiteHistory getSiteHistory(HttpServletRequest request) {
+        String realIp = getIpAddress(request);
+        if ("127.0.0.1".equals(realIp)) {
+            return null;
+        }
+        String url = "https://ipinfo.io/" + realIp + "?token=" + token;
+        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
+        if (!response.getStatusCode().is2xxSuccessful()) {
+            log.warn("ip info address failed, response code: {}", response.getStatusCodeValue());
+            return null;
+        }
+
+        String result = response.getBody();
+        ObjectMapper om = new ObjectMapper();
+        try {
+            SiteHistory history = new SiteHistory();
+            history.setMethod(request.getMethod());
+            history.setRealIP(realIp);
+            history.setUri(request.getRequestURI());
+            IPInfo ipInfo = om.readValue(result, IPInfo.class);
+            history.setCity(ipInfo.getCity());
+            history.setCountry(ipInfo.getCountry());
+            history.setRealIP(ipInfo.getIp());
+            history.setLoc(ipInfo.getLoc());
+            history.setOrg(ipInfo.getOrg());
+            history.setTimezone(ipInfo.getTimezone());
+            history.setRegion(ipInfo.getRegion());
+            return history;
+        } catch (Exception e) {
+            log.warn("ip info address exception {}, json format error {}", e.getClass().getName() + e.getMessage(), result);
+        }
+        return null;
+    }
+
     /**
      * 获得ip属地
      */
-    public void setIPInfo(SiteHistory history) {
-        String url = "https://ipinfo.io/" + history.getRealIP() + "?token=" + token;
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        if (response.getStatusCode().is2xxSuccessful()) {
-            String result = response.getBody();
-            ObjectMapper om = new ObjectMapper();
-            try {
-                IPInfo ipInfo = om.readValue(result, IPInfo.class);
-                history.setCity(ipInfo.getCity());
-                history.setCountry(ipInfo.getCountry());
-                history.setRealIP(ipInfo.getIp());
-                history.setLoc(ipInfo.getLoc());
-                history.setOrg(ipInfo.getOrg());
-                history.setTimezone(ipInfo.getTimezone());
-                history.setRegion(ipInfo.getRegion());
-                siteHistoryDao.update(history);
-            } catch (Exception e) {
-                log.warn("ip info address exception {}, json format error {}", e.getClass().getName() + e.getMessage(), result);
-            }
-        }else {
-            log.warn("ip info address failed, response code: {}", response.getStatusCodeValue());
-        }
-    }
 
     private static class IPInfo {
         String ip;

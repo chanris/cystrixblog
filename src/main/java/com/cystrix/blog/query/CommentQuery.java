@@ -9,5 +9,5 @@ import lombok.Data;
  */
 @Data
 public class CommentQuery {
-    private Integer id;
+    private Integer articleId;
 }

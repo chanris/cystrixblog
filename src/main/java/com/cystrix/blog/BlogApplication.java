@@ -6,6 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import java.util.UUID;
+
 /**
  * @author: chenyue7@foxmail.com
  * @date: 6/7/2023
@@ -18,7 +20,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @MapperScan(basePackages = "com.cystrix.blog.dao")
 public class BlogApplication {
     public static void main(String[] args) {
-        SpringApplication.run(BlogApplication.class);
+//        SpringApplication.run(BlogApplication.class);
+        System.out.println(UUID.randomUUID().toString());
     }
 }
 
