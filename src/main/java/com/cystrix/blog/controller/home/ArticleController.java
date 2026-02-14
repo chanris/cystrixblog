@@ -8,6 +8,9 @@ import com.cystrix.blog.view.ArticleView;
 import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ import java.util.List;
  * @date: 6/7/2023
  * @description:
  */
+@Api(tags = "前端文章管理")
 @RestController
 @RequestMapping(value = "/home/article")
 public class ArticleController {
@@ -31,8 +35,9 @@ public class ArticleController {
     /**
      * 文章摘要列表，首页展示
      */
+    @ApiOperation(value = "获取文章摘要列表")
     @RequestMapping(value = "/listArticleDigestInfo")
-    public Response listArticleDigestInfo(@RequestBody BaseVo vo) {
+    public Response listArticleDigestInfo(@ApiParam(value = "分页参数") @RequestBody BaseVo vo) {
         List<ArticleView> articles = articleService.getPagedArticleWithoutContent(vo);
         return Response.ok(new PageInfo<>(articles));
     }
@@ -40,8 +45,9 @@ public class ArticleController {
     /**
      * 文章详细页面
      */
+    @ApiOperation(value = "获取文章详情")
     @RequestMapping(value = "/articleDetailInfo")
-    public Response articleStatisticalInfo(@RequestBody ArticleQuery query) {
+    public Response articleStatisticalInfo(@ApiParam(value = "文章查询参数") @RequestBody ArticleQuery query) {
         try {
             Assert.notNull(query.getId(), "文章id不能为空");
         }catch (Exception e) {
@@ -54,8 +60,9 @@ public class ArticleController {
     /**
      * 文章点赞
      */
+    @ApiOperation(value = "文章点赞")
     @PostMapping(value = "/likeArticle")
-    public Response likeArticle(@RequestBody ArticleQuery query) {
+    public Response likeArticle(@ApiParam(value = "文章查询参数") @RequestBody ArticleQuery query) {
         try {
             Assert.notNull(query.getId(), "文章id不能为空");
         }catch (Exception e) {

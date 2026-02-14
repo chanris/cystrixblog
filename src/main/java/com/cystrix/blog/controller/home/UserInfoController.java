@@ -9,6 +9,9 @@ import com.cystrix.blog.util.RedisUtils;
 import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.Response;
 import com.cystrix.blog.view.UserInfoView;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @date: 11/7/2023
  * @description:
  */
+@Api(tags = "前端用户管理")
 @RestController
 @RequestMapping(value = "/home/user")
 public class UserInfoController {
@@ -38,14 +42,16 @@ public class UserInfoController {
         this.redisUtils = redisUtils;
     }
 
+    @ApiOperation(value = "获取用户信息")
     @RequestMapping(value = "")
     public Response getUserInfo() {
         UserInfoView userInfoView = userService.getUserInfoVo();
         return Response.ok(userInfoView);
     }
 
+    @ApiOperation(value = "获取验证码")
     @RequestMapping(value = "/getVerificationCode")
-    public Response getVerificationCode(@RequestBody LoginVo vo) {
+    public Response getVerificationCode(@ApiParam(value = "登录信息") @RequestBody LoginVo vo) {
         try {
             Assert.notNull(vo.getEmail(), "邮箱不能为空");
             Assert.isTrue(userService.isExistedUser(vo.getEmail()), "用户不存在");

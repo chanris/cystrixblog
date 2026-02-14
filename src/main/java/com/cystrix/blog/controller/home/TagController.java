@@ -8,6 +8,9 @@ import com.cystrix.blog.service.impl.TagServiceImpl;
 import com.cystrix.blog.vo.BaseVo;
 import com.cystrix.blog.vo.Response;
 import com.github.pagehelper.PageInfo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +21,7 @@ import java.util.List;
  * @date: 13/7/2023
  * @description:
  */
+@Api(tags = "前端标签管理")
 @RestController
 @RequestMapping(value = "/home/tag")
 public class TagController {
@@ -27,18 +31,21 @@ public class TagController {
         this.tagService = tagService;
     }
 
+    @ApiOperation(value = "获取分页标签列表")
     @RequestMapping(value = "/page")
-    public Response getPagedTagList(@RequestBody BaseVo vo) {
+    public Response getPagedTagList(@ApiParam(value = "分页参数") @RequestBody BaseVo vo) {
         return Response.ok(new PageInfo<>(tagService.getPageTag(vo)));
     }
 
+    @ApiOperation(value = "获取所有标签")
     @GetMapping(value = "/all")
     public Response getAllTagList() {
         return Response.ok(tagService.getAll());
     }
 
+    @ApiOperation(value = "根据文章ID获取标签列表")
     @RequestMapping(value = "/list")
-    public Response getTagList(@RequestBody ArticleQuery articleQuery) {
+    public Response getTagList(@ApiParam(value = "文章查询参数") @RequestBody ArticleQuery articleQuery) {
         try {
             Assert.notNull(articleQuery.getId(), "文章id不能为空");
         }catch (Exception e) {

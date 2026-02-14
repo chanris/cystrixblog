@@ -8,6 +8,9 @@ import com.cystrix.blog.service.impl.UserServiceImpl;
 import com.cystrix.blog.vo.LoginToken;
 import com.cystrix.blog.vo.LoginVo;
 import com.cystrix.blog.vo.Response;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.shiro.util.Assert;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +24,7 @@ import java.util.regex.Pattern;
  * @date: 10/7/2023
  * @description:
  */
+@Api(tags = "后台用户管理")
 @RestController
 @RequestMapping(value = "/admin/user")
 public class AdminUserInfoController {
@@ -31,8 +35,9 @@ public class AdminUserInfoController {
         this.userService = userService;
     }
 
+    @ApiOperation(value = "用户登录")
     @RequestMapping(value = "/login")
-    public Response login(@RequestBody LoginVo vo) {
+    public Response login(@ApiParam(value = "登录信息") @RequestBody LoginVo vo) {
         LoginToken tokenVo = userService.doLoginHandle(vo);
         return Response.builder().code(CodeEnum.OK.code).msg("登录成功").result(tokenVo).build();
     }
@@ -40,8 +45,9 @@ public class AdminUserInfoController {
     /**
      * 添加用户
      */
+    @ApiOperation(value = "添加用户")
     @PostMapping(value = "/add")
-    public Response createUser(@RequestBody UserInfo userInfo) {
+    public Response createUser(@ApiParam(value = "用户信息") @RequestBody UserInfo userInfo) {
         try {
             Assert.notNull(userInfo.getUsername(), "用户名不能为空");
             Assert.notNull(userInfo.getPassword(), "密码不能为空");
@@ -56,8 +62,9 @@ public class AdminUserInfoController {
         return Response.ok();
     }
 
+    @ApiOperation(value = "更新用户信息")
     @PostMapping (value = "/update")
-    public Response updateUserInfo(@RequestBody UserInfo userInfo) {
+    public Response updateUserInfo(@ApiParam(value = "用户信息") @RequestBody UserInfo userInfo) {
         try {
             Assert.notNull(userInfo.getId(), "id不能为空");
         }catch (Exception e) {
