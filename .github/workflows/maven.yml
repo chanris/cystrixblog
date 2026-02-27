@@ -1,0 +1,58 @@
+# .github/workflows/maven.yml
+name: Build and Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 拉取代码
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. 设置 JDK
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      # 3. Maven 打包（跳过测试）
+      - name: Build with Maven
+        run: mvn clean package -DskipTests
+
+      # 4. 上传 jar 包到云服务器
+      - name: Deploy to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "target/*.jar"
+          target: "/app/myproject/"
+
+      # 5. SSH 登录服务器，重启应用
+      - name: Restart application
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            # 停止旧进程
+            pid=$(pgrep -f "myproject")
+            if [ -n "$pid" ]; then
+              echo "Stopping old process: $pid"
+              kill $pid
+              sleep 3
+            fi
+
+            # 启动新进程
+            cd /app/myproject
+            nohup java -jar *.jar > app.log 2>&1 &
+            echo "Application started, pid: $!"
