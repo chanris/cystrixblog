@@ -64,7 +64,7 @@ public class NetUtils {
         if ("127.0.0.1".equals(realIp)) {
             return null;
         }
-        String url = "https://ipinfo.io/" + realIp + "?token=" + token;
+        String url = "https://api.ipinfo.io/lite/" + realIp + "?token=" + token;
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         if (!response.getStatusCode().is2xxSuccessful()) {
             log.warn("ip info address failed, response code: {}", response.getStatusCodeValue());

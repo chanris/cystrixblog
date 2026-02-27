@@ -168,6 +168,9 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <mainClass>com.cystrix.blog.BlogApplication</mainClass>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
