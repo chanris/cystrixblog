@@ -2,8 +2,9 @@
 name: Build and Deploy
 
 on:
+  workflow_dispatch:    # 手动触发
   push:
-    branches: [ main ]
+    branches: [ main ]  # 推送时自动触发
 
 jobs:
   build-and-deploy:
