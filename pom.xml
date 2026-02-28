@@ -159,6 +159,7 @@
   </dependencies>
 
   <build>
+    <finalName>cystrixblog</finalName>
     <plugins>
       <!-- Spring Boot Maven Plugin -->
       <plugin>
