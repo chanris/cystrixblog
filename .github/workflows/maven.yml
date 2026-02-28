@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       # 1. 拉取代码
@@ -31,11 +31,11 @@ jobs:
       - name: Deploy to server
         uses: appleboy/scp-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
+          host: ${{ secrets.DEPLOY_SERVER_HOST }}
+          username: ${{ secrets.DEPLOY_SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           source: "target/*.jar"
-          target: "/app/myproject/"
+          target: "/app/cystrixblog/"
 
       # 5. SSH 登录服务器，重启应用
       - name: Restart application
@@ -54,6 +54,6 @@ jobs:
             fi
 
             # 启动新进程
-            cd /app/myproject
+            cd /app/cystrixblog
             nohup java -jar *.jar > app.log 2>&1 &
             echo "Application started, pid: $!"
