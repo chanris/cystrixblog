@@ -15,15 +15,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. 设置 JDK
-      - name: Set up JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: maven
-
-      # 3. Maven 打包（跳过测试）
+      # 2. Maven 打包（跳过测试）
       - name: Build with Maven
         run: mvn clean package -DskipTests
 
@@ -55,5 +47,6 @@ jobs:
 
             # 启动新进程
             cd /app/cystrixblog
-            nohup java -jar *.jar > app.log 2>&1 &
-            echo "Application started, pid: $!"
+            nohup java -Dspring.profiles.active=${{ secrets.SPRING_PROFILES_ACTIVE}} -Dspring.cloud.nacos.config.username=${{secrets.SPRING_CLOUD_NACOS_CONFIG_NAME}} -Dspring.cloud.nacos.config.password=${{secrets.SPRING_CLOUD_NACOS_CONFIG_PASSWORD}} -Dspring.cloud.nacos.config.namespace=${{secrets.SPRING_CLOUD_NACOS_CONFIG_NAMESPACE}} -Dspring.cloud.nacos.config.server-addr=${{secrets.SPRING_CLOUD_NACOS_CONFIG_SERVER_ADDR}} -Dtomcat.port=${{secrets.TOMCAT_PORT}} -DIP_TOKEN=${{secrets.IP_TOKEN}} -DREDIS_PWD=${{secrets.REDIS_PWD}} -DMAIL_USER=${{secrets.MAIL_USER}} -DMAIL_PWD=${{secrets.MAIL_PWD}} -DDB_USER=${{secrets.DB_USER}} -DDB_PWD=${{secrets.DB_PWD}} -DPRIVATE_KEY=${{secrets.PRIVATE_KEY}} -DIMG_PATH=${{secrets.IMG_PATH}} -DCOVER_PATH=${{secrets.COVER_PATH}} -jar *.jar > app.${{ secrets.TOMCAT_PORT}}.log 2>&1 &
+            APP_PID=$!
+            echo "Application started, port: ${{secrets.TOMCAT_PORT}} pid: $APP_PID"
