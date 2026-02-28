@@ -17,7 +17,7 @@ jobs:
 
       # 2. Maven 打包（跳过测试）
       - name: Build with Maven
-        run: mvn clean package -DskipTests
+        run: /usr/local/apache-maven-3.8.9/bin/mvn clean package -DskipTests
 
       # 4. 上传 jar 包到云服务器
       - name: Deploy to server
