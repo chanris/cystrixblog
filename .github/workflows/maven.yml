@@ -17,6 +17,8 @@ jobs:
 
       # 2. Maven 打包（跳过测试）
       - name: Build with Maven
+        env:
+          JAVA_HOME: /opt/sdkenvironment/jdk-17.0.12
         run: /usr/local/apache-maven-3.8.9/bin/mvn clean package -DskipTests
 
       # 4. 上传 jar 包到云服务器
