@@ -18,15 +18,18 @@
   <url>https://github.com/chanris/cystrixblog</url>
 
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
-    <mysql.version>8.0.33</mysql.version>
-    <druid.version>1.2.23</druid.version>
-    <spring.version>2.3.4.RELEASE</spring.version>
-    <mybatis.version>2.3.1</mybatis.version>
-    <shiro.verison>1.11.0</shiro.verison>
-    <jwt.version>4.3.0</jwt.version>
-    <fastjson.version>2.0.35</fastjson.version>
+      <java.version>17</java.version>
+      <maven.compiler.source>17</maven.compiler.source>
+      <maven.compiler.target>17</maven.compiler.target>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+      <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
+      <mysql.version>8.0.33</mysql.version>
+      <druid.version>1.2.23</druid.version>
+      <spring.version>2.3.4.RELEASE</spring.version>
+      <mybatis.version>2.3.1</mybatis.version>
+      <shiro.verison>1.11.0</shiro.verison>
+      <jwt.version>4.3.0</jwt.version>
+      <fastjson.version>2.0.35</fastjson.version>
   </properties>
 
   <dependencies>
