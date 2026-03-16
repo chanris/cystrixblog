@@ -24,6 +24,9 @@ jobs:
       # 3. 重启应用
       - name: Restart application
         run: |
+            echo "Current user: $(whoami)"
+            echo "Java version:"
+            /opt/sdkenvironment/jdk-17.0.12/bin/java -version
             # 复制新 jar 到部署目录
             cp target/*.jar ~/app/cystrixblog/cystrixblog.jar
 
