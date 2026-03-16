@@ -21,30 +21,18 @@ jobs:
           JAVA_HOME: /opt/sdkenvironment/jdk-17.0.12
         run: /usr/local/apache-maven-3.8.9/bin/mvn clean package -DskipTests
 
-      # 4. 上传 jar 包到云服务器
-      - name: Deploy to server
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.DEPLOY_SERVER_HOST }}
-          username: ${{ secrets.DEPLOY_SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "target/*.jar"
-          target: "/app/cystrixblog/"
-
-      # 5. SSH 登录服务器，重启应用
+      # 3. 重启应用
       - name: Restart application
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.DEPLOY_SERVER_HOST }}
-          username: ${{ secrets.DEPLOY_SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          script: |
+        run: |
+            # 复制新 jar 到部署目录
+            cp target/*.jar /app/cystrixblog/cystrixblog.jar
+
             # 停止旧进程
             if pkill -f "cystrixblog.jar"; then
               echo "Stopping old process..."
               sleep 3
             fi
-
+            
             # 启动新进程
             cd /app/cystrixblog
             echo "prepare for start cystrixblog..."
