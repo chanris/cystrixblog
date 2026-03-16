@@ -40,10 +40,8 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             # 停止旧进程
-            pid=$(pgrep -f "cystrixblog")
-            if [ -n "$pid" ]; then
-              echo "Stopping old process: $pid"
-              kill $pid
+            if pkill -f "cystrixblog.jar"; then
+              echo "Stopping old process..."
               sleep 3
             fi
 
